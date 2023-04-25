@@ -1,0 +1,134 @@
+/* Variables */
+/* Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+  color: #444;
+  background-color: #F0F2F5;
+}
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  position: relative;
+  margin: 20px;
+  border-radius: 10px;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.chat-header {
+  padding: 20px;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  background-color: #007bff;
+  color: #fff;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+}
+
+.chat-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+.chat-message {
+  margin-bottom: 20px;
+}
+.chat-message p {
+  display: inline-block;
+  margin: 0;
+  padding: 10px;
+  border-radius: 20px;
+  font-size: 18px;
+  max-width: 60%;
+  word-wrap: break-word;
+  background-color: #F0F2F5;
+  box-shadow: 6px 6px 8px rgba(0, 0, 0, 0.1);
+}
+
+.sent p {
+  background-color: #007bff;
+  color: #fff;
+  margin-left: auto;
+  margin-right: 0;
+}
+
+.received p {
+  background-color: #fff;
+  color: #000;
+  margin-right: auto;
+  margin-left: 0;
+}
+
+.chat-input {
+  position: absolute;
+  bottom: 100px;
+  left: 0;
+  width: 100%;
+  padding: 20px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.chat-input input[type=text] {
+  flex-grow: 1;
+  padding: 10px;
+  border: none;
+  border-radius: 20px;
+  font-size: 18px;
+  background-color: #F0F2F5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.chat-input button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 20px;
+  margin-left: 10px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+.chat-input button:hover {
+  background-color: #0062cc;
+}
+
+footer {
+  position: relative;
+  bottom: 0;
+  width: 100%;
+  background-color: #fff;
+  padding: 20px;
+  text-align: center;
+  border-top: 1px solid #F0F2F5;
+  color: #888;
+  font-size: 18px;
+}
+footer a {
+  color: #007bff;
+  text-decoration: none;
+}
+footer a:hover {
+  text-decoration: underline;
+}
+
+/*# sourceMappingURL=text.css.map */
