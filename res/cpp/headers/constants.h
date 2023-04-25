@@ -12,8 +12,7 @@
 #define CONSTANTS_H_
 
 namespace globals {
-
-    // extern bool debug;
+    const std::string projectID = "licenta-383311";
 
 } // namespace globals
 

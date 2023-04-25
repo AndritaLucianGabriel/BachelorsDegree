@@ -10,8 +10,8 @@
 
 #include <string>
 
-namespace globals
-{
-    const std::string projectID = "licenta-383311";
+namespace globals {
+
+    // const std::string projectID = "licenta-383311";
 
 } // namespace globals

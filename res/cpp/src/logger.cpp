@@ -16,6 +16,7 @@
 #include "Poco/PatternFormatter.h"
 #include "Poco/FormattingChannel.h"
 #include "Poco/Exception.h"
+#include "Poco/File.h"
 
 #include "logger.h"
 
@@ -25,19 +26,20 @@
 Poco::Logger *MyLogger::logger = nullptr;
 bool MyLogger::debug = false;
 
-Poco::Logger &MyLogger::getLogger()
-{
-    if (!logger)
-    {
+Poco::Logger &MyLogger::getLogger() {
+    if (!logger) {
         // Create a ConsoleChannel for logging to the console
         Poco::AutoPtr<Poco::ConsoleChannel> pConsoleChannel;
-        if (debug)
-        {
+        if (debug) {
             pConsoleChannel = new Poco::ConsoleChannel;
         }
 
         // Create a FileChannel for logging to a file
         Poco::AutoPtr<Poco::FileChannel> pFileChannel(new Poco::FileChannel);
+        Poco::File dir("./logs");
+        if (!dir.exists()) {
+            dir.createDirectories();
+        }
         pFileChannel->setProperty("path", "./logs/licenta.log");
         pFileChannel->setProperty("rotation", "1M"); // keeps 1 file of 1MB max
         pFileChannel->setProperty("archive", "number"); // newest archive is always .0
@@ -52,8 +54,7 @@ Poco::Logger &MyLogger::getLogger()
 
         // Create a SplitterChannel for logging to both console and file
         Poco::AutoPtr<Poco::SplitterChannel> pSplitterChannel(new Poco::SplitterChannel);
-        if (debug)
-        {
+        if (debug) {
             pSplitterChannel->addChannel(pConsoleChannel);
         }
         pSplitterChannel->addChannel(pFC);
@@ -67,13 +68,11 @@ Poco::Logger &MyLogger::getLogger()
     return *logger;
 }
 
-void MyLogger::init(bool pDebug)
-{
+void MyLogger::init(bool pDebug) {
     debug = pDebug;
 }
 
 // When you use Poco::Logger, you don't have to worry about freeing the logger instance directly, as Poco::Logger takes care of memory management internally. Poco uses a reference counting mechanism for logger management. The logger is destroyed automatically when its reference count drops to zero.
 void MyLogger::cleanUp() {
     logger = nullptr;
-
 }

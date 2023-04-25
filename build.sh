@@ -22,6 +22,7 @@ inf() { echo -e "$(tput bold)"INFO: "$(tput sgr0)$* \n"; }
 clean() {
     msg "Cleaning..."
     rm -rf "build" "licenta_EXECUTABLE" "logs"
+    GOOGLE_APPLICATION_CREDENTIALS="" # we ll clean the enviroment variable for the GCP's credentials
     if [ $? -ne 0 ]; then
         err_exit "Failed!\n"
         exit
@@ -71,22 +72,32 @@ compile_cpp() {
     fi
 }
 
-build()
-{
+configure_gcp() {
+    msg "Configuring enviroment for GCP..."
+    LOGIN_FILE=$(find ./res -maxdepth 1 -name *.json)
+    if [ -f "$LOGIN_FILE" ];
+    then
+        export GOOGLE_APPLICATION_CREDENTIALS="$LOGIN_FILE"
+        succ "Done"
+    else
+        wrn "No login key found! Create a new login key for a service account and put it in ./res!"
+        err_exit "Failed!\n"
+    fi
+}
+
+build() {
     compile_sass
     compile_cpp
-    mkdir -p logs   #checks if already exists, so it doesn't change the contents of it
+    configure_gcp
     if [ "${VERBOSE}" = "false" ]; then
         clear
         ./licenta_EXECUTABLE DISABLE_DEBUG
-        clear
     else
         ./licenta_EXECUTABLE ENABLE_DEBUG
     fi
 }
 
-execute()
-{
+execute() {
     case $COMMAND in
         'BUILD')
             build
@@ -103,8 +114,7 @@ execute()
     esac
 }
 
-func_read_cli_options()
-{
+func_read_cli_options() {
     while [ $# -ne 0 ]; do
         case "$1" in
             '-c'|'--clean')

@@ -20,8 +20,7 @@
 
 #include "logger.h"
 
-class MyRequestHandler : public Poco::Net::HTTPRequestHandler
-{
+class MyRequestHandler : public Poco::Net::HTTPRequestHandler {
     public:
         virtual void handleRequest(Poco::Net::HTTPServerRequest &req, Poco::Net::HTTPServerResponse &resp);
 
@@ -32,8 +31,7 @@ class MyRequestHandler : public Poco::Net::HTTPRequestHandler
 
 }; // class MyRequestHandler
 
-class MyRequestHandlerFactory : public Poco::Net::HTTPRequestHandlerFactory
-{
+class MyRequestHandlerFactory : public Poco::Net::HTTPRequestHandlerFactory {
     public:
         virtual Poco::Net::HTTPRequestHandler *createRequestHandler(const Poco::Net::HTTPServerRequest &);
 

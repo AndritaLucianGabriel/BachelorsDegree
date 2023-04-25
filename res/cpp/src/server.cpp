@@ -17,8 +17,7 @@
 
 int MyRequestHandler::count = 0;
 
-void MyRequestHandler::handleRequest(Poco::Net::HTTPServerRequest &request, Poco::Net::HTTPServerResponse &response)
-{
+void MyRequestHandler::handleRequest(Poco::Net::HTTPServerRequest &request, Poco::Net::HTTPServerResponse &response) {
     std::string requestPath = request.getURI();
     logger.information("Requested " + requestPath);
 
@@ -27,7 +26,7 @@ void MyRequestHandler::handleRequest(Poco::Net::HTTPServerRequest &request, Poco
     std::string extension = requestPath.substr(requestPath.find(".") + 1);
 
     //hardcoded for root path
-    if(requestPath == "/"){
+    if(requestPath == "/") {
         serveResponse(response, "index", "html");
     }
     else {
@@ -52,21 +51,18 @@ void MyRequestHandler::handleRequest(Poco::Net::HTTPServerRequest &request, Poco
 void MyRequestHandler::serveResponse(Poco::Net::HTTPServerResponse &response, const std::string& fileName, const std::string& extension) {
     response.setContentType("text/" + extension);
     std::ifstream file("res/" + extension + "/" + fileName + "." + extension);
-    if (file.is_open())
-    {
+    if (file.is_open()) {
         logger.information("Sending " + fileName + "/" + extension);
         response.sendFile("res/" + extension + "/" + fileName + "." + extension, "text/" + extension);
         file.close();
     }
-    else
-    {
+    else {
         logger.error(fileName + "." + extension + " not found");
         response.setStatus(Poco::Net::HTTPResponse::HTTP_NOT_FOUND);
         response.send();
     }
 }
 
-Poco::Net::HTTPRequestHandler *MyRequestHandlerFactory::createRequestHandler(const Poco::Net::HTTPServerRequest &)
-{
+Poco::Net::HTTPRequestHandler *MyRequestHandlerFactory::createRequestHandler(const Poco::Net::HTTPServerRequest &) {
     return new MyRequestHandler;
 }

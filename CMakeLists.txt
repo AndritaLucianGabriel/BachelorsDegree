@@ -17,6 +17,7 @@ set(SOURCE_FILES_LIBRARY
     ${PATH_TO_CPP}/logger.cpp
     ${PATH_TO_CPP}/server.cpp
     ${PATH_TO_CPP}/main.cpp
+    ${PATH_TO_CPP}/chatbot.cpp
 )
 
 # Include the headers' folder in the CMake build
