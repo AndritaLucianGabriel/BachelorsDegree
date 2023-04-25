@@ -1,3 +1,0 @@
-/mnt/d/Licenta/Proiect/build/CMakeFiles/licenta_EXECUTABLE.dir
-/mnt/d/Licenta/Proiect/build/CMakeFiles/edit_cache.dir
-/mnt/d/Licenta/Proiect/build/CMakeFiles/rebuild_cache.dir
