@@ -1,0 +1,9 @@
+[submodule "libs/google-cloud-cpp"]
+	path = libs/google-cloud-cpp
+	url = https://github.com/googleapis/google-cloud-cpp.git
+[submodule "libs/poco"]
+	path = libs/poco
+	url = https://github.com/pocoproject/poco.git
+[submodule "libs/vcpkg"]
+	path = libs/vcpkg
+	url = https://github.com/microsoft/vcpkg.git
