@@ -28,8 +28,8 @@ gcloud config set project PROJECT_ID
 gcloud config set billing/quota_project PROJECT_ID
     We create a new key for an already existing service account (the default one)
 Docs: https://cloud.google.com/iam/docs/keys-create-delete#iam-service-account-keys-create-console
-    After we download the json we set the enviroment variable for authentication for the GCP apis
-export GOOGLE_APPLICATION_CREDENTIALS="/path/to/your/keyfile.json"
+    After we download the json we store in ./res. Name is not relevant as long as there we'll be only one json 
+file in that folder's root.
 
     VCPKG v2023.04.15 Release
 https://github.com/microsoft/vcpkg.git

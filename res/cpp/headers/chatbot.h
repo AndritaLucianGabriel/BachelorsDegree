@@ -8,20 +8,13 @@
  * code or its suitability for any purpose. Use of the code is at your own risk.
  */
 
-#ifndef LOGGER_H_
-#define LOGGER_H_
+#ifndef CHATBOT_H_
+#define CHATBOT_H_
 
-#include "Poco/Logger.h"
-
-class MyLogger{
+class Chatbot {
     public:
-        static Poco::Logger &getLogger();
-        static void init(bool pDebug);
-        static void cleanUp();
-    private:
-        static bool debug;
-        static Poco::Logger *logger;
+        void call();
 
-}; // class MyLogger
+}; // class Chatbot
 
-#endif // LOGGER_H_
+#endif // CHATBOT_H_

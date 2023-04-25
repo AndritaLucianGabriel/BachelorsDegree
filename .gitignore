@@ -4,4 +4,4 @@ build
 logs
 licenta_EXECUTABLE
 boost_1_67_0
-login_key_to_gcp_service_account.json
+res/*.json
