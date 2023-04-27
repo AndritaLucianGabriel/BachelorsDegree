@@ -32,7 +32,7 @@ change_versions() {
         # VCPKG v2023.04.15 Release
     cd ./vcpkg
     git checkout 2023.04.15
-    cd..
+    cd ..
         # GCP v2.9.1
     cd ./google-cloud-cpp
     git checkout 2.9.1
@@ -92,6 +92,13 @@ commands=("enviroment_setup" "poco_setup" "npm_setup" "gc_cli_setup" "sass_setup
 
 install() {
     for command in "${commands[@]}"; do
+        # Remove the '_setup' suffix
+        cmd_without_suffix=${command%_setup}
+
+        # Capitalize the first letter
+        capitalized_cmd="${cmd_without_suffix^}"
+        msg "$capitalized_cmd setup..."
+
         if [ "${VERBOSE}" = "false" ]; then
             eval "$command" > /dev/null
             exit_status=$?
