@@ -35,7 +35,7 @@ change_versions() {
     cd ..
         # GCP v2.9.1
     cd ./google-cloud-cpp
-    git checkout 2.9.1
+    git checkout v2.9.1
     cd ..
     cd ..
 }
