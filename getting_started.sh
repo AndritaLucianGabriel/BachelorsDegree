@@ -1,4 +1,5 @@
 #!/bin/bash
+
 clear
 read -r -d '\0' USAGE <<- EOM
 Usage: per default the script doesn't run.
@@ -22,7 +23,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-change_versions() {
+change_versions_setup() {
     msg "Getting wanted versions for submodules..."
     cd ./libs
         # Poco v1.12.4
@@ -43,7 +44,6 @@ change_versions() {
 enviroment_setup() {
     msg "Enviroment setup..."
     git submodule update --init --recursive
-    change_versions
     dos2unix ./build.sh ./libs/dart-sass/sass
 }
 
@@ -88,7 +88,7 @@ gcp_setup() {
     ./libs/vcpkg install google-cloud-cpp[core,dialogflow-es]
 }
 
-commands=("enviroment_setup" "poco_setup" "npm_setup" "gc_cli_setup" "sass_setup" "vcpkg_setup" "gcp_setup")
+commands=("enviroment_setup" "change_versions_setup" "poco_setup" "npm_setup" "gc_cli_setup" "sass_setup" "vcpkg_setup" "gcp_setup")
 
 install() {
     for command in "${commands[@]}"; do
