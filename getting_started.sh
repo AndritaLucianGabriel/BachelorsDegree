@@ -40,12 +40,13 @@ change_versions_setup() {
     cd ..
     cd ..
     echo
+    echo
 }
 
 enviroment_setup() {
     msg "Enviroment setup..."
     git submodule update --init --recursive > /dev/null
-    dos2unix ./build.sh ./libs/dart-sass/sass > /dev/null
+    dos2unix ./build.sh ./libs/dart-sass/sass C
     echo
 }
 
@@ -68,7 +69,7 @@ npm_setup() {
 
 gc_cli_setup() {
     msg "GC CLI setup..."
-    curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-427.0.0-linux-x86_64.tar.gz
+    curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-427.0.0-linux-x86_64.tar.gz > /dev/null
     tar -xf google-cloud-cli-427.0.0-linux-x86_64.tar.gz
     ./google-cloud-sdk/install.sh
     source ~/.bashrc
