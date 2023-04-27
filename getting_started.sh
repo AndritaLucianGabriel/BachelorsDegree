@@ -39,12 +39,14 @@ change_versions_setup() {
     git checkout v2.9.1
     cd ..
     cd ..
+    echo
 }
 
 enviroment_setup() {
     msg "Enviroment setup..."
     git submodule update --init --recursive
     dos2unix ./build.sh ./libs/dart-sass/sass
+    echo
 }
 
 poco_setup() {
