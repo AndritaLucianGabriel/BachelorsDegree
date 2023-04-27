@@ -45,4 +45,4 @@ gcloud config set project PROJECT_ID
 gcloud config set billing/quota_project PROJECT_ID
 
     How to build:
-Open the Proiect folder as workspace, make sure you have executable rights on the build.sh file and it's formatted for unix (dos2unix) and then run it using: ./build.sh -b
+Open the Proiect folder as workspace, make sure you have executable rights on the build.sh file and it's formatted for unix (dos2unix) and then run it using: ./build.sh -b ./google-cloud-sdk/bin/gcloud init

@@ -72,7 +72,7 @@ gc_cli_setup() {
     tar -xf google-cloud-cli-427.0.0-linux-x86_64.tar.gz
     ./google-cloud-sdk/install.sh
     source ~/.bashrc
-    ./google-cloud-sdk/bin/gcloud init
+    # ./google-cloud-sdk/bin/gcloud init
 }
 
 sass_setup() {
