@@ -2,10 +2,11 @@
 clear
 read -r -d '\0' USAGE <<- EOM
 Usage: per default the script doesn't run.
-  -b|--build         - build and run the project
-  -c|--clean         - clean the project
-  -v|--verbose       - optional, print more output to the console
-  -h|--help          - show this help
+  -b|--build          - build and run the project
+  -bscss|--build-scss - compile only the scss files to update the html's aspect
+  -c|--clean          - clean the project
+  -v|--verbose        - optional, print more output to the console
+  -h|--help           - show this help
 Notes: do NOT run -c with other options since the cleaning is meant to be a solo process.
 EOM
 
@@ -24,7 +25,7 @@ clean() {
     rm -rf "build" "licenta_EXECUTABLE" "logs"
     GOOGLE_APPLICATION_CREDENTIALS="" # we ll clean the enviroment variable for the GCP's credentials
     if [ $? -ne 0 ]; then
-        err_exit "Failed!\n"
+        err_exit "Failed with exit status $?!\n"
         exit
     else
         succ "Done"
@@ -35,7 +36,7 @@ compile_sass() {
     msg "Compiling sass files..."
     sass "res/scss/text.scss" "res/css/text.css" > /dev/null
     if [ $? -ne 0 ]; then
-        err_exit "Failed!\n"
+        err_exit "Failed with exit status $?!\n"
         exit
     else
         succ "Done"
@@ -51,7 +52,7 @@ compile_cpp() {
         cmake "CMakeLists.txt" --no-warn-unused-cli -B build -DCMAKE_TOOLCHAIN_FILE=../libs/vcpkg/scripts/buildsystems/vcpkg.cmake
     fi
     if [ $? -ne 0 ]; then
-        err_exit "Failed!\n"
+        err_exit "Failed with exit status $?!\n"
         exit
     else
         cd "./build"
@@ -63,7 +64,7 @@ compile_cpp() {
             make
         fi
         if [ $? -ne 0 ]; then
-            err_exit "Failed!\n"
+            err_exit "Failed with exit status $?!\n"
             exit
         else
             succ "Done"
@@ -81,7 +82,7 @@ configure_gcp() {
         succ "Done"
     else
         wrn "No login key found! Create a new login key for a service account and put it in ./res!"
-        err_exit "Failed!\n"
+        err_exit "Failed with exit status $?!\n"
     fi
 }
 

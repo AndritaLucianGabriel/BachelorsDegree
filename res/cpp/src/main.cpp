@@ -27,8 +27,10 @@ class MyServerApp : public ServerApplication {
 
             s.start();
             std::cout<<"\n\tServer started...\n\n";
+
             Chatbot chatbot;
             chatbot.call();
+
             waitForTerminationRequest(); // wait for CTRL-C or kill
 
             MyLogger::cleanUp();
