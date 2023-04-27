@@ -28,23 +28,25 @@ change_versions_setup() {
     cd ./libs
         # Poco v1.12.4
     cd ./poco
-    git checkout poco-1.12.4-release
+    git checkout poco-1.12.4-release > /dev/null
     cd ..
         # VCPKG v2023.04.15 Release
     cd ./vcpkg
-    git checkout 2023.04.15
+    git checkout 2023.04.15 > /dev/null
     cd ..
         # GCP v2.9.1
     cd ./google-cloud-cpp
-    git checkout v2.9.1
+    git checkout v2.9.1 > /dev/null
     cd ..
     cd ..
+    echo
 }
 
 enviroment_setup() {
     msg "Enviroment setup..."
-    git submodule update --init --recursive
-    dos2unix ./build.sh ./libs/dart-sass/sass
+    git submodule update --init --recursive > /dev/null
+    dos2unix ./build.sh ./libs/dart-sass/sass > /dev/null
+    echo
 }
 
 poco_setup() {
@@ -53,9 +55,9 @@ poco_setup() {
     apt-get install openssl libssl-dev --fix-missing
     apt-get -y update && apt-get -y install git g++ make cmake libssl-dev --fix-missing
     cd ./libs/poco/build
-    cmake ..
-    cmake --build . --config Release
-    cmake --build . --target install
+    cmake .. -Wno-dev
+    cmake --build . --config Release -Wno-dev
+    cmake --build . --target install -Wno-dev
     cd ../../../
 }
 
@@ -67,7 +69,7 @@ npm_setup() {
 gc_cli_setup() {
     msg "GC CLI setup..."
     curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-427.0.0-linux-x86_64.tar.gz
-    tar -xf google-cloud-cli-427.0.0-linux-x86.tar.gz
+    tar -xf google-cloud-cli-427.0.0-linux-x86_64.tar.gz
     ./google-cloud-sdk/install.sh
     source ~/.bashrc
     ./google-cloud-sdk/bin/gcloud init
