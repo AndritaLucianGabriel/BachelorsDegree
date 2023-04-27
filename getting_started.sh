@@ -40,6 +40,7 @@ change_versions_setup() {
     cd ..
     cd ..
     echo
+    echo
 }
 
 enviroment_setup() {
