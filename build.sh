@@ -1,4 +1,5 @@
 #!/bin/bash
+
 clear
 read -r -d '\0' USAGE <<- EOM
 Usage: per default the script doesn't run.
