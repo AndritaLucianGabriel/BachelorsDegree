@@ -40,13 +40,12 @@ change_versions_setup() {
     cd ..
     cd ..
     echo
-    echo
 }
 
 enviroment_setup() {
     msg "Enviroment setup..."
     git submodule update --init --recursive > /dev/null
-    dos2unix ./build.sh ./libs/dart-sass/sass C
+    dos2unix ./build.sh ./libs/dart-sass/sass > /dev/null
     echo
 }
 
