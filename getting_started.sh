@@ -43,8 +43,8 @@ change_versions_setup() {
 
 enviroment_setup() {
     msg "Enviroment setup..."
-    git submodule update --init --recursive > /dev/null
-    dos2unix ./build.sh ./libs/dart-sass/sass > /dev/null
+    git submodule update --init --recursive
+    dos2unix ./build.sh ./libs/dart-sass/sass
 }
 
 poco_setup() {
@@ -54,8 +54,8 @@ poco_setup() {
     apt-get -y update && apt-get -y install git g++ make cmake libssl-dev --fix-missing
     cd ./libs/poco/build
     cmake ..
-    cmake --build . --config Release -Wunused-result
-    cmake --build . --target install -Wunused-result
+    cmake --build . --config Release
+    cmake --build . --target install
     cd ../../../
 }
 
@@ -75,7 +75,7 @@ gc_cli_setup() {
 
 sass_setup() {
     msg "Sass setup..."
-    ln -s /mnt/c/Users/gabyl/OneDrive/Desktop/FACULTATE/Anul-4/BachelorsDegree/libs/dart-sass/sass /usr/local/bin/sass
+    ln -sf ./libs/dart-sass/sass /usr/local/bin/sass
 }
 
 vcpkg_setup() {
@@ -86,7 +86,7 @@ vcpkg_setup() {
 
 gcp_setup() {
     msg "GCP setup (this will take ~1.5h)..."
-    ./libs/vcpkg install google-cloud-cpp[core,dialogflow-es]
+    ./libs/vcpkg/vcpkg install google-cloud-cpp[core,dialogflow-es]
 }
 
 commands=("enviroment_setup" "change_versions_setup" "poco_setup" "npm_setup" "gc_cli_setup" "sass_setup" "vcpkg_setup" "gcp_setup")
