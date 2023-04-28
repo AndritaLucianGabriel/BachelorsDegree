@@ -39,14 +39,14 @@ change_versions_setup() {
     git checkout v2.9.1 > /dev/null
     cd ..
     cd ..
-    echo
+    echo -e
 }
 
 enviroment_setup() {
     msg "Enviroment setup..."
     git submodule update --init --recursive > /dev/null
     dos2unix ./build.sh ./libs/dart-sass/sass > /dev/null
-    echo
+    echo -e
 }
 
 poco_setup() {
@@ -55,7 +55,7 @@ poco_setup() {
     apt-get install openssl libssl-dev --fix-missing
     apt-get -y update && apt-get -y install git g++ make cmake libssl-dev --fix-missing
     cd ./libs/poco/build
-    cmake .. -Wno-dev
+    cmake ..
     cmake --build . --config Release -Wno-dev
     cmake --build . --target install -Wno-dev
     cd ../../../
