@@ -39,14 +39,12 @@ change_versions_setup() {
     git checkout v2.9.1 > /dev/null
     cd ..
     cd ..
-    echo -e
 }
 
 enviroment_setup() {
     msg "Enviroment setup..."
     git submodule update --init --recursive > /dev/null
     dos2unix ./build.sh ./libs/dart-sass/sass > /dev/null
-    echo -e
 }
 
 poco_setup() {
@@ -56,8 +54,8 @@ poco_setup() {
     apt-get -y update && apt-get -y install git g++ make cmake libssl-dev --fix-missing
     cd ./libs/poco/build
     cmake ..
-    cmake --build . --config Release -Wno-dev
-    cmake --build . --target install -Wno-dev
+    cmake --build . --config Release -Wunused-result
+    cmake --build . --target install -Wunused-result
     cd ../../../
 }
 
@@ -70,8 +68,8 @@ gc_cli_setup() {
     msg "GC CLI setup..."
     curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-427.0.0-linux-x86_64.tar.gz > /dev/null
     tar -xf google-cloud-cli-427.0.0-linux-x86_64.tar.gz
-    ./google-cloud-sdk/install.sh
-    source ~/.bashrc
+    # ./google-cloud-sdk/install.sh
+    # source ~/.bashrc
     # ./google-cloud-sdk/bin/gcloud init
 }
 
@@ -82,6 +80,7 @@ sass_setup() {
 
 vcpkg_setup() {
     msg "VCPKG setup..."
+    apt-get install curl zip unzip tar
     ./libs/vcpkg/bootstrap-vcpkg.sh
 }
 
