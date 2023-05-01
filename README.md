@@ -44,5 +44,10 @@ Optional steps(requires gc cli installed(steps 0.2-0.6)):
 gcloud config set project PROJECT_ID
 gcloud config set billing/quota_project PROJECT_ID
 
+    How the chatbot works:
+Docs: https://googleapis.dev/cpp/google-cloud-dialogflow_es/latest/index.html
+Notes: am nevoie de o sesiune care reprezinta interactiunea dintre agentul Dialogflow si end-user, se stocheaza contextul
+timp de 20 min (sursa: https://cloud.google.com/dialogflow/es/docs/api-overview). 
+
     How to build:
-Open the Proiect folder as workspace, make sure you have executable rights on the build.sh file and it's formatted for unix (dos2unix) and then run it using: ./build.sh -b ./google-cloud-sdk/bin/gcloud init
+Open the Proiect folder as workspace, make sure you have executable rights on the build.sh file and it's formatted for unix (dos2unix) and then run it using: ./build.sh -b ./google-cloud-sdk/bin/gcloud init ./google-cloud-sdk/install.sh

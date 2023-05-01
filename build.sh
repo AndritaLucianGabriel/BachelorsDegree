@@ -35,7 +35,11 @@ clean() {
 
 compile_sass() {
     msg "Compiling sass files..."
-    sass "res/scss/text.scss" "res/css/text.css" > /dev/null
+    if [ "${VERBOSE}" = "false" ]; then
+        sass --no-source-map "res/scss/text.scss" "res/css/text.css" > /dev/null
+    else
+        sass --no-source-map "res/scss/text.scss" "res/css/text.css"
+    fi
     if [ $? -ne 0 ]; then
         err_exit "Failed with exit status $?!\n"
         exit

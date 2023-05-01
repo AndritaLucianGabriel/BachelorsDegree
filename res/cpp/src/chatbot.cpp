@@ -8,26 +8,65 @@
  * code or its suitability for any purpose. Use of the code is at your own risk.
  */
 
-#include "google/cloud/dialogflow_es/agents_client.h"
-#include "google/cloud/project.h"
-
 #include "chatbot.h"
 #include "constants.h"
 
 #include <iostream>
+#include <sstream>
 
-namespace dialogflow_es = ::google::cloud::dialogflow_es;
+void Chatbot::sendMessage(const std::string& message) {
+	if(init == true) {
+		try {
+			this->request.mutable_query_input()->mutable_text()->set_text(message);
 
-void Chatbot::call() {
-  auto client = dialogflow_es::AgentsClient(dialogflow_es::MakeAgentsConnection());
+			auto response = this->client.DetectIntent(this->request);
+			if (!response) {
+				logger.error("Error in DetectIntent: " + response.status().message());
+				return;
+			}
 
-  auto const project = google::cloud::Project(globals::projectID);
-  for (auto a : client.SearchAgents(project.FullName())) {
-    if (!a) throw std::move(a).status();
-    std::cout << a->DebugString() << "\n";
-  }
-// } catch (google::cloud::Status const& status) {
-//   std::cerr << "google::cloud::Status thrown: " << status << "\n";
-//   return 1;
-// }
+			const v2::QueryResult& query_result = response->query_result();
+			this->setOutputText(query_result.fulfillment_text());
+			// logger.information(convertQueryForDebug(query_result));
+		} catch (google::cloud::Status const& status) {
+			logger.error("google::cloud::Status thrown: " + status.message());
+		}
+	}
+	else {
+		logger.error("The agent's session has not been configured!");
+	}
+}
+
+std::string Chatbot::convertQueryForDebug(const v2::QueryResult& query) {
+	std::string text;
+	text="Query text: " + query.query_text() + "\n"
+		+ "Intent: " + query.intent().display_name() + "\n"
+		+ "Response: " + query.fulfillment_text();
+	return text;
+}
+
+void Chatbot::setOutputText(const std::string& outputParam) {
+	this->outputText = outputParam;
+	logger.information("Output text sent to agent: " + this->outputText);
+}
+
+std::string Chatbot::getOutputText() {
+	logger.information("Output text retrieved from agent: " + this->outputText);
+	return this->outputText;
+}
+
+void Chatbot::setUp() {
+	if(init == false) {
+		try{
+			init = true;
+			request.mutable_query_input()->mutable_text()->set_language_code(globals::agentLanguage);
+			this->request.set_session("projects/" + globals::projectID + "/agent/sessions/" + globals::sessionID);
+			logger.information("The agent has been succesfully configured!");
+		} catch (google::cloud::Status const& status) {
+			logger.error("google::cloud::Status thrown: " + status.message());
+		}
+	}
+	else {
+		logger.warning("The agent's session was already configured!");
+	}
 }

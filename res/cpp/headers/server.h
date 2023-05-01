@@ -19,6 +19,7 @@
 #include <Poco/Logger.h>
 
 #include "logger.h"
+#include "chatbot.h"
 
 class MyRequestHandler : public Poco::Net::HTTPRequestHandler {
     public:
@@ -27,8 +28,7 @@ class MyRequestHandler : public Poco::Net::HTTPRequestHandler {
     private:
         void serveResponse(Poco::Net::HTTPServerResponse &response, const std::string& fileName, const std::string& extension);
         Poco::Logger &logger = MyLogger::getLogger();
-        static int count;
-
+        Chatbot chatbot;
 }; // class MyRequestHandler
 
 class MyRequestHandlerFactory : public Poco::Net::HTTPRequestHandlerFactory {
