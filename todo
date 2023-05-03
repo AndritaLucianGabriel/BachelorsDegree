@@ -3,7 +3,7 @@ Partea de handle al requesturilor e intereasanta, legatura din html si css fiind
 separat (deci trebuie sa am logica speciala pt a trimite si css-ul)
 
     TODO - wip:
- 
+-fa split scss uri (pt culori mai ales)
 
     TODO - done:
 -cum folosesc poco

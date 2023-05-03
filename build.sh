@@ -33,11 +33,6 @@ clean() {
     fi
 }
 
-# compile_sass_watch() {
-#     msg "Watching sass files..."
-#     sass --no-source-map --watch "res/scss/text.scss" "res/css/text.css"
-# }
-
 compile_sass_once() {
     msg "Compiling sass files..."
     if [ "${VERBOSE}" = "false" ]; then
@@ -116,9 +111,6 @@ execute() {
         'CLEAN')
             clean
         ;;
-        'BUILD-SCSS-W')
-            compile_sass_watch
-        ;;
         'BUILD-SCSS-O')
             compile_sass_once
         ;;
@@ -136,9 +128,6 @@ func_read_cli_options() {
         shift;;
             '-b'|'--build')
                 COMMAND="BUILD"
-        shift;;
-            '-bscssw'|'--build-scss-w')
-                COMMAND="BUILD-SCSS-W"
         shift;;
             '-bscsso'|'--build-scss-o')
                 COMMAND="BUILD-SCSS-O"
