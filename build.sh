@@ -33,7 +33,12 @@ clean() {
     fi
 }
 
-compile_sass() {
+# compile_sass_watch() {
+#     msg "Watching sass files..."
+#     sass --no-source-map --watch "res/scss/text.scss" "res/css/text.css"
+# }
+
+compile_sass_once() {
     msg "Compiling sass files..."
     if [ "${VERBOSE}" = "false" ]; then
         sass --no-source-map "res/scss/text.scss" "res/css/text.css" > /dev/null
@@ -92,7 +97,7 @@ configure_gcp() {
 }
 
 build() {
-    compile_sass
+    compile_sass_once
     compile_cpp
     configure_gcp
     if [ "${VERBOSE}" = "false" ]; then
@@ -111,8 +116,11 @@ execute() {
         'CLEAN')
             clean
         ;;
-        'BUILD-SCSS')
-            compile_sass
+        'BUILD-SCSS-W')
+            compile_sass_watch
+        ;;
+        'BUILD-SCSS-O')
+            compile_sass_once
         ;;
         'NONE')
             err_exit "No command was given!"
@@ -129,8 +137,11 @@ func_read_cli_options() {
             '-b'|'--build')
                 COMMAND="BUILD"
         shift;;
-            '-bscss'|'--build-scss')
-                COMMAND="BUILD-SCSS"
+            '-bscssw'|'--build-scss-w')
+                COMMAND="BUILD-SCSS-W"
+        shift;;
+            '-bscsso'|'--build-scss-o')
+                COMMAND="BUILD-SCSS-O"
         shift;;
             '-v'|'--verbose')
                 # verbose mode

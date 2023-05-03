@@ -68,8 +68,12 @@ Poco::Logger &MyLogger::getLogger() {
     return *logger;
 }
 
-void MyLogger::init(bool pDebug) {
-    debug = pDebug;
+void MyLogger::init(bool debugParam) {
+    debug = debugParam;
+}
+
+bool MyLogger::getDebug() {
+    return debug;
 }
 
 // When you use Poco::Logger, you don't have to worry about freeing the logger instance directly, as Poco::Logger takes care of memory management internally. Poco uses a reference counting mechanism for logger management. The logger is destroyed automatically when its reference count drops to zero.

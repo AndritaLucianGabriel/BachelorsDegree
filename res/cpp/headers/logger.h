@@ -16,7 +16,8 @@
 class MyLogger{
     public:
         static Poco::Logger &getLogger();
-        static void init(bool pDebug);
+        static void init(bool debugParam);
+        static bool getDebug();
         static void cleanUp();
     private:
         static bool debug;

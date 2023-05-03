@@ -3,7 +3,7 @@ Partea de handle al requesturilor e intereasanta, legatura din html si css fiind
 separat (deci trebuie sa am logica speciala pt a trimite si css-ul)
 
     TODO - wip:
--folosirea textului returnat de robot si modificarea html ului cu mesajul aferent 
+ 
 
     TODO - done:
 -cum folosesc poco
@@ -12,6 +12,7 @@ separat (deci trebuie sa am logica speciala pt a trimite si css-ul)
 -logger si fisier de logging(avem, cum sa nu avem)
 -integrarea de clean si restul intre run-uri in script (daca vrea clean, stergem si logurile chiar daca sunt in rotatie)
 -are sens enable debug are doar rolul de a scoate output in consola (atat din build.sh cat si din executabil)
+-folosirea textului returnat de robot si modificarea html ului cu mesajul aferent(creat chatbot BE si modificat partea de server cat si creat un js pt client side)
 
 Probleme rezolvate:
 Cum fac partea de modifica a html ului pt mesaje? Am ales sa folosesc JS, avand nevoie de event listeners pt butoane

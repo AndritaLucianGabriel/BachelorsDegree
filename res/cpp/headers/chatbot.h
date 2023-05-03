@@ -18,18 +18,20 @@
 
 #include "logger.h"
 
+#include <memory.h>
+
 namespace dialogflow_es = ::google::cloud::dialogflow_es;
 namespace v2 = ::google::cloud::dialogflow::v2;
 
 class Chatbot {
     public:
-        Chatbot():client(dialogflow_es::MakeSessionsConnection()){setUp();}
+        static Chatbot* getInstance();
         void sendMessage(const std::string& message);
 
         void setOutputText(const std::string& outputParam);
         std::string getOutputText();
-
     private:
+        Chatbot():client(dialogflow_es::MakeSessionsConnection()){setUp();}
         void setUp();
         std::string convertQueryForDebug(const v2::QueryResult& query);
         Poco::Logger& logger = MyLogger::getLogger();
@@ -40,6 +42,7 @@ class Chatbot {
         bool init = false;
         std::string inputText = "";
         std::string outputText = "";
+        static Chatbot* agent;
 
 }; // class Chatbot
 

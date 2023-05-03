@@ -14,19 +14,29 @@
 #include <iostream>
 #include <sstream>
 
+Chatbot* Chatbot::agent = nullptr;
+
+Chatbot* Chatbot::getInstance() {
+	if(agent == nullptr) {
+		agent = new Chatbot();
+		return agent;
+	}
+	return agent;
+}
+
 void Chatbot::sendMessage(const std::string& message) {
 	if(init == true) {
 		try {
-			this->request.mutable_query_input()->mutable_text()->set_text(message);
+			request.mutable_query_input()->mutable_text()->set_text(message);
 
-			auto response = this->client.DetectIntent(this->request);
+			auto response = client.DetectIntent(request);
 			if (!response) {
 				logger.error("Error in DetectIntent: " + response.status().message());
 				return;
 			}
 
 			const v2::QueryResult& query_result = response->query_result();
-			this->setOutputText(query_result.fulfillment_text());
+			setOutputText(query_result.fulfillment_text());
 			// logger.information(convertQueryForDebug(query_result));
 		} catch (google::cloud::Status const& status) {
 			logger.error("google::cloud::Status thrown: " + status.message());
@@ -46,13 +56,12 @@ std::string Chatbot::convertQueryForDebug(const v2::QueryResult& query) {
 }
 
 void Chatbot::setOutputText(const std::string& outputParam) {
-	this->outputText = outputParam;
-	logger.information("Output text sent to agent: " + this->outputText);
+	outputText = outputParam;
 }
 
 std::string Chatbot::getOutputText() {
-	logger.information("Output text retrieved from agent: " + this->outputText);
-	return this->outputText;
+	logger.information("Output text retrieved from agent: " + outputText);
+	return outputText;
 }
 
 void Chatbot::setUp() {
@@ -60,7 +69,7 @@ void Chatbot::setUp() {
 		try{
 			init = true;
 			request.mutable_query_input()->mutable_text()->set_language_code(globals::agentLanguage);
-			this->request.set_session("projects/" + globals::projectID + "/agent/sessions/" + globals::sessionID);
+			request.set_session("projects/" + globals::projectID + "/agent/sessions/" + globals::sessionID);
 			logger.information("The agent has been succesfully configured!");
 		} catch (google::cloud::Status const& status) {
 			logger.error("google::cloud::Status thrown: " + status.message());

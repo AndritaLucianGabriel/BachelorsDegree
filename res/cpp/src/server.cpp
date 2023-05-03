@@ -14,6 +14,7 @@
 #include <vector>
 
 #include "server.h"
+#include "chatbot.h"
 
 #include <Poco/Net/HTTPServer.h>
 #include <Poco/Net/HTTPRequestHandler.h>
@@ -46,13 +47,14 @@ void MyRequestHandler::handleRequest(Poco::Net::HTTPServerRequest &request, Poco
         Var jsonData = parser.parse(requestBody);
         Object::Ptr jsonObject = jsonData.extract<Object::Ptr>();
         std::string message = jsonObject->get("message").toString();
-        chatbot.sendMessage(message);
-        response.setStatus(Poco::Net::HTTPResponse::HTTP_OK);
+        logger.information("Input text sent from client: " + message);
+        Chatbot::getInstance()->sendMessage(message);
         ostream &out=response.send();
         out.flush();
-        out<<chatbot.getOutputText();
+        out<<Chatbot::getInstance()->getOutputText();
         out.flush();
-        // response.send();
+        response.setStatus(Poco::Net::HTTPResponse::HTTP_OK);
+        response.send();
     }
     else {
         logger.information("Requested " + requestPath);

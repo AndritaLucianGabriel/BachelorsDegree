@@ -30,16 +30,24 @@ class MyServerApp : public ServerApplication {
             Poco::Net::HTTPServer server(new MyRequestHandlerFactory, Poco::Net::ServerSocket(9090), pParams);
 
             server.start();
-            std::cout<<"\n\tServer started...\n\n";
+            logger.information("\n\tServer started...\n\n");
+            if(MyLogger::getDebug() == false){
+                std::cout<<"\n\tServer started...\n\n";
+            }
 
             waitForTerminationRequest(); // wait for CTRL-C or kill
 
             MyLogger::cleanUp();
-            std::cout<<"\n\tShutting down...\n";
+            logger.information("\n\tShutting down...\n");
+            if(MyLogger::getDebug() == false){
+                std::cout<<"\n\tShutting down...\n";
+            }
             server.stop();
 
             return Application::EXIT_OK;
         }
+    private:
+        Poco::Logger& logger = MyLogger::getLogger();
 };
 
 int main(int argc, char **argv) {
@@ -51,10 +59,6 @@ int main(int argc, char **argv) {
     }
 
     MyServerApp app;
-
-    Poco::Logger &logger = MyLogger::getLogger();
-
-    logger.information("=======================================================");
 
     return app.run(argc, argv);
 }

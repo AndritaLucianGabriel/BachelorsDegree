@@ -28,7 +28,7 @@ class MyRequestHandler : public Poco::Net::HTTPRequestHandler {
     private:
         void serveResponse(Poco::Net::HTTPServerResponse &response, const std::string& fileName, const std::string& extension);
         Poco::Logger &logger = MyLogger::getLogger();
-        Chatbot chatbot;
+
 }; // class MyRequestHandler
 
 class MyRequestHandlerFactory : public Poco::Net::HTTPRequestHandlerFactory {

@@ -15,7 +15,7 @@ namespace globals {
     const std::string projectID = "licenta-383311";
     // For further implementation, this will be generated for each client
     const std::string sessionID = "123456789";
-    const std::string agentLanguage = "en-US";
+    const std::string agentLanguage = "en";
 } // namespace globals
 
 #endif // CONSTANTS_H_

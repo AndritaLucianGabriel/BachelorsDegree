@@ -48,11 +48,14 @@ body {
   flex-grow: 1;
   overflow-y: auto;
   padding: 20px;
+  max-height: 36rem;
 }
 
 .chat-message {
   margin-bottom: 20px;
-
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
   p {
     display: inline-block;
     margin: 0;
@@ -82,7 +85,7 @@ body {
 
 .chat-input {
   position: absolute;
-  bottom: 100px;
+  bottom: 0px;
   left: 0;
   width: 100%;
   padding: 20px;
