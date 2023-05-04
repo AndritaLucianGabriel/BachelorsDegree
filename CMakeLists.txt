@@ -13,7 +13,6 @@ set(PATH_TO_HEADERS ${CMAKE_SOURCE_DIR}/res/cpp/headers)
 
 # Set the sources to a specific variable
 set(SOURCE_FILES_LIBRARY
-    ${PATH_TO_CPP}/constants.cpp
     ${PATH_TO_CPP}/logger.cpp
     ${PATH_TO_CPP}/server.cpp
     ${PATH_TO_CPP}/main.cpp

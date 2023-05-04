@@ -1,7 +1,13 @@
+# Cached info
 .idea
 .vscode
+
+# Folders
+boost_1_67_0
 build
 logs
+css
+
+# Files
 licenta_EXECUTABLE
-boost_1_67_0
 res/*.json

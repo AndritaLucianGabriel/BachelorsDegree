@@ -1,5 +1,19 @@
 #!/bin/bash
 
+# Copyright 2023 Andrita Lucian-Gabriel
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 clear
 read -r -d '\0' USAGE <<- EOM
 Usage: per default the script doesn't run.
@@ -23,7 +37,7 @@ inf() { echo -e "$(tput bold)"INFO: "$(tput sgr0)$* \n"; }
 
 clean() {
     msg "Cleaning..."
-    rm -rf "build" "licenta_EXECUTABLE" "logs"
+    rm -rf "build" "licenta_EXECUTABLE" "logs" "res/css"
     GOOGLE_APPLICATION_CREDENTIALS="" # we ll clean the enviroment variable for the GCP's credentials
     if [ $? -ne 0 ]; then
         err_exit "Failed with exit status $?!\n"
@@ -33,18 +47,21 @@ clean() {
     fi
 }
 
-# compile_sass_watch() {
-#     msg "Watching sass files..."
-#     sass --no-source-map --watch "res/scss/text.scss" "res/css/text.css"
-# }
-
-compile_sass_once() {
+compile_sass() {
     msg "Compiling sass files..."
-    if [ "${VERBOSE}" = "false" ]; then
-        sass --no-source-map "res/scss/text.scss" "res/css/text.css" > /dev/null
-    else
-        sass --no-source-map "res/scss/text.scss" "res/css/text.css"
-    fi
+    files="$(find ./res/scss -type f)"
+
+    IFS=$'\n' # Set Internal Field Separator to newline for correct handling of filenames with spaces
+    for file in $files; do
+        file_name_with_ext="$(basename "$file")"
+        file_name="${file_name_with_ext%.*}"
+        if [ "${VERBOSE}" = "false" ]; then
+            sass --no-source-map "res/scss/$file_name.scss" "res/css/$file_name.css" > /dev/null
+        else
+            sass --no-source-map "res/scss/$file_name.scss" "res/css/$file_name.css"
+        fi
+    done
+    unset IFS # Reset IFS to its original value
     if [ $? -ne 0 ]; then
         err_exit "Failed with exit status $?!\n"
         exit
@@ -97,7 +114,7 @@ configure_gcp() {
 }
 
 build() {
-    compile_sass_once
+    compile_sass
     compile_cpp
     configure_gcp
     if [ "${VERBOSE}" = "false" ]; then
@@ -116,11 +133,8 @@ execute() {
         'CLEAN')
             clean
         ;;
-        'BUILD-SCSS-W')
-            compile_sass_watch
-        ;;
-        'BUILD-SCSS-O')
-            compile_sass_once
+        'BUILD-SCSS')
+            compile_sass
         ;;
         'NONE')
             err_exit "No command was given!"
@@ -137,11 +151,8 @@ func_read_cli_options() {
             '-b'|'--build')
                 COMMAND="BUILD"
         shift;;
-            '-bscssw'|'--build-scss-w')
-                COMMAND="BUILD-SCSS-W"
-        shift;;
-            '-bscsso'|'--build-scss-o')
-                COMMAND="BUILD-SCSS-O"
+            '-bscss'|'--build-scss')
+                COMMAND="BUILD-SCSS"
         shift;;
             '-v'|'--verbose')
                 # verbose mode

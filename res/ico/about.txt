@@ -1,0 +1,6 @@
+This favicon was generated using the following font:
+
+- Font Title: Chilanka
+- Font Author: Copyright 2020 The Chilanka Project Authors (https://gitlab.com/smc/fonts/chilanka)
+- Font Source: http://fonts.gstatic.com/s/chilanka/v20/WWXRlj2DZQiMJYaYRrJQI9EAZhTO.ttf
+- Font License: SIL Open Font License, 1.1 (http://scripts.sil.org/OFL))
