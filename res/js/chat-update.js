@@ -1,3 +1,18 @@
+/* Copyright 2023 Andrita Lucian-Gabriel
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 function sendToServer(inputContent) {
   // Sending the information back to the server so the bot can process it
   displayBubbleUntillResponse();
@@ -90,38 +105,11 @@ document.addEventListener("DOMContentLoaded", function () {
       process();
       inputText.value = ""; // clear the input text after sending
     });
-});
 
-window.addEventListener("load", function () {
-  const themeSwitch = document.getElementById('themeSwitch');
-  //  Verific tema
-  if (localStorage.getItem('theme') === 'lightTheme' || localStorage.getItem('theme') === '') {
-      setTheme('lightTheme');
-      themeSwitch.checked = false;
-  } else if (localStorage.getItem('theme') === 'darkTheme') {
-      setTheme('darkTheme');
-      themeSwitch.checked = true;
-  }
-  function setTheme(themeName) {
-    localStorage.setItem('theme', themeName);
-    if (themeName == "lightTheme") {
-        document.body.style.setProperty("--primary-color", "#007bff");
-        document.body.style.setProperty("--secondary-color", "#F0F2F5");
-        document.body.style.setProperty("--text-color", "#444");
-        document.body.style.setProperty("--chat-background-color", "#DCD7C9");
-    }
-    else if (themeName == "darkTheme") {
-        document.body.style.setProperty("--primary-color", "#2C3639");
-        document.body.style.setProperty("--secondary-color", "#3F4E4F");
-        document.body.style.setProperty("--text-color", "#DCD7C9");
-        document.body.style.setProperty("--chat-background-color", "#A27B5C");
-    }
-  }
-  themeSwitch.addEventListener('change', () => {
-    if (themeSwitch.checked) {
-      setTheme("darkTheme");
-    } else {
-      setTheme("lightTheme");
-    }
-  });
+    const content = document.getElementsByClassName("chat-content")[0];
+    const input = document.getElementById("input-text");
+
+    content.addEventListener("click", function() {
+      input.focus();
+    });
 });

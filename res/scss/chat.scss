@@ -1,3 +1,18 @@
+/* Copyright 2023 Andrita Lucian-Gabriel
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 /* Reset */
 * {
   margin: 0;
@@ -5,24 +20,10 @@
   box-sizing: border-box;
 }
 
+@import "./colors.scss";
+
 html, body {
   height: 100%;
-  --slider-light-background-color: blue;
-  --slider-dark-background-color: darkblue;
-  --body-background-color:red;
-  --header-background-color: green;
-  --header-text-color: yellow;
-  --chat-background-color: pink;
-  --chat-received-background-color: black;
-  --chat-received-text-color: yellow;
-  --chat-sent-background-color: gray;
-  --chat-sent-text-color: green;
-  --chat-footer-text-color: purple;
-  --chat-input-background-color: green;
-  --chat-input-button: blue;
-  --footer-background-color: pink;
-  --footer-info-color: white;
-  --footer-misc-color: lightblue;
 }
 
 body {
@@ -77,7 +78,7 @@ body {
             height: 0;
 
             &:checked + .slider {
-              background-color: var(--slider-dark-background-color);
+              background-color: var(--slider-background-color);
             }
 
             &:checked + .slider:before {
@@ -92,7 +93,7 @@ body {
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: var(--slider-light-background-color);
+            background-color: var(--slider-background-color);
             transition: 0.4s;
 
             &:before {
@@ -143,17 +144,18 @@ body {
         border: none;
         border-radius: 20px;
         font-size: 18px;
-        background-color: var(--chat-footer-text-color);
+        color: var(--chat-footer-text-color);
+        background-color: var(--chat-footer-background-color);
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 
         &:focus{
-          outline:0;
+          box-shadow: 0 2px 2px var(--header-text-color);
         }
       }
 
       button {
         padding: 10px 20px;
-        background-color: var(--primary-color);
+        background-color: var(--chat-button);
         color: var(--chat-footer-text-color);
         border: none;
         border-radius: 20px;
@@ -185,8 +187,8 @@ body {
 }
 
 .sent p {
-  background-color: var(--chat-input-background-color);
-  color: var(--chat-input-text-color);
+  background-color: var(--chat-sent-background-color);
+  color: var(--chat-sent-text-color);
   margin-left: auto;
   margin-right: 0;
 }
@@ -207,7 +209,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: lightgray;
+  background-color: var(--bubble-background-color);
   animation: chatAnimation 0.5s ease-in-out;
 
   .circle {

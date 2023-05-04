@@ -13,14 +13,18 @@
  * limitations under the License.
  */
 
-#ifndef CONSTANTS_H_
-#define CONSTANTS_H_
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
 
-namespace globals {
-    const std::string projectID = "licenta-383311";
-    // For further implementation, this will be generated for each client
-    const std::string sessionID = "123456789";
-    const std::string agentLanguage = "en";
-} // namespace globals
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
 
-#endif // CONSTANTS_H_
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
