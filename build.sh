@@ -17,11 +17,12 @@
 clear
 read -r -d '\0' USAGE <<- EOM
 Usage: per default the script doesn't run.
-  -b|--build          - build and run the project
-  -bscss|--build-scss - compile only the scss files to update the html's aspect
-  -c|--clean          - clean the project
-  -v|--verbose        - optional, print more output to the console
-  -h|--help           - show this help
+  -b|--build            - build and run the project
+  -bscss|--build-scss   - compile only the scss files to update the html's aspect
+  -docs|--generate-docs - generate the technical documentation using Doxygen
+  -c|--clean            - clean the project
+  -v|--verbose          - optional, print more output to the console
+  -h|--help             - show this help
 Notes: do NOT run -c with other options since the cleaning is meant to be a solo process.
 EOM
 
@@ -37,8 +38,23 @@ inf() { echo -e "$(tput bold)"INFO: "$(tput sgr0)$* \n"; }
 
 clean() {
     msg "Cleaning..."
-    rm -rf "build" "licenta_EXECUTABLE" "logs" "res/css"
+    rm -rf "build" "licenta_EXECUTABLE" "logs" "res/css" "res/docs"
     GOOGLE_APPLICATION_CREDENTIALS="" # we ll clean the enviroment variable for the GCP's credentials
+    if [ $? -ne 0 ]; then
+        err_exit "Failed with exit status $?!\n"
+        exit
+    else
+        succ "Done"
+    fi
+}
+
+generate_docs() {
+    msg "Generating documentation..."
+    if [ "${VERBOSE}" = "false" ]; then
+        doxygen > /dev/null
+    else
+        doxygen
+    fi
     if [ $? -ne 0 ]; then
         err_exit "Failed with exit status $?!\n"
         exit
@@ -130,11 +146,14 @@ execute() {
         'BUILD')
             build
         ;;
-        'CLEAN')
-            clean
-        ;;
         'BUILD-SCSS')
             compile_sass
+        ;;
+        'GENERATE-DOCS')
+            generate_docs
+        ;;
+        'CLEAN')
+            clean
         ;;
         'NONE')
             err_exit "No command was given!"
@@ -150,6 +169,9 @@ func_read_cli_options() {
         shift;;
             '-b'|'--build')
                 COMMAND="BUILD"
+        shift;;
+            '-docs'|'--generate-docs')
+                COMMAND="GENERATE-DOCS"
         shift;;
             '-bscss'|'--build-scss')
                 COMMAND="BUILD-SCSS"

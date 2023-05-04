@@ -25,7 +25,10 @@
 
 namespace dialogflow_es = ::google::cloud::dialogflow_es;
 namespace v2 = ::google::cloud::dialogflow::v2;
-
+/**
+ * @brief Ajutor
+ * 
+ */
 class Chatbot {
     public:
         static Chatbot* getInstance();
@@ -37,8 +40,8 @@ class Chatbot {
         Chatbot():client(dialogflow_es::MakeSessionsConnection()){setUp();}
         void setUp();
         std::string convertQueryForDebug(const v2::QueryResult& query);
-        Poco::Logger& logger = MyLogger::getLogger();
 
+        Poco::Logger& logger = MyLogger::getLogger();
         //Am nevoie de asta pt conversatie. MakeSessionsConnection foloseste enviroment variable setat in script prin json
 		dialogflow_es::SessionsClient client;
         v2::DetectIntentRequest request;
