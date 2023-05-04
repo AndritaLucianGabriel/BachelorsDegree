@@ -3,6 +3,7 @@
 .vscode
 
 # Folders
+docs
 boost_1_67_0
 build
 logs

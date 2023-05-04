@@ -59,7 +59,7 @@ enviroment_setup() {
     msg "Enviroment setup..."
     git submodule update --init --recursive
     dos2unix ./build.sh ./libs/dart-sass/sass
-    apt-get install doxygen
+    apt-get install doxygen graphviz
 }
 
 poco_setup() {
