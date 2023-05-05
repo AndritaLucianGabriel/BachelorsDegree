@@ -22,7 +22,7 @@
 #include <Poco/Util/ServerApplication.h>
 #include <Poco/JSON/Parser.h>
 #include <Poco/StreamCopier.h>
-#include "Poco/DynamicAny.h"
+#include <Poco/DynamicAny.h>
 
 #include <fstream>
 #include <string>

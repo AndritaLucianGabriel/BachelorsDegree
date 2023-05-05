@@ -16,7 +16,10 @@
 #ifndef CONSTANTS_H_
 #define CONSTANTS_H_
 
+#include "string.h"
+
 namespace globals {
+    const int serverPort = 9090;
     const std::string projectID = "licenta-383311";
     // For further implementation, this will be generated for each client
     const std::string sessionID = "123456789";

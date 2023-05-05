@@ -18,12 +18,12 @@ clear
 read -r -d '\0' USAGE <<- EOM
 Usage: per default the script doesn't run.
   -b|--build            - build and run the project
-  -bscss|--build-scss   - compile only the scss files to update the html's aspect
+  -bscss|--build-scss   - compile only the scss files to update the HTML's aspect
   -docs|--generate-docs - generate the technical documentation using Doxygen
   -c|--clean            - clean the project
   -v|--verbose          - optional, print more output to the console
   -h|--help             - show this help
-Notes: do NOT run -c with other options since the cleaning is meant to be a solo process.
+Note: do NOT run -c with other options since the cleaning is meant to be a solo process.
 EOM
 
 VERBOSE="false"
