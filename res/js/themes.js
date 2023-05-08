@@ -15,7 +15,7 @@
 
 window.addEventListener("load", function () {
     const themeSwitch = document.getElementById('themeSwitch');
-    //  Verific tema
+    // Check the stored theme
     if (localStorage.getItem('theme') === 'lightTheme' || localStorage.getItem('theme') === '') {
         setTheme('lightTheme');
         themeSwitch.checked = false;
