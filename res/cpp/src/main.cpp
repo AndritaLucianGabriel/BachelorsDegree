@@ -18,7 +18,7 @@
  * @section intro_sec Introduction
  * This is a C++ banking application that uses Google Cloud Platform's Dialogflow ES for human-chatbot interactions in a banking context. The project was created as a Bachelor Degree for the Computers and Information Technology specialization for the Faculty of Mathematics and Computer Science from the University of Bucharest, Romania, author <a href="https://github.com/AndritaLucianGabriel">Andrita Lucian-Gabriel</a>.
  * @section general_info General information
- * @subsection install_library Installing Library
+ * @subsection install_library Installing the libraries
  * The user must have an access key for a service account on Google Cloud Platform in order to access the Dialogflow ES API. Read more <a href="https://cloud.google.com/iam/docs/keys-create-delete">here</a>. 
  * \n This key will be set to \a GOOGLE_APPLICATION_CREDENTIALS enviroment variable that will work as a login credentials for the platform.
  * \n In the root directory of the project, there is a bash script called \b getting_started.sh (Note: if the script can't be run on a Unix platform, I recommend first to check for the bad line endings so run \b dos2unix on the script and check again). When ran from an Unix platform, this will install all the required dependencies (see \ref getting_started_info). After it's completed, the user still has to manually run the first time setup for the GC CLI:
@@ -33,12 +33,12 @@
  * 1. Eviroment setup:
  * 		1. The submodules are initialized.
  * 		2. Based on the missmatch of line endings, both the \b build.sh and \b sass executable will be converted to unix-like.
- * 		3. Installation of both \b doxygen and it's dependency \b graphviz
+ * 		3. Installation of both \b doxygen and it's dependency \b graphviz.
  * 
  * 2. Reverting the libs to the wanted versions:
  * 		1. \b Poco \b v1.12.4 is being used.
  * 		2. \b VCPKG \b v2023.04.15 \b Release is being used.
- * 		3. \b GCP \b v2.9.1
+ * 		3. \b GCP \b v2.9.1 is being used.
  * 3. Poco setup. Read more <a href="https://github.com/pocoproject/poco">here</a>:
  * 		1. Installation of the dependencies (\b openssl , \b libssl-dev , \b git , \b g++ , \b make , \b cmake).
  * 		2. Configuring CMakeLists.txt.
@@ -83,10 +83,10 @@
  * 2. If the flag exists in the wanted list COMMAND variable is stores the wanted action and then it is passed to \a execute.
  * 3. The \a execute function will then call the method that has the wanted functionality. This level of abstractization allows to chain multiple commands under the same name (if wanted).
  *
- * Note: From now on, we will analyse each scrip individually since they have different methods for their different use cases. 
- * 1. For  \b getting_started.sh:
+ * Note: From now on, we will analyse each script individually since they have different methods for their different use cases. 
+ * 1. For \b getting_started.sh:
  * \n The \a execute method can only call the \a install function. This method will go through a list of commands and install the prerequisites (see \ref getting_started_info).
- * 2. For  \b build.sh:
+ * 2. For \b build.sh:
  * \n The \a execute method can call one of the following functions:
  * 		1. The \a compile_sass function will iterate over all the scss files from \b res/scss subfolder and will compile them and generate the wanted css files in \b res/css subfolder. These files will not contain the auto-generated css maps because there are not a lot of css to begin with and there's no need to create extra logic for the server to handle these requests.
  * 		2. The \a generate_docs function will generate the technical documentation. In the Doxyfile, the following tags have been changed:
@@ -108,7 +108,7 @@
  * 			16. CALLER_GRAPH = YES
  * 			17. ALPHABETICAL_INDEX = NO
  * 		3. The \a build function is top-level method that has the goal of building and running the final executable. That executable is called \b licenta_EXECUTABLE and can be found in the project's root directory. It can be run with two flags: \b DISABLE_DEBUG or \b ENABLE_DEBUG. These flags depend on the \b VERBOSE global. If it is \a true, then the project's logging system (\b MyLogger - a wrapper onto Poco's Loger class) will create a Poco::ConsoleChannel that will be provided to a Poco::SplitterChannel. This way, whenever will be generated a new log, it will also be printed into the console, besides the \b logs folder.
- * 			1. It calls the compile_sass function. See above for further explications.
+ * 			1. It calls the \a compile_sass function. See above for further explications.
  * 			1. The \a compile_cpp function first configures the CMakeLists.txt file and passes the \a CMAKE_TOOLCHAIN_FILE variable to the Google Cloud Platform's CMake. Because this is not used directly in this CMake, we will also add the \b --no-warn-unused-cli flag to surpress the warning regarding this variable. If the configuring is succesfull, then actual building of the project happens.
  * 			2. The \a configure_gcp function will export the \a GOOGLE_APPLICATION_CREDENTIALS variable so it is visible to every process and sub-process that starts from the script.
  *
