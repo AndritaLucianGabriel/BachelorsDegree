@@ -33,19 +33,19 @@ bool MyLogger::debug = false;
 
 Poco::Logger &MyLogger::getLogger() {
     if (!logger) {
-        // Create a ConsoleChannel for logging to the console
+        // Creates a ConsoleChannel for logging to the console
         Poco::AutoPtr<Poco::ConsoleChannel> pConsoleChannel;
         if (debug) {
             pConsoleChannel = new Poco::ConsoleChannel;
         }
 
-        // Create a FileChannel for logging to a file
+        // Creates a FileChannel for logging to a file
         Poco::AutoPtr<Poco::FileChannel> pFileChannel(new Poco::FileChannel);
         Poco::File dir("./logs");
         if (!dir.exists()) {
             dir.createDirectories();
         }
-        pFileChannel->setProperty("path", "./logs/licenta.log");
+        pFileChannel->setProperty("path", "./logs/licenta.log"); //path the logs
         pFileChannel->setProperty("rotation", "1M"); // keeps 1 file of 1MB max
         pFileChannel->setProperty("archive", "number"); // newest archive is always .0
         pFileChannel->setProperty("flush", "true"); // will always log even in a system crash situation
@@ -57,7 +57,7 @@ Poco::Logger &MyLogger::getLogger() {
 
         Poco::AutoPtr<Poco::FormattingChannel> pFC(new Poco::FormattingChannel(pPF, pFileChannel));
 
-        // Create a SplitterChannel for logging to both console and file
+        // Creates a SplitterChannel for logging to both console and file
         Poco::AutoPtr<Poco::SplitterChannel> pSplitterChannel(new Poco::SplitterChannel);
         if (debug) {
             pSplitterChannel->addChannel(pConsoleChannel);

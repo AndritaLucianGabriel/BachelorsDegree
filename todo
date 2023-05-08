@@ -3,8 +3,7 @@ Partea de handle al requesturilor e intereasanta, legatura din html si css fiind
 separat (deci trebuie sa am logica speciala pt a trimite si css-ul)
 
     TODO - wip:
--curatenie in cod
--baga doxygen
+
 
     TODO - done:
 -cum folosesc poco
@@ -16,6 +15,8 @@ separat (deci trebuie sa am logica speciala pt a trimite si css-ul)
 -folosirea textului returnat de robot si modificarea html ului cu mesajul aferent(creat chatbot BE si modificat partea de server cat si creat un js pt client side)
 -fa split scss uri (pt culori mai ales)
 -license
+-curatenie in cod
+-baga doxygen
 
 Probleme rezolvate:
 Cum fac partea de modifica a html ului pt mesaje? Am ales sa folosesc JS, avand nevoie de event listeners pt butoane
