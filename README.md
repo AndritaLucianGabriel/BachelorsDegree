@@ -2,7 +2,7 @@
 ## Introduction
 &emsp;This is a C++ banking application that uses Google Cloud Platform's Dialogflow ES for human-chatbot interactions in a banking context. The project was created as a Bachelor Degree for the Computers and Information Technology specialization of the Faculty of Mathematics and Computer Science from the University of Bucharest, Romania, author <a href="https://github.com/AndritaLucianGabriel">Andrita Lucian-Gabriel</a>.
 ## Installing the libraries
-&emsp;The user must have an access key for a service account on Google Cloud Platform in order to access the Dialogflow ES API. Read more <a href="https://cloud.google.com/iam/docs/keys-create-delete">here</a>.
+&emsp;The user must have an access key for a service account on Google Cloud Platform in order to access the Dialogflow ES API. This key must be placed under res folder. Read more <a href="https://cloud.google.com/iam/docs/keys-create-delete">here</a>.
 
 &emsp;This key will be set to **GOOGLE_APPLICATION_CREDENTIALS** enviroment variable that will work as a login credentials for the platform.
 
