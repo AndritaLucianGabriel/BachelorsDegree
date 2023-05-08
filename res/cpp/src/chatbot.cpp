@@ -30,24 +30,34 @@ Chatbot* Chatbot::getInstance() {
 }
 
 void Chatbot::sendMessage(const std::string& message) {
-	if(init == true) {
+	if(agent != nullptr) {
 		try {
-			request.mutable_query_input()->mutable_text()->set_text(message);
+			agent->request.mutable_query_input()->mutable_text()->set_text(message);
 
-			auto response = client.DetectIntent(request);
+			auto response = agent->client.DetectIntent(request);
+			// If the response is valid, and the request didn't time out
 			if (!response) {
 				logger.error("Error in DetectIntent: " + response.status().message());
 				return;
 			}
+			// If the response is valid, but the request timed out, we try again
+			else if (response->query_result().fulfillment_text() == "") {
+				logger.warning("Retrying the request!");
+				response = agent->client.DetectIntent(request);
+				if (!response) {
+					logger.error("Error in DetectIntent: " + response.status().message());
+					return;
+				}
+			}
 
 			const v2::QueryResult& query_result = response->query_result();
 			if(query_result.fulfillment_text() == "") {
-				setOutputText("Something went wrong. Can you try again?");
+				agent->setOutputText("Something went wrong. Can you try again?");
 			}
 			else {
-				setOutputText(query_result.fulfillment_text());
+				agent->setOutputText(query_result.fulfillment_text());
 			}
-			// logger.information(convertQueryForDebug(query_result));
+			// logger.information(agent->convertQueryForDebug(query_result));
 		} catch (google::cloud::Status const& status) {
 			logger.error("google::cloud::Status thrown: " + status.message());
 		}
@@ -66,26 +76,20 @@ std::string Chatbot::convertQueryForDebug(const v2::QueryResult& query) {
 }
 
 void Chatbot::setOutputText(const std::string& outputParam) {
-	outputText = outputParam;
+	agent->outputText = outputParam;
 }
 
 std::string Chatbot::getOutputText() {
-	logger.information("Output text retrieved from agent: " + outputText);
-	return outputText;
+	logger.information("Output text retrieved from agent: " + agent->outputText);
+	return agent->outputText;
 }
 
 void Chatbot::setUp() {
-	if(init == false) {
-		try{
-			init = true;
-			request.mutable_query_input()->mutable_text()->set_language_code(globals::agentLanguage);
-			request.set_session("projects/" + globals::projectID + "/agent/sessions/" + globals::sessionID);
-			logger.information("The agent has been succesfully configured!");
-		} catch (google::cloud::Status const& status) {
-			logger.error("google::cloud::Status thrown: " + status.message());
-		}
-	}
-	else {
-		logger.warning("The agent's session was already configured!");
+	try {
+		request.mutable_query_input()->mutable_text()->set_language_code(globals::agentLanguage);
+		request.set_session("projects/" + globals::projectID + "/agent/sessions/" + globals::sessionID);
+		logger.information("The agent has been succesfully configured!");
+	} catch (google::cloud::Status const& status) {
+		logger.error("google::cloud::Status thrown: " + status.message());
 	}
 }

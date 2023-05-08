@@ -18,12 +18,30 @@
 
 #include "string.h"
 
+/**
+ * @brief Namespace that stores configuration variables.
+ */
 namespace globals {
+    /**
+     * @brief The port that will be used for the server.
+     */
     const int serverPort = 9090;
+
+    /**
+     * @brief The name of the project (check on Google Cloud Platform).
+     */
     const std::string projectID = "licenta-383311";
-    // For further implementation, this will be generated for each client
+
+    /**
+     * @brief The ID of the session that's being used for the client.
+     */
     const std::string sessionID = "123456789";
+
+    /**
+     * @brief The language of the session.
+     */
     const std::string agentLanguage = "en";
+
 } // namespace globals
 
 #endif // CONSTANTS_H_

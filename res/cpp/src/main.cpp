@@ -67,7 +67,7 @@
  * 6. - h or - - help => show this help
  * 
  * Note: do \b NOT run \b -c with other options since the cleaning is meant to be a solo process.
- * @subsection more_info Detailed information regarding both scripts
+ * @subsection more_info Detailed information
  * Both scripts share the same code regarding user input and error handling.
  * 1. They are processed by \a func_read_cli_options and cross-referenced with the default list (it's mostly different for both of them since they have distinct roles, but \b -v and \b -h are common since they have a shared utility).
  * 		1. Common flags:
@@ -96,20 +96,23 @@
  * 			4. FULL_PATH_NAMES = NO
  * 			5. BUILTIN_STL_SUPPORT = YES
  * 			6. EXTRACT_ALL = YES
- * 			7. EXTRACT_PRIVATE        = YES
- * 			8. EXTRACT_STATIC         = YES
- * 			9. INPUT                  = ./res
- * 			10. RECURSIVE              = YES
- * 			11. HTML_OUTPUT            = .
- * 			12. DISABLE_INDEX          = YES
- * 			13. GENERATE_TREEVIEW      = YES
- * 			14. GENERATE_LATEX         = no
- * 			15. CALL_GRAPH             = YES
- * 			16. CALLER_GRAPH           = YES
+ * 			7. EXTRACT_PRIVATE = YES
+ * 			8. EXTRACT_STATIC = YES
+ * 			9. INPUT = ./res
+ * 			10. RECURSIVE = YES
+ * 			11. HTML_OUTPUT = .
+ * 			12. DISABLE_INDEX = YES
+ * 			13. GENERATE_TREEVIEW = YES
+ * 			14. GENERATE_LATEX = NO
+ * 			15. CALL_GRAPH = YES
+ * 			16. CALLER_GRAPH = YES
+ * 			17. ALPHABETICAL_INDEX = NO
  * 		3. The \a build function is top-level method that has the goal of building and running the final executable. That executable is called \b licenta_EXECUTABLE and can be found in the project's root directory. It can be run with two flags: \b DISABLE_DEBUG or \b ENABLE_DEBUG. These flags depend on the \b VERBOSE global. If it is \a true, then the project's logging system (\b MyLogger - a wrapper onto Poco's Loger class) will create a Poco::ConsoleChannel that will be provided to a Poco::SplitterChannel. This way, whenever will be generated a new log, it will also be printed into the console, besides the \b logs folder.
  * 			1. It calls the compile_sass function. See above for further explications.
- * 			1. The \a compile_cpp
- * 			2. The \a configure_gcp
+ * 			1. The \a compile_cpp function first configures the CMakeLists.txt file and passes the \a CMAKE_TOOLCHAIN_FILE variable to the Google Cloud Platform's CMake. Because this is not used directly in this CMake, we will also add the \b --no-warn-unused-cli flag to surpress the warning regarding this variable. If the configuring is succesfull, then actual building of the project happens.
+ * 			2. The \a configure_gcp function will export the \a GOOGLE_APPLICATION_CREDENTIALS variable so it is visible to every process and sub-process that starts from the script.
+ *
+ * The project's CMake uses \a C++17 standard, and output's the executable in the project's root. The libraries used for the linking are \b Poco \b :: \b Foundation \b Poco \b :: \b Net \b Poco \b :: \b Util and \b google-cloud-cpp \b :: \b dialogflow_es.
  */
 
 #include <Poco/Util/ServerApplication.h>
@@ -126,8 +129,18 @@
 
 using namespace Poco::Util;
 
+/**
+ * @brief Wrapper class over Poco::Util::ServerApplication that is used for implementing server applications.
+ * It allows the application to run as a Unix daemon.
+ */
 class MyServerApp : public ServerApplication {
     protected:
+        /**
+         * @brief Creates the actual daemon for the server. The server will work on maximum 4 threads and will accept
+         * a limit of 100 connections.
+         * 
+         * @return int Application::EXIT_OK
+         */
         int main(const std::vector<std::string> &) {
             Poco::Net::HTTPServerParams* pParams = new Poco::Net::HTTPServerParams;
             pParams->setMaxQueued(100);
@@ -152,13 +165,25 @@ class MyServerApp : public ServerApplication {
             return Application::EXIT_OK;
         }
     private:
+        /**
+         * @brief Creates a class data member while using an already existing reference to a MyLogger object.
+         * @see MyLogger::getLogger()
+         */
         Poco::Logger& logger = MyLogger::getLogger();
 };
 
+/**
+ * @brief Main method of the application
+ * 
+ * @param argc NA
+ * @param argv It can be ENABLE_DEBUG or DISABLE_DEBUG based on the existence of -v flag of build.sh
+ */
 int main(int argc, char **argv) {
+    // If the script was ran with -v flag, then we will print to the console stream too.
     if (std::string(argv[1]) == "ENABLE_DEBUG") {
         MyLogger::init(true);
     }
+    // If not, we will keep just the log files.
     else if (std::string(argv[1]) == "DISABLE_DEBUG") {
         MyLogger::init(false);
     }
