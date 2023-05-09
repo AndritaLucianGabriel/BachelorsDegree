@@ -38,6 +38,7 @@ void Chatbot::sendMessage(const std::string& message) {
 			// If the response is valid, and the request didn't time out
 			if (!response) {
 				logger.error("Error in DetectIntent: " + response.status().message());
+				agent->setOutputText("We're sorry, there are issues connecting to the cloud!");
 				return;
 			}
 			// If the response is valid, but the request timed out, we try again
