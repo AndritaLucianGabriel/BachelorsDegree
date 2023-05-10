@@ -66,7 +66,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   }
 
 
-  function createAccount(agent) {
+  async function createAccount(agent) {
     const iban = agent.parameters.iban;
     const currency = agent.parameters.currency;
     const sold = agent.parameters.sold;
