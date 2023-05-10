@@ -6,11 +6,14 @@ const functions = require('firebase-functions');
 const {WebhookClient} = require('dialogflow-fulfillment');
 const {Storage} = require('@google-cloud/storage');
 process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
- 
+
+// One time configuration
+createBucketIfNotExists('ank_accounts');
+createBucketIfNotExists('licenta_data');
+
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {
   const storage = new Storage();
   const agent = new WebhookClient({ request, response });
-  createBucketIfNotExists("bank_accounts");
   console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
   console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
  
@@ -28,7 +31,6 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     const fileContent = 'Hello, this is a sample content!';
     const bucketName = 'licenta_data';
 
-    createBucketIfNotExists(bucketName)
     const bucket = storage.bucket(bucketName);
     const fileName = 'example.txt';
     const file = bucket.file(fileName);
@@ -50,7 +52,6 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   function readFileFromBucket(agent) {
     const bucketName = 'licenta_data';
     const fileName = 'example.txt';
-    createBucketIfNotExists(bucketName)
     const bucket = storage.bucket(bucketName);
     const file = bucket.file(fileName);
 
@@ -72,7 +73,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     const currency = agent.parameters.currency;
     const sold = agent.parameters.sold;
 
-    const bucketName = 'bank-accounts';
+    const bucketName = 'bank_accounts';
     const fileName = iban + '.json';
     // Prepare bank account data as a JSON string
     const bankAccountData = JSON.stringify({
