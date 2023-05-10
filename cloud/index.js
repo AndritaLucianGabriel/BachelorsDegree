@@ -70,7 +70,6 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     const currency = agent.parameters.currency;
     const sold = agent.parameters.sold;
   
-    const storage = new Storage();
     const bucketName = 'bankAccounts';
     const fileName = `${iban}.json`;
   
