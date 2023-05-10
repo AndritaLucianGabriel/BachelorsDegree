@@ -51,7 +51,8 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   function readFileFromBucket(agent) {
     const bucketName = 'licenta_data';
     const fileName = 'example.txt';
-    const bucket = storage.bucket(createBucketIfNotExists(bucketName));
+    createBucketIfNotExists(bucketName)
+    const bucket = storage.bucket(bucketName);
     const file = bucket.file(fileName);
 
     return file.download()
