@@ -91,7 +91,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     })
     .then(() => {
       console.log(`Bank account with IBAN '${iban}' has been created.`);
-      agent.add(`Bank account with IBAN '${iban}' has been created for ${owner}.`);
+      agent.add(`Bank account with IBAN '${iban}' has been created.`);
     })
     .catch(error => {
       console.error('Error creating bank account:', error);
