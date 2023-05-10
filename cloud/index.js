@@ -85,7 +85,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     console.log(bankAccountData);
   
     // Save bank account data to Google Cloud Storage
-    createBucketIfNotExists(bucketName)
+    await createBucketIfNotExists(bucketName);
     const bucket = storage.bucket(bucketName);
     const file = bucket.file(fileName);
   
