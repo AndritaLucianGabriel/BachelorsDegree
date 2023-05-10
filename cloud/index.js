@@ -73,9 +73,9 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
     const bucketName = 'bank-accounts';
     const fileName = iban + '.json';
-    console.log(iban);
-    console.log(gent.parameters.iban);
-    console.log(fileName);
+    console.log("Agent iban: " + agent.parameters.iban);
+    console.log("Iban:" + iban);
+    console.log("Filename" + fileName);
     // Prepare bank account data as a JSON string
     const bankAccountData = JSON.stringify({
       iban: iban,
@@ -93,8 +93,8 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
       contentType: 'application/json',
     })
     .then(() => {
-      console.log(`Bank account with IBAN '` + iban + `' has been created.`);
-      agent.add(`Bank account with IBAN '` + iban + `' has been created.`);
+      console.log(`Bank account with IBAN '${iban}' has been created.`);
+      agent.add(`Bank account with IBAN '${iban}' has been created.`);
     })
     .catch(error => {
       console.error('Error creating bank account:', error);
