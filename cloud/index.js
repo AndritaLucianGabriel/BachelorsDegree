@@ -10,6 +10,7 @@ process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {
   const storage = new Storage();
   const agent = new WebhookClient({ request, response });
+  createBucketIfNotExists("bank_accounts");
   console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
   console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
  
@@ -66,26 +67,21 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   }
 
 
-  async function createAccount(agent) {
+  function createAccount(agent) {
     const iban = agent.parameters.iban;
     const currency = agent.parameters.currency;
     const sold = agent.parameters.sold;
 
     const bucketName = 'bank-accounts';
     const fileName = iban + '.json';
-    console.log("Agent iban: " + agent.parameters.iban);
-    console.log("Iban:" + iban);
-    console.log("Filename" + fileName);
     // Prepare bank account data as a JSON string
     const bankAccountData = JSON.stringify({
       iban: iban,
       currency: currency,
       sold: sold,
     });
-    console.log(bankAccountData);
   
     // Save bank account data to Google Cloud Storage
-    await createBucketIfNotExists(bucketName);
     const bucket = storage.bucket(bucketName);
     const file = bucket.file(fileName);
   
