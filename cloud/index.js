@@ -7,16 +7,14 @@ const {WebhookClient} = require('dialogflow-fulfillment');
 const {Storage} = require('@google-cloud/storage');
 process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
 
-// One time configuration
-
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {
-    createBucketIfNotExists('bank_accounts');
-    createBucketIfNotExists('licenta_data');
     const storage = new Storage();
     const agent = new WebhookClient({ request, response });
     console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
     console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
-    
+    createBucketIfNotExists("bank_accounts");
+    createBucketIfNotExists("licenta_data");
+
     function welcome(agent) {
         agent.add(`Welcome to my agent!`);
     }
