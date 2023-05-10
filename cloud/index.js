@@ -26,25 +26,26 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   
   // Testing
   function checkBalance(agent) {
-    const fileContent = 'Hello, this is a sample content!';
-    const bucketName = 'licenta_data';
-    agent.add(`File '${fileName}' has been written to bucket '${bucketName}'`);
+    agent.add(`Hatz`);
+    // const fileContent = 'Hello, this is a sample content!';
+    // const bucketName = 'licenta_data';
+    // agent.add(`File '${fileName}' has been written to bucket '${bucketName}'`);
 
-    const bucket = storage.bucket(createBucketIfNotExists(bucketName));
-    const fileName = 'example.txt';
-    const file = bucket.file(fileName);
+    // const bucket = storage.bucket(createBucketIfNotExists(bucketName));
+    // const fileName = 'example.txt';
+    // const file = bucket.file(fileName);
     
-    return file.save(fileContent, {
-    contentType: 'text/plain',
-    })
-    .then(() => {
-      console.log(`File '${fileName}' has been written to bucket '${bucketName}'`);
-      agent.add(`File '${fileName}' has been written to bucket '${bucketName}'`);
-    })
-    .catch(error => {
-      console.error('Error writing file to the bucket:', error);
-      agent.add(`Error reading file from the bucket: ${error.message}`);
-    });
+    // return file.save(fileContent, {
+    // contentType: 'text/plain',
+    // })
+    // .then(() => {
+    //   console.log(`File '${fileName}' has been written to bucket '${bucketName}'`);
+    //   agent.add(`File '${fileName}' has been written to bucket '${bucketName}'`);
+    // })
+    // .catch(error => {
+    //   console.error('Error writing file to the bucket:', error);
+    //   agent.add(`Error reading file from the bucket: ${error.message}`);
+    // });
   }
 
   // Testing
