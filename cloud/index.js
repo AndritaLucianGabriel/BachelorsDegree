@@ -43,7 +43,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     })
     .catch(error => {
       console.error('Error writing file to the bucket:', error);
-      agent.add(`Error reading file from the bucket: ${error}`);
+      agent.add(`Error reading file from the bucket: ${error.message}`);
     });
   }
 
