@@ -27,6 +27,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   // Testing
   function checkBalance(agent) {
     agent.add(`Hatz`);
+    return;
     // const fileContent = 'Hello, this is a sample content!';
     // const bucketName = 'licenta_data';
     // agent.add(`File '${fileName}' has been written to bucket '${bucketName}'`);
