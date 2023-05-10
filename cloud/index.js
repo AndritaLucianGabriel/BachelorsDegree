@@ -4,7 +4,6 @@
  
 const functions = require('firebase-functions');
 const {WebhookClient} = require('dialogflow-fulfillment');
-const {Card, Suggestion} = require('dialogflow-fulfillment');
 const {Storage} = require('@google-cloud/storage');
  
 process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
