@@ -58,7 +58,7 @@ void Chatbot::sendMessage(const std::string& message) {
 			else {
 				agent->setOutputText(query_result.fulfillment_text());
 			}
-			// logger.information(agent->convertQueryForDebug(query_result));
+			logger.information(agent->convertQueryForDebug(query_result));
 		} catch (google::cloud::Status const& status) {
 			logger.error("google::cloud::Status thrown: " + status.message());
 		}
