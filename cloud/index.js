@@ -51,21 +51,23 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
   // Testing
   function readFileFromBucket(agent) {
-    const bucketName = 'licenta_data';
-    const fileName = 'example.txt';
-    const bucket = storage.bucket(createBucketIfNotExists(bucketName));
-    const file = bucket.file(fileName);
+    agent.add("hatz");
+    return;
+    // const bucketName = 'licenta_data';
+    // const fileName = 'example.txt';
+    // const bucket = storage.bucket(createBucketIfNotExists(bucketName));
+    // const file = bucket.file(fileName);
 
-    return file.download()
-      .then(data => {
-        const fileContent = data[0].toString();
-        console.log(`File '${fileName}' content: ${fileContent}`);
-        agent.add(`File '${fileName}' content: ${fileContent}`);
-      })
-      .catch(error => {
-        console.error('Error reading file from the bucket:', error);
-        agent.add(`Error reading file from the bucket: ${error.message}`);
-      });
+    // return file.download()
+    //   .then(data => {
+    //     const fileContent = data[0].toString();
+    //     console.log(`File '${fileName}' content: ${fileContent}`);
+    //     agent.add(`File '${fileName}' content: ${fileContent}`);
+    //   })
+    //   .catch(error => {
+    //     console.error('Error reading file from the bucket:', error);
+    //     agent.add(`Error reading file from the bucket: ${error.message}`);
+    //   });
   }
 
 
