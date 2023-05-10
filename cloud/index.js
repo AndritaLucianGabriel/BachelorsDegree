@@ -26,7 +26,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   
   // Testing
   function checkBalance(agent) {
-    agent.add(`Hatz`);
+    agent.add(`Hatzhmm`);
     return;
     // const fileContent = 'Hello, this is a sample content!';
     // const bucketName = 'licenta_data';
