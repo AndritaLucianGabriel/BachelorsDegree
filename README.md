@@ -13,7 +13,7 @@ source ~/.bashrc
 ./google-cloud-sdk/bin/gcloud init
 ```
 Note: the first-time setup will take a **long** time (especially on older machines).
-## First time setup 
+## First time setup
 The script's (**getting_started.sh**) flow is as follows:
 
 **Important note**: It must be run with **-i** or **--install** flag and after it's completion, the user has to run the setup for the gcloud (see above steps).
