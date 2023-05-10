@@ -73,13 +73,14 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   
     const bucketName = 'bank-accounts';
     const fileName = `${iban}.json`;
-  
+    console.log(fileName);
     // Prepare bank account data as a JSON string
     const bankAccountData = JSON.stringify({
       iban: iban,
       currency: currency,
       sold: sold,
     });
+    console.log(bankAccountData);
   
     // Save bank account data to Google Cloud Storage
     createBucketIfNotExists(bucketName)
