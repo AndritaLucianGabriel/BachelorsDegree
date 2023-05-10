@@ -29,6 +29,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     const fileContent = 'Hello, this is a sample content!';
     const bucketName = 'licenta_data';
     agent.add(`File '${fileName}' has been written to bucket '${bucketName}'`);
+    
     const bucket = storage.bucket(createBucketIfNotExists(bucketName));
     const fileName = 'example.txt';
     const file = bucket.file(fileName);
