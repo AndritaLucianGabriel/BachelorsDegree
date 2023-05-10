@@ -10,9 +10,8 @@ const {Storage} = require('@google-cloud/storage');
 process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
  
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {
+  const storage = new Storage();
   const agent = new WebhookClient({ request, response });
-  const bucketName = 'licenta_data';
-  const fileName = 'example.txt';
   console.log('Dialogflow Request headers: ' + JSON.stringify(request.headers));
   console.log('Dialogflow Request body: ' + JSON.stringify(request.body));
  
@@ -25,11 +24,12 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     agent.add(`I'm sorry, can you try again?`);
   }
   
+  // Testing
   function checkBalance(agent) {
-    const storage = new Storage();
     const fileContent = 'Hello, this is a sample content!';
-
-    const bucket = storage.bucket(bucketName);
+    const bucketName = 'licenta_data';
+    const bucket = storage.bucket(createBucketIfNotExists(bucketName));
+    const fileName = 'example.txt';
     const file = bucket.file(fileName);
     
     return file.save(fileContent, {
@@ -41,13 +41,15 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     })
     .catch(error => {
       console.error('Error writing file to the bucket:', error);
-      agent.add('Error writing file to the bucket: ${error.message}');
+      agent.add(`Error reading file from the bucket: ${error.message}`);
     });
   }
 
+  // Testing
   function readFileFromBucket(agent) {
-    const storage = new Storage();
-    const bucket = storage.bucket(bucketName);
+    const bucketName = 'licenta_data';
+    const fileName = 'example.txt';
+    const bucket = storage.bucket(createBucketIfNotExists(bucketName));
     const file = bucket.file(fileName);
 
     return file.download()
@@ -62,21 +64,29 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
       });
   }
 
+
   function createAccount(agent) {
     const iban = agent.parameters.iban;
     const currency = agent.parameters.currency;
     const sold = agent.parameters.sold;
-    
-    // Save bank account to the database
-    // For example, if you were using Firebase Firestore as the database:
-    const db = admin.firestore();
-    const bankAccountRef = db.collection('bankAccounts').doc(iban);
-
-    return bankAccountRef.set({
+  
+    const storage = new Storage();
+    const bucketName = 'bankAccounts';
+    const fileName = `${iban}.json`;
+  
+    // Prepare bank account data as a JSON string
+    const bankAccountData = JSON.stringify({
       iban: iban,
       currency: currency,
       sold: sold,
-      owner: owner
+    });
+  
+    // Save bank account data to Google Cloud Storage
+    const bucket = storage.bucket(createBucketIfNotExists(bucketName));
+    const file = bucket.file(fileName);
+  
+    return file.save(bankAccountData, {
+      contentType: 'application/json',
     })
     .then(() => {
       console.log(`Bank account with IBAN '${iban}' has been created.`);
@@ -87,6 +97,24 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
       agent.add(`Error creating bank account: ${error.message}`);
     });
   }
+
+  async function createBucketIfNotExists(bucketName) {
+    try {
+      // Check if the bucket exists
+      const [buckets] = await storage.getBuckets();
+      const bucketExists = buckets.some(bucket => bucket.name === bucketName);
+  
+      // If the bucket doesn't exist, create it
+      if (!bucketExists) {
+        await storage.createBucket(bucketName);
+        console.log(`Bucket '${bucketName}' has been created.`);
+      } else {
+        console.log(`Bucket '${bucketName}' already exists.`);
+      }
+    } catch (error) {
+      console.error('Error creating bucket:', error);
+    }
+  }  
 
   // // Uncomment and edit to make your own intent handler
   // // uncomment `intentMap.set('your intent name here', yourFunctionHandler);`
@@ -123,7 +151,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
   intentMap.set('Default Fallback Intent', fallback);
   intentMap.set('Check Balance', checkBalance);
   intentMap.set('Read File', readFileFromBucket);
-  intentMap.set('Create Account', checkBalance);
+  intentMap.set('Create Account', createAccount);
   // intentMap.set('your intent name here', yourFunctionHandler);
   // intentMap.set('your intent name here', googleAssistantHandler);
   agent.handleRequest(intentMap);
