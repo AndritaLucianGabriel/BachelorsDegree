@@ -23,7 +23,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     }
     
     // Testing
-    function checkBalance(agent) {
+    async function checkBalance(agent) {
         const fileContent = 'Hello, this is a sample content!';
         const bucketName = 'licenta_data';
 
@@ -31,7 +31,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const fileName = 'example.txt';
         const file = bucket.file(fileName);
         
-        return file.save(fileContent, {
+        await file.save(fileContent, {
         contentType: 'text/plain',
         })
         .then(() => {
@@ -45,13 +45,13 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     }
 
     // Testing
-    function readFileFromBucket(agent) {
+    async function readFileFromBucket(agent) {
         const bucketName = 'licenta_data';
         const fileName = 'example.txt';
         const bucket = storage.bucket(bucketName);
         const file = bucket.file(fileName);
 
-        return file.download()
+        await file.download()
         .then(data => {
             const fileContent = data[0].toString();
             console.log(`File '${fileName}' content: ${fileContent}`);
@@ -72,7 +72,6 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const fileName = iban + '.json';
       
         // Initialize Google Cloud Storage
-        const storage = new Storage();
         const bucket = storage.bucket(bucketName);
         const file = bucket.file(fileName);
       
@@ -102,6 +101,53 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         } catch (error) {
           console.error('Error creating bank account:', error);
           agent.add(`Error creating bank account: ${error.message}`);
+        }
+    }
+
+    async function transferMoney(agent) {
+        const sourceIban = agent.parameters.sourceIban;
+        const destinationIban = agent.parameters.destinationIban;
+        const amount = agent.parameters.amount;
+        
+        const bucketName = 'bank-accounts';
+        const bucket = storage.bucket(bucketName);
+      
+        try {
+          // Read source and destination account data
+          const [sourceData, destinationData] = await Promise.all([
+            bucket.file(sourceIban + '.json').download(),
+            bucket.file(destinationIban + '.json').download()
+          ]);
+      
+          const sourceAccount = JSON.parse(sourceData[0]);
+          const destinationAccount = JSON.parse(destinationData[0]);
+      
+          // Check if the source account has enough balance
+          if (sourceAccount.sold < amount) {
+            agent.add(`Insufficient balance in the source account with IBAN '${sourceIban}'.`);
+            return;
+          }
+      
+          // Get conversion rate between source and destination currencies
+          const conversionRate = await getConversionRate(sourceAccount.currency, destinationAccount.currency);
+      
+          // Calculate the transferred amount in the destination currency
+          const convertedAmount = amount * conversionRate;
+      
+          // Update account balances
+          sourceAccount.sold -= amount;
+          destinationAccount.sold += convertedAmount;
+      
+          // Save updated account data
+          await Promise.all([
+            bucket.file(sourceIban + '.json').save(JSON.stringify(sourceAccount), { contentType: 'application/json' }),
+            bucket.file(destinationIban + '.json').save(JSON.stringify(destinationAccount), { contentType: 'application/json' })
+          ]);
+      
+          agent.add(`Transferred ${amount} ${sourceAccount.currency} from account with IBAN '${sourceIban}' to account with IBAN '${destinationIban}'. The destination account received ${convertedAmount.toFixed(2)} ${destinationAccount.currency}.`);
+        } catch (error) {
+          console.error('Error transferring money:', error);
+          agent.add(`Error transferring money: ${error.message}`);
         }
     }
 
