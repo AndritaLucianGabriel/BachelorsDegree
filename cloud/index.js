@@ -164,7 +164,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const file = bucket.file(fileName);
 
         // Check if the file exists
-        const [exists] = await file.exists();
+        const [exists] = file.exists();
     
         if (!exists) {
             try {
