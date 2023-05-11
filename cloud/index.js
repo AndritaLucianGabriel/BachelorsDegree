@@ -23,7 +23,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     }
     
     // Testing
-    function checkBalance(agent) {
+    async function checkBalance(agent) {
         const fileContent = 'Hello, this is a sample content!';
         const bucketName = 'licenta_data';
 
@@ -31,7 +31,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const fileName = 'example.txt';
         const file = bucket.file(fileName);
         
-        return file.save(fileContent, {
+        await file.save(fileContent, {
         contentType: 'text/plain',
         })
         .then(() => {
@@ -45,13 +45,13 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     }
 
     // Testing
-    function readFileFromBucket(agent) {
+    async function readFileFromBucket(agent) {
         const bucketName = 'licenta_data';
         const fileName = 'example.txt';
         const bucket = storage.bucket(bucketName);
         const file = bucket.file(fileName);
 
-        return file.download()
+        await file.download()
         .then(data => {
             const fileContent = data[0].toString();
             console.log(`File '${fileName}' content: ${fileContent}`);
@@ -63,36 +63,147 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         });
     }
 
-
-    function createAccount(agent) {
+    async function createAccount(agent) {
         const iban = agent.parameters.iban;
         const currency = agent.parameters.currency;
         const sold = agent.parameters.sold;
-
+      
         const bucketName = 'bank-accounts';
         const fileName = iban + '.json';
-        // Prepare bank account data as a JSON string
-        const bankAccountData = JSON.stringify({
-        iban: iban,
-        currency: currency,
-        sold: sold,
-        });
-    
-        // Save bank account data to Google Cloud Storage
+      
+        // Initialize Google Cloud Storage
         const bucket = storage.bucket(bucketName);
         const file = bucket.file(fileName);
+      
+        try {
+          // Check if the file exists
+          const [exists] = await file.exists();
+      
+          if (!exists) {
+            // Prepare bank account data as a JSON string
+            const bankAccountData = JSON.stringify({
+              iban: iban,
+              currency: currency,
+              sold: sold,
+            });
+      
+            // Save bank account data to Google Cloud Storage
+            await file.save(bankAccountData, {
+              contentType: 'application/json',
+            });
+      
+            console.log(`Bank account with IBAN '${iban}' has been created.`);
+            agent.add(`Bank account with IBAN '${iban}' has been created.`);
+          } else {
+            console.log(`Bank account with IBAN '${iban}' already exists.`);
+            agent.add(`Bank account with IBAN '${iban}' already exists.`);
+          }
+        } catch (error) {
+          console.error('Error creating bank account:', error);
+          agent.add(`Error creating bank account: ${error.message}`);
+        }
+    }
+
+    async function transferMoney(agent) {
+        const sourceIban = agent.parameters.sourceIban;
+        const destinationIban = agent.parameters.destinationIban;
+        const amount = agent.parameters.amount;
+        
+        const bucketName = 'bank-accounts';
+        const bucket = storage.bucket(bucketName);
+      
+        try {
+          // Read source and destination account data
+          const [sourceData, destinationData] = await Promise.all([
+            bucket.file(sourceIban + '.json').download(),
+            bucket.file(destinationIban + '.json').download()
+          ]);
+      
+          const sourceAccount = JSON.parse(sourceData[0]);
+          const destinationAccount = JSON.parse(destinationData[0]);
+      
+          // Check if the source account has enough balance
+          if (sourceAccount.sold < amount) {
+            agent.add(`Insufficient balance in the source account with IBAN '${sourceIban}'.`);
+            return;
+          }
+      
+          // Get conversion rate between source and destination currencies
+          const conversionRate = await getConversionRate(sourceAccount.currency, destinationAccount.currency);
+      
+          // Calculate the transferred amount in the destination currency
+          const convertedAmount = amount * conversionRate;
+      
+          // Update account balances
+          sourceAccount.sold = parseFloat(sourceAccount.sold - amount);
+          destinationAccount.sold = parseFloat(destinationAccount.sold + convertedAmount);
+      
+          // Save updated account data
+          await Promise.all([
+            bucket.file(sourceIban + '.json').save(JSON.stringify(sourceAccount), { contentType: 'application/json' }),
+            bucket.file(destinationIban + '.json').save(JSON.stringify(destinationAccount), { contentType: 'application/json' })
+          ]);
+      
+          agent.add(`Transferred ${amount} ${sourceAccount.currency} from account with IBAN '${sourceIban}' to account with IBAN '${destinationIban}'. The destination account received ${convertedAmount.toFixed(2)} ${destinationAccount.currency}.`);
+        } catch (error) {
+          console.error('Error transferring money:', error);
+          agent.add(`Error transferring money: ${error.message}`);
+        }
+    }
+
+    async function addAmount(agent) {
+        const iban = agent.parameters.iban;
+        const amount = agent.parameters.amount;
+        const currency = agent.parameters.currency;
+      
+        const bucketName = 'bank-accounts';
+        const fileName = iban + '.json';
+      
+        // Initialize Google Cloud Storage
+        const bucket = storage.bucket(bucketName);
+        const file = bucket.file(fileName);
+
+        // Check if the file exists
+        const [exists] = await file.exists();
     
-        return file.save(bankAccountData, {
-        contentType: 'application/json',
-        })
-        .then(() => {
-        console.log(`Bank account with IBAN '${iban}' has been created.`);
-        agent.add(`Bank account with IBAN '${iban}' has been created.`);
-        })
-        .catch(error => {
-        console.error('Error creating bank account:', error);
-        agent.add(`Error creating bank account: ${error.message}`);
-        });
+        if (exists) {
+            try {
+                // Read account data
+                const [accountData] = await file.download();
+                const account = JSON.parse(accountData.toString());
+                console.log("account: " + account);
+                // Get conversion rate between source and destination currencies
+                const conversionRate = await getConversionRate(account.currency, currency);
+                console.log("ConversionRate: " + conversionRate);
+                // Calculate the transferred amount in the destination currency
+                const convertedAmount = amount * conversionRate;
+                console.log("convertedAmount: " + convertedAmount);
+                // Update account balance
+                account.sold = parseFloat(account.sold + convertedAmount);
+                console.log("account.sold: " + account.sold);
+                // Save updated account data
+                await file.save(JSON.stringify(account), { contentType: 'application/json' });
+            
+                agent.add(`Added ${amount} ${account.currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
+            } catch (error) {
+                console.error('Error adding amount to account:', error);
+                agent.add(`Error adding amount to account: ${error.message}`);
+            }
+        }
+        else {
+            console.log(`Bank account with IBAN '${iban}' doesn't exist.`);
+            agent.add(`Bank account with IBAN '${iban}' doesn't exist.`);
+        }
+    }
+
+    async function getConversionRate(sourceCurrency, destinationCurrency) {
+        // Implement a function that retrieves the conversion rate between two currencies
+        if(sourceCurrency === destinationCurrency) {
+            return 1.0;   
+        }
+        else {
+            return 1.0;
+        }
     }
 
     async function createBucketIfNotExists(bucketName) {
@@ -152,6 +263,8 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     intentMap.set('Check Balance', checkBalance);
     intentMap.set('Read File', readFileFromBucket);
     intentMap.set('Create Account', createAccount);
+    intentMap.set('Transfer Money', transferMoney);
+    intentMap.set('Deposit', addAmount);
     // intentMap.set('your intent name here', yourFunctionHandler);
     // intentMap.set('your intent name here', googleAssistantHandler);
     agent.handleRequest(intentMap);
