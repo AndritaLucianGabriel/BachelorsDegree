@@ -208,6 +208,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     intentMap.set('Check Balance', checkBalance);
     intentMap.set('Read File', readFileFromBucket);
     intentMap.set('Create Account', createAccount);
+    intentMap.set('Transfer Money', transferMoney);
     // intentMap.set('your intent name here', yourFunctionHandler);
     // intentMap.set('your intent name here', googleAssistantHandler);
     agent.handleRequest(intentMap);
