@@ -179,7 +179,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                 const convertedAmount = amount * conversionRate;
                 console.log("convertedAmount: " + convertedAmount);
                 // Update account balance
-                account.sold += convertedAmount;
+                account.sold += parseFloat(convertedAmount);
                 console.log("account.sold: " + account.sold);
                 // Save updated account data
                 await file.save(JSON.stringify(account), { contentType: 'application/json' });
