@@ -63,36 +63,46 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         });
     }
 
-
-    function createAccount(agent) {
+    async function createAccount(agent) {
         const iban = agent.parameters.iban;
         const currency = agent.parameters.currency;
         const sold = agent.parameters.sold;
-
+      
         const bucketName = 'bank-accounts';
         const fileName = iban + '.json';
-        // Prepare bank account data as a JSON string
-        const bankAccountData = JSON.stringify({
-        iban: iban,
-        currency: currency,
-        sold: sold,
-        });
-    
-        // Save bank account data to Google Cloud Storage
+      
+        // Initialize Google Cloud Storage
+        const storage = new Storage();
         const bucket = storage.bucket(bucketName);
         const file = bucket.file(fileName);
-    
-        return file.save(bankAccountData, {
-        contentType: 'application/json',
-        })
-        .then(() => {
-        console.log(`Bank account with IBAN '${iban}' has been created.`);
-        agent.add(`Bank account with IBAN '${iban}' has been created.`);
-        })
-        .catch(error => {
-        console.error('Error creating bank account:', error);
-        agent.add(`Error creating bank account: ${error.message}`);
-        });
+      
+        try {
+          // Check if the file exists
+          const [exists] = await file.exists();
+      
+          if (!exists) {
+            // Prepare bank account data as a JSON string
+            const bankAccountData = JSON.stringify({
+              iban: iban,
+              currency: currency,
+              sold: sold,
+            });
+      
+            // Save bank account data to Google Cloud Storage
+            await file.save(bankAccountData, {
+              contentType: 'application/json',
+            });
+      
+            console.log(`Bank account with IBAN '${iban}' has been created.`);
+            agent.add(`Bank account with IBAN '${iban}' has been created.`);
+          } else {
+            console.log(`Bank account with IBAN '${iban}' already exists.`);
+            agent.add(`Bank account with IBAN '${iban}' already exists.`);
+          }
+        } catch (error) {
+          console.error('Error creating bank account:', error);
+          agent.add(`Error creating bank account: ${error.message}`);
+        }
     }
 
     async function createBucketIfNotExists(bucketName) {
