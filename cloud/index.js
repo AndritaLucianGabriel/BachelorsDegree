@@ -166,7 +166,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         // Check if the file exists
         const [exists] = file.exists();
     
-        if (!exists) {
+        if (exists) {
             try {
                 // Read account data
                 const [accountData] = await file.download();
@@ -191,7 +191,6 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
             }
         }
         else {
-            console.log("Exists: " + exists);
             console.log(`Bank account with IBAN '${iban}' doesn't exist.`);
             agent.add(`Bank account with IBAN '${iban}' doesn't exist.`);
         }
