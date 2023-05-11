@@ -160,28 +160,37 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const storage = new Storage();
         const bucket = storage.bucket(bucketName);
         const file = bucket.file(iban + '.json');
-      
-        try {
-          // Read account data
-          const [accountData] = await file.download();
-          const account = JSON.parse(accountData.toString());
-      
-          // Get conversion rate between source and destination currencies
-          const conversionRate = await getConversionRate(sourceAccount.currency, currency);
 
-          // Calculate the transferred amount in the destination currency
-          const convertedAmount = amount * conversionRate;
+        // Check if the file exists
+        const [exists] = await file.exists();
+    
+        if (!exists) {
+            try {
+            // Read account data
+            const [accountData] = await file.download();
+            const account = JSON.parse(accountData.toString());
+        
+            // Get conversion rate between source and destination currencies
+            const conversionRate = await getConversionRate(sourceAccount.currency, currency);
 
-          // Update account balance
-          account.sold += convertedAmount;
-      
-          // Save updated account data
-          await file.save(JSON.stringify(account), { contentType: 'application/json' });
-      
-          agent.add(`Added ${amount} ${account.currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
-        } catch (error) {
-          console.error('Error adding amount to account:', error);
-          agent.add(`Error adding amount to account: ${error.message}`);
+            // Calculate the transferred amount in the destination currency
+            const convertedAmount = amount * conversionRate;
+
+            // Update account balance
+            account.sold += convertedAmount;
+        
+            // Save updated account data
+            await file.save(JSON.stringify(account), { contentType: 'application/json' });
+        
+            agent.add(`Added ${amount} ${account.currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
+            } catch (error) {
+            console.error('Error adding amount to account:', error);
+            agent.add(`Error adding amount to account: ${error.message}`);
+            }
+        }
+        else {
+            console.log(`Bank account with IBAN '${iban}' doesn't exist.`);
+            agent.add(`Bank account with IBAN '${iban}' doesn't exist.`);
         }
     }
 
