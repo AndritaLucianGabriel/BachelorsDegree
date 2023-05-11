@@ -157,7 +157,6 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const currency = agent.parameters.currency;
       
         const bucketName = 'bank-accounts';
-        const storage = new Storage();
         const bucket = storage.bucket(bucketName);
         const file = bucket.file(iban + '.json');
 
