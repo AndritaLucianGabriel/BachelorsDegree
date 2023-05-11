@@ -153,7 +153,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
     async function addAmount(agent) {
         const iban = agent.parameters.iban;
-        const amount = agent.parameters.amount;
+        const amount = parseFloat(agent.parameters.amount);
         const currency = agent.parameters.currency;
       
         const bucketName = 'bank-accounts';
@@ -179,7 +179,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                 const convertedAmount = amount * conversionRate;
                 console.log("convertedAmount: " + convertedAmount);
                 // Update account balance
-                account.sold += parseFloat(convertedAmount);
+                account.sold += convertedAmount;
                 console.log("account.sold: " + account.sold);
                 // Save updated account data
                 await file.save(JSON.stringify(account), { contentType: 'application/json' });
