@@ -162,8 +162,6 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         // Initialize Google Cloud Storage
         const bucket = storage.bucket(bucketName);
         const file = bucket.file(fileName);
-        console.log("fileName: " + fileName);
-        console.log("Exists: " + file.exists());
 
         // Check if the file exists
         const [exists] = await file.exists();
@@ -193,6 +191,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
             }
         }
         else {
+            console.log("Exists: " + exists);
             console.log(`Bank account with IBAN '${iban}' doesn't exist.`);
             agent.add(`Bank account with IBAN '${iban}' doesn't exist.`);
         }
