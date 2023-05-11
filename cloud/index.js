@@ -151,13 +151,10 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         }
     }
 
-    async function getConversionRate(sourceCurrency, destinationCurrency) {
-        // Implement a function that retrieves the conversion rate between two currencies
-    }
-
     async function addAmount(agent) {
         const iban = agent.parameters.iban;
         const amount = agent.parameters.amount;
+        const currency = agent.parameters.currency-name;
       
         const bucketName = 'bank-accounts';
         const storage = new Storage();
@@ -169,8 +166,14 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
           const [accountData] = await file.download();
           const account = JSON.parse(accountData.toString());
       
+          // Get conversion rate between source and destination currencies
+          const conversionRate = await getConversionRate(sourceAccount.currency, currency);
+
+          // Calculate the transferred amount in the destination currency
+          const convertedAmount = amount * conversionRate;
+
           // Update account balance
-          account.sold += amount;
+          account.sold += convertedAmount;
       
           // Save updated account data
           await file.save(JSON.stringify(account), { contentType: 'application/json' });
@@ -179,6 +182,16 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         } catch (error) {
           console.error('Error adding amount to account:', error);
           agent.add(`Error adding amount to account: ${error.message}`);
+        }
+    }
+
+    async function getConversionRate(sourceCurrency, destinationCurrency) {
+        // Implement a function that retrieves the conversion rate between two currencies
+        if(sourceCurrency === destinationCurrency) {
+            return 1.0;   
+        }
+        else {
+            return 1.0;
         }
     }
 
