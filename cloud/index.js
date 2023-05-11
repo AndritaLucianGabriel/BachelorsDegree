@@ -135,8 +135,8 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
           const convertedAmount = amount * conversionRate;
       
           // Update account balances
-          sourceAccount.sold -= amount;
-          destinationAccount.sold += convertedAmount;
+          sourceAccount.sold = parseFloat(sourceAccount.sold - amount);
+          destinationAccount.sold = parseFloat(destinationAccount.sold + convertedAmount);
       
           // Save updated account data
           await Promise.all([
