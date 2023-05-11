@@ -151,6 +151,37 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         }
     }
 
+    async function getConversionRate(sourceCurrency, destinationCurrency) {
+        // Implement a function that retrieves the conversion rate between two currencies
+    }
+
+    async function addAmount(agent) {
+        const iban = agent.parameters.iban;
+        const amount = agent.parameters.amount;
+      
+        const bucketName = 'bank-accounts';
+        const storage = new Storage();
+        const bucket = storage.bucket(bucketName);
+        const file = bucket.file(iban + '.json');
+      
+        try {
+          // Read account data
+          const [accountData] = await file.download();
+          const account = JSON.parse(accountData.toString());
+      
+          // Update account balance
+          account.sold += amount;
+      
+          // Save updated account data
+          await file.save(JSON.stringify(account), { contentType: 'application/json' });
+      
+          agent.add(`Added ${amount} ${account.currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
+        } catch (error) {
+          console.error('Error adding amount to account:', error);
+          agent.add(`Error adding amount to account: ${error.message}`);
+        }
+    }
+
     async function createBucketIfNotExists(bucketName) {
         try {
         // Check if the bucket exists
@@ -209,6 +240,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     intentMap.set('Read File', readFileFromBucket);
     intentMap.set('Create Account', createAccount);
     intentMap.set('Transfer Money', transferMoney);
+    intentMap.set('Deposit', addAmount);
     // intentMap.set('your intent name here', yourFunctionHandler);
     // intentMap.set('your intent name here', googleAssistantHandler);
     agent.handleRequest(intentMap);
