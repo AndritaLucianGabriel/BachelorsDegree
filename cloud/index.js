@@ -157,9 +157,13 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const currency = agent.parameters.currency;
       
         const bucketName = 'bank-accounts';
-        const bucket = storage.bucket(bucketName);
         const fileName = iban + '.json';
+      
+        // Initialize Google Cloud Storage
+        const bucket = storage.bucket(bucketName);
         const file = bucket.file(fileName);
+        console.log("fileName: " + fileName);
+        console.log("Exists: " + file.exists());
 
         // Check if the file exists
         const [exists] = await file.exists();
