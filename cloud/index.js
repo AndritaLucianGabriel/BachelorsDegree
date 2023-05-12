@@ -166,13 +166,13 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     
         if (exists) {
             try {
+                const account = JSON.parse(accountData.toString());
+
                 // Read account data and get conversion rate concurrently
                 const [accountData, conversionRate] = await Promise.all([
                     file.download(),
                     getConversionRate(account.currency, currency)
                 ]);
-    
-                const account = JSON.parse(accountData.toString());
     
                 // Calculate the transferred amount in the destination currency
                 const convertedAmount = amount * conversionRate;
