@@ -205,7 +205,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         console.log("URL: " + url);
         try {
           const response = await axios.get(url);
-          const conversionRate = response.data.destinationCurrency;
+          const conversionRate = response.data[destinationCurrency];
           console.log("response.data: " + response.data);
           console.log("response.data.destinationCurrency: " + response.data.destinationCurrency);
           return conversionRate;
