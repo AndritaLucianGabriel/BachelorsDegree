@@ -262,6 +262,8 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
                 // Get conversion rate between source and destination currencies
                 let conversionRate = 1.0;
+                console.log("currency: " + currency);
+                console.log("account.currency: " + account.currency);
                 if(currency !== '') {
                     conversionRate = await getConversionRate(currency, account.currency);
                 } else {
