@@ -41,6 +41,8 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                 // Read account data
                 const [accountData] = await file.download();
                 const account = JSON.parse(accountData.toString());
+
+                console.log(`The account with IBAN '${iban}' has a balance of: ${account.sold} ${account.currency}.`);
                 agent.add(`The account with IBAN '${iban}' has a balance of: ${account.sold} ${account.currency}.`);
             } catch(error) {
                 console.error('Error checking the balance:', error);
@@ -66,28 +68,28 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const file = bucket.file(fileName);
       
         try {
-          // Check if the file exists
-          const [exists] = await file.exists();
-      
-          if (!exists) {
-            // Prepare bank account data as a JSON string
-            const bankAccountData = JSON.stringify({
-              iban: iban,
-              currency: currency,
-              sold: sold,
-            });
-      
-            // Save bank account data to Google Cloud Storage
-            await file.save(bankAccountData, {
-              contentType: 'application/json',
-            });
-      
-            console.log(`Bank account with IBAN '${iban}' has been created.`);
-            agent.add(`Bank account with IBAN '${iban}' has been created.`);
-          } else {
-            console.log(`Bank account with IBAN '${iban}' already exists.`);
-            agent.add(`Bank account with IBAN '${iban}' already exists.`);
-          }
+            // Check if the file exists
+            const [exists] = await file.exists();
+        
+            if (!exists) {
+                // Prepare bank account data as a JSON string
+                const bankAccountData = JSON.stringify({
+                iban: iban,
+                currency: currency,
+                sold: sold,
+                });
+        
+                // Save bank account data to Google Cloud Storage
+                await file.save(bankAccountData, {
+                contentType: 'application/json',
+                });
+        
+                console.log(`Bank account with IBAN '${iban}' has been created.`);
+                agent.add(`Bank account with IBAN '${iban}' has been created.`);
+            } else {
+                console.log(`Bank account with IBAN '${iban}' already exists.`);
+                agent.add(`Bank account with IBAN '${iban}' already exists.`);
+            }
         } catch (error) {
           console.error('Error creating bank account:', error);
           agent.add(`Error creating bank account: ${error.message}`);
@@ -98,52 +100,51 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const sourceIban = agent.parameters.sourceIban;
         const destinationIban = agent.parameters.destinationIban;
         const amount = agent.parameters.amount;
-        const currency = agent.parameters.currency;
         
         const bucketName = 'bank-accounts';
         const bucket = storage.bucket(bucketName);
       
         try {
-          // Read source and destination account data
-          const [sourceData, destinationData] = await Promise.all([
-            bucket.file(sourceIban + '.json').download(),
-            bucket.file(destinationIban + '.json').download()
-          ]);
-      
-          const sourceAccount = JSON.parse(sourceData[0]);
-          const destinationAccount = JSON.parse(destinationData[0]);
-      
-          // Check if the source account has enough balance
-          console.log("sourceAccount.sold: " + sourceAccount.sold);
-          console.log("amount: " + amount);
-          if (sourceAccount.sold < amount) {
-            agent.add(`Insufficient balance in the source account with IBAN '${sourceIban}'.`);
-            return;
-          }
-      
-          // Get conversion rate between source and destination currencies
-          const conversionRate = await getConversionRate(sourceAccount.currency, destinationAccount.currency);
-      
-          // Calculate the transferred amount in the destination currency
-          const convertedAmount = amount * conversionRate;
-      
-          // Update account balances
-          sourceAccount.sold = parseFloat(sourceAccount.sold) - parseFloat(amount);
-          sourceAccount.sold = Number(sourceAccount.sold).toFixed(2);
+            // Read source and destination account data
+            const [sourceData, destinationData] = await Promise.all([
+                bucket.file(sourceIban + '.json').download(),
+                bucket.file(destinationIban + '.json').download()
+            ]);
+        
+            const sourceAccount = JSON.parse(sourceData[0]);
+            const destinationAccount = JSON.parse(destinationData[0]);
+        
+            // Check if the source account has enough balance
+            console.log("sourceAccount.sold: " + sourceAccount.sold);
+            console.log("amount: " + amount);
+            if (sourceAccount.sold < amount) {
+                agent.add(`Insufficient balance in the source account with IBAN '${sourceIban}'.`);
+                return;
+            }
+        
+            // Get conversion rate between source and destination currencies
+            const conversionRate = await getConversionRate(sourceAccount.currency, destinationAccount.currency);
+        
+            // Calculate the transferred amount in the destination currency
+            const convertedAmount = amount * conversionRate;
+        
+            // Update account balances
+            sourceAccount.sold = parseFloat(sourceAccount.sold) - parseFloat(amount);
+            sourceAccount.sold = Number(sourceAccount.sold).toFixed(2);
 
-          destinationAccount.sold = parseFloat(destinationAccount.sold) + parseFloat(convertedAmount);
-          destinationAccount.sold = Number(destinationAccount.sold).toFixed(2);
+            destinationAccount.sold = parseFloat(destinationAccount.sold) + parseFloat(convertedAmount);
+            destinationAccount.sold = Number(destinationAccount.sold).toFixed(2);
 
-          // Save updated account data
-          await Promise.all([
-            bucket.file(sourceIban + '.json').save(JSON.stringify(sourceAccount), { contentType: 'application/json' }),
-            bucket.file(destinationIban + '.json').save(JSON.stringify(destinationAccount), { contentType: 'application/json' })
-          ]);
-      
-          agent.add(`Transferred ${amount} ${sourceAccount.currency} from account with IBAN '${sourceIban}' to account with IBAN '${destinationIban}'. The destination account received ${convertedAmount.toFixed(2)} ${destinationAccount.currency}.`);
+            // Save updated account data
+            await Promise.all([
+                    bucket.file(sourceIban + '.json').save(JSON.stringify(sourceAccount), { contentType: 'application/json' }),
+                    bucket.file(destinationIban + '.json').save(JSON.stringify(destinationAccount), { contentType: 'application/json' })
+            ]);
+            console.log(`Transferred ${amount} ${sourceAccount.currency} from account with IBAN '${sourceIban}' to account with IBAN '${destinationIban}'. The destination account received ${convertedAmount.toFixed(2)} ${destinationAccount.currency}.`);
+            agent.add(`Transferred ${amount} ${sourceAccount.currency} from account with IBAN '${sourceIban}' to account with IBAN '${destinationIban}'. The destination account received ${convertedAmount.toFixed(2)} ${destinationAccount.currency}.`);
         } catch (error) {
-          console.error('Error transferring money:', error);
-          agent.add(`Error transferring money: ${error.message}`);
+            console.error('Error transferring money:', error);
+            agent.add(`Error transferring money: ${error.message}`);
         }
     }
 
@@ -190,11 +191,36 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                 // Save updated account data
                 await file.save(JSON.stringify(account), { contentType: 'application/json' });
             
+                console.log(`Added ${amount} ${currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
                 agent.add(`Added ${amount} ${currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
             } catch (error) {
                 console.error('Error adding amount to account:', error);
                 agent.add(`Error adding amount to account: ${error.message}`);
             }
+        }
+        else {
+            console.log(`Bank account with IBAN '${iban}' doesn't exist.`);
+            agent.add(`Bank account with IBAN '${iban}' doesn't exist.`);
+        }
+    }
+
+    async function closeAccount(agent) {
+        const iban = agent.parameters.iban;
+        const bucketName = 'bank-accounts';
+        const fileName = iban + '.json';
+
+        // Initialize Google Cloud Storage
+        const bucket = storage.bucket(bucketName);
+        const file = bucket.file(fileName);
+
+        // Check if the file exists
+        const [exists] = await file.exists();
+    
+        if (exists) {
+            await file.delete();
+
+            console.log(`The bank account '${iban}' has been closed!`);
+            agent.add(`The bank account '${iban}' has been closed!`);
         }
         else {
             console.log(`Bank account with IBAN '${iban}' doesn't exist.`);
@@ -279,6 +305,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     intentMap.set('Create Account', createAccount);
     intentMap.set('Transfer Money', transferMoney);
     intentMap.set('Deposit', addAmount);
+    intentMap.set('Close Account', closeAccount);
     // intentMap.set('your intent name here', yourFunctionHandler);
     // intentMap.set('your intent name here', googleAssistantHandler);
     agent.handleRequest(intentMap);
