@@ -23,45 +23,34 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         agent.add(`I'm sorry, can you try again?`);
     }
     
-    // Testing
     async function checkBalance(agent) {
-        const fileContent = 'Hello, this is a sample content!';
-        const bucketName = 'licenta_data';
+        const iban = agent.parameters.iban;
+        const bucketName = 'bank-accounts';
+        const fileName = iban + '.json';
 
-        const bucket = storage.bucket(bucketName);
-        const fileName = 'example.txt';
-        const file = bucket.file(fileName);
-        
-        await file.save(fileContent, {
-        contentType: 'text/plain',
-        })
-        .then(() => {
-        console.log(`File '${fileName}' has been written to bucket '${bucketName}'`);
-        agent.add(`File '${fileName}' has been written to bucket '${bucketName}'`);
-        })
-        .catch(error => {
-        console.error('Error writing file to the bucket:', error);
-        agent.add(`Error reading file from the bucket: ${error.message}`);
-        });
-    }
-
-    // Testing
-    async function readFileFromBucket(agent) {
-        const bucketName = 'licenta_data';
-        const fileName = 'example.txt';
+        // Initialize Google Cloud Storage
         const bucket = storage.bucket(bucketName);
         const file = bucket.file(fileName);
 
-        await file.download()
-        .then(data => {
-            const fileContent = data[0].toString();
-            console.log(`File '${fileName}' content: ${fileContent}`);
-            agent.add(`File '${fileName}' content: ${fileContent}`);
-        })
-        .catch(error => {
-            console.error('Error reading file from the bucket:', error);
-            agent.add(`Error reading file from the bucket: ${error.message}`);
-        });
+        // Check if the file exists
+        const [exists] = await file.exists();
+    
+            
+        if (exists) {
+            try {
+                // Read account data
+                const [accountData] = await file.download();
+                const account = JSON.parse(accountData.toString());
+                agent.add(`The account with IBAN '${iban}' has a balance of: ${account.sold} ${account.currency}.`);
+            } catch(error) {
+                console.error('Error checking the balance:', error);
+                agent.add(`Error checking the balance: ${error.message}`);
+            }
+        }
+        else {
+            console.log(`Bank account with IBAN '${iban}' doesn't exist.`);
+            agent.add(`Bank account with IBAN '${iban}' doesn't exist.`);
+        }
     }
 
     async function createAccount(agent) {
@@ -109,6 +98,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const sourceIban = agent.parameters.sourceIban;
         const destinationIban = agent.parameters.destinationIban;
         const amount = agent.parameters.amount;
+        const currency = agent.parameters.currency;
         
         const bucketName = 'bank-accounts';
         const bucket = storage.bucket(bucketName);
@@ -139,8 +129,11 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
       
           // Update account balances
           sourceAccount.sold = parseFloat(sourceAccount.sold) - parseFloat(amount);
+          sourceAccount.sold = Number(sourceAccount.sold).toFixed(2);
+
           destinationAccount.sold = parseFloat(destinationAccount.sold) + parseFloat(convertedAmount);
-      
+          destinationAccount.sold = Number(destinationAccount.sold).toFixed(2);
+
           // Save updated account data
           await Promise.all([
             bucket.file(sourceIban + '.json').save(JSON.stringify(sourceAccount), { contentType: 'application/json' }),
