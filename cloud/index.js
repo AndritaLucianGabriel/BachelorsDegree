@@ -301,7 +301,6 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     intentMap.set('Default Welcome Intent', welcome);
     intentMap.set('Default Fallback Intent', fallback);
     intentMap.set('Check Balance', checkBalance);
-    intentMap.set('Read File', readFileFromBucket);
     intentMap.set('Create Account', createAccount);
     intentMap.set('Transfer Money', transferMoney);
     intentMap.set('Deposit', addAmount);
