@@ -100,6 +100,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const sourceIban = agent.parameters.sourceIban;
         const destinationIban = agent.parameters.destinationIban;
         const amount = agent.parameters.amount;
+        const currency = agent.parameters.currency;
         
         const bucketName = 'bank-accounts';
         const bucket = storage.bucket(bucketName);
@@ -114,34 +115,68 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
             const sourceAccount = JSON.parse(sourceData[0]);
             const destinationAccount = JSON.parse(destinationData[0]);
         
-            // Check if the source account has enough balance
-            console.log("sourceAccount.sold: " + sourceAccount.sold);
-            console.log("amount: " + amount);
-            if (sourceAccount.sold < amount) {
-                agent.add(`Insufficient balance in the source account with IBAN '${sourceIban}'.`);
-                return;
+            if(currency === sourceAccount.currency || currency === '') {
+                // Check if the source account has enough balance
+                console.log("sourceAccount.sold: " + sourceAccount.sold);
+                console.log("amount: " + amount);
+                if (sourceAccount.sold < amount) {
+                    agent.add(`Insufficient balance in the source account with IBAN '${sourceIban}'.`);
+                    return;
+                }
+
+                // Get conversion rate between source and destination currencies
+                const conversionRate = await getConversionRate(sourceAccount.currency, destinationAccount.currency);
+
+                // Calculate the transferred amount in the destination currency
+                const convertedAmount = amount * conversionRate;
+
+                // Update account balances
+                sourceAccount.sold = parseFloat(sourceAccount.sold) - parseFloat(amount);
+                sourceAccount.sold = Number(sourceAccount.sold).toFixed(2);
+
+                destinationAccount.sold = parseFloat(destinationAccount.sold) + parseFloat(convertedAmount);
+                destinationAccount.sold = Number(destinationAccount.sold).toFixed(2);
+
+                // Save updated account data
+                await Promise.all([
+                        bucket.file(sourceIban + '.json').save(JSON.stringify(sourceAccount), { contentType: 'application/json' }),
+                        bucket.file(destinationIban + '.json').save(JSON.stringify(destinationAccount), { contentType: 'application/json' })
+                ]);
+                console.log(`Transferred ${amount} ${sourceAccount.currency} from account with IBAN '${sourceIban}' to account with IBAN '${destinationIban}'. The destination account received ${convertedAmount.toFixed(2)} ${destinationAccount.currency}.`);
+                agent.add(`Transferred ${amount} ${sourceAccount.currency} from account with IBAN '${sourceIban}' to account with IBAN '${destinationIban}'. The destination account received ${convertedAmount.toFixed(2)} ${destinationAccount.currency}.`);
             }
-        
-            // Get conversion rate between source and destination currencies
-            const conversionRate = await getConversionRate(sourceAccount.currency, destinationAccount.currency);
-        
-            // Calculate the transferred amount in the destination currency
-            const convertedAmount = amount * conversionRate;
-        
-            // Update account balances
-            sourceAccount.sold = parseFloat(sourceAccount.sold) - parseFloat(amount);
-            sourceAccount.sold = Number(sourceAccount.sold).toFixed(2);
+            else if(currency === destinationAccount.currency) {    
+                    // Get conversion rate between source and destination currencies    
+                    const conversionRate = await getConversionRate(destinationAccount.currency, sourceAccount.currency);
+                    
+                    // Calculate the transferred amount in the destination currency
+                    const convertedAmount = amount * conversionRate;
+                    
+                    if (sourceAccount.sold < convertedAmount) {
+                        agent.add(`Insufficient balance in the source account with IBAN '${sourceIban}'.`);
+                        return;
+                    }
+    
+                    // Update account balances
+                    sourceAccount.sold = parseFloat(sourceAccount.sold) - parseFloat(convertedAmount);
+                    sourceAccount.sold = Number(sourceAccount.sold).toFixed(2);
 
-            destinationAccount.sold = parseFloat(destinationAccount.sold) + parseFloat(convertedAmount);
-            destinationAccount.sold = Number(destinationAccount.sold).toFixed(2);
+                    destinationAccount.sold = parseFloat(destinationAccount.sold) + parseFloat(amount);
+                    destinationAccount.sold = Number(destinationAccount.sold).toFixed(2);
 
-            // Save updated account data
-            await Promise.all([
-                    bucket.file(sourceIban + '.json').save(JSON.stringify(sourceAccount), { contentType: 'application/json' }),
-                    bucket.file(destinationIban + '.json').save(JSON.stringify(destinationAccount), { contentType: 'application/json' })
-            ]);
-            console.log(`Transferred ${amount} ${sourceAccount.currency} from account with IBAN '${sourceIban}' to account with IBAN '${destinationIban}'. The destination account received ${convertedAmount.toFixed(2)} ${destinationAccount.currency}.`);
-            agent.add(`Transferred ${amount} ${sourceAccount.currency} from account with IBAN '${sourceIban}' to account with IBAN '${destinationIban}'. The destination account received ${convertedAmount.toFixed(2)} ${destinationAccount.currency}.`);
+                    // Save updated account data
+                    await Promise.all([
+                            bucket.file(sourceIban + '.json').save(JSON.stringify(sourceAccount), { contentType: 'application/json' }),
+                            bucket.file(destinationIban + '.json').save(JSON.stringify(destinationAccount), { contentType: 'application/json' })
+                    ]);
+                    console.log(`Transferred ${convertedAmount.toFixed(2)} ${sourceAccount.currency} from account with IBAN '${sourceIban}' to account with IBAN '${destinationIban}'. The destination account received ${amount} ${destinationAccount.currency}.`);
+                    agent.add(`Transferred ${convertedAmount.toFixed(2)} ${sourceAccount.currency} from account with IBAN '${sourceIban}' to account with IBAN '${destinationIban}'. The destination account received ${amount} ${destinationAccount.currency}.`);
+            }
+            else {
+                console.log(`Invalid currency for transfer. It has to be either ${sourceAccount.currency} or ${destinationAccount.currency}.`);
+                agent.add(`Invalid currency for transfer. It has to be either ${sourceAccount.currency} or ${destinationAccount.currency}.`);
+            }
+            
         } catch (error) {
             console.error('Error transferring money:', error);
             agent.add(`Error transferring money: ${error.message}`);
