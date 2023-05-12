@@ -174,7 +174,9 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                 const account = JSON.parse(accountData.toString());
                 console.log("account: " + account);
                 // Get conversion rate between source and destination currencies
-                const conversionRate = await getConversionRate(account.currency, currency);
+                let conversionRate = 1.0;
+                if(currency !== '') 
+                    conversionRate = await getConversionRate(account.currency, currency);
                 console.log("ConversionRate: " + conversionRate);
                 // Calculate the transferred amount in the destination currency
                 const convertedAmount = amount * conversionRate;
@@ -202,7 +204,6 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const url = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}&base_currency=${sourceCurrency}&currencies=${destinationCurrency}`;
         try {
           const response = await axios.get(url);
-          axios.AxiosHeaders()
           const conversionRate = response.data.destinationCurrency;
           return conversionRate;
         } catch (error) {
