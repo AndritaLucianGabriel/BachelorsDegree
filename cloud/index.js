@@ -215,6 +215,10 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                 console.log("ConversionRate: " + conversionRate);
                 // Calculate the transferred amount in the destination currency
                 const convertedAmount = amount * conversionRate;
+                if (parseFloat(sourceAccount.sold) < parseFloat(convertedAmount)) {
+                    agent.add(`Insufficient balance in the source account with IBAN '${account.iban}'.`);
+                    return;
+                }
                 console.log("convertedAmount: " + convertedAmount);
                 // Update account balance
                 console.log("before account.sold: " + account.sold);
@@ -275,7 +279,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                 // Update account balance
                 console.log("before account.sold: " + account.sold);
                 account.sold = parseFloat(account.sold) - parseFloat(convertedAmount);
-                console.log("after adding account.sold: " + account.sold);
+                console.log("after withdraw account.sold: " + account.sold);
 
                 account.sold = Number(account.sold).toFixed(2);
                 console.log("after rounded account.sold: " + account.sold);
@@ -285,8 +289,8 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                 console.log(`Withdrew ${amount} ${currency} from the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
                 agent.add(`Withdrew ${amount} ${currency} from the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
             } catch (error) {
-                console.error('Error adding amount to account:', error);
-                agent.add(`Error adding amount to account: ${error.message}`);
+                console.error('Error withdrawing amount to account:', error);
+                agent.add(`Error withdrawing amount to account: ${error.message}`);
             }
         }
         else {
