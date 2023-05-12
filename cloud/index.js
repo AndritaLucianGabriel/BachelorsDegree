@@ -119,7 +119,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                 // Check if the source account has enough balance
                 console.log("sourceAccount.sold: " + sourceAccount.sold);
                 console.log("amount: " + amount);
-                if (sourceAccount.sold < amount) {
+                if (parseFloat(sourceAccount.sold) < parseFloat(amount)) {
                     agent.add(`Insufficient balance in the source account with IBAN '${sourceIban}'.`);
                     return;
                 }
@@ -152,7 +152,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                     // Calculate the transferred amount in the destination currency
                     const convertedAmount = amount * conversionRate;
                     
-                    if (sourceAccount.sold < convertedAmount) {
+                    if (parseFloat(sourceAccount.sold) < parseFloat(convertedAmount)) {
                         agent.add(`Insufficient balance in the source account with IBAN '${sourceIban}'.`);
                         return;
                     }
