@@ -239,7 +239,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         }
     }
 
-    async function closeAccount(agent) {
+    async function withdrawAmount(agent) {
         const iban = agent.parameters.iban;
         const amount = agent.parameters.amount;
         let currency = agent.parameters.currency;
@@ -290,7 +290,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         }
     }
 
-    async function withdrawAmount(agent) {
+    async function closeAccount(agent) {
         const iban = agent.parameters.iban;
         const bucketName = 'bank-accounts';
         const fileName = iban + '.json';
@@ -313,6 +313,31 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
             agent.add(`Bank account with IBAN '${iban}' doesn't exist.`);
         }
     }
+
+    async function listAccounts(agent) {
+        const bucketName = 'bank-accounts';
+    
+        // Initialize Google Cloud Storage
+        const bucket = storage.bucket(bucketName);
+    
+        // List all files in the bucket
+        const [files] = await bucket.getFiles();
+    
+        if (files.length > 0) {
+            let ibanList = [];
+            files.forEach(file => {
+                const iban = file.name.replace('.json', '');
+                ibanList.push(iban);
+            });
+    
+            console.log(`Found ${ibanList.length} bank accounts. IBANs: ${ibanList.join(', ')}`);
+            agent.add(`Found ${ibanList.length} bank accounts. IBANs: ${ibanList.join(', ')}`);
+        } else {
+            console.log('No bank accounts found.');
+            agent.add('No bank accounts found.');
+        }
+    }
+
 
     async function getConversionRate(sourceCurrency, destinationCurrency) {
         const apiKey = 'Hx5QBKAESeOlThw7d5R0kysnrl2jUu1zpZj3ociN';
@@ -392,6 +417,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     intentMap.set('Deposit', addAmount);
     intentMap.set('Close Account', closeAccount);
     intentMap.set('Withdraw', withdrawAmount);
+    intentMap.set('List Accounts', listAccounts);
     // intentMap.set('your intent name here', yourFunctionHandler);
     // intentMap.set('your intent name here', googleAssistantHandler);
     agent.handleRequest(intentMap);
