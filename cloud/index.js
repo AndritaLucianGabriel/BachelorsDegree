@@ -155,7 +155,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     async function addAmount(agent) {
         const iban = agent.parameters.iban;
         const amount = agent.parameters.amount;
-        const currency = agent.parameters.currency;
+        let currency = agent.parameters.currency;
       
         const bucketName = 'bank-accounts';
         const fileName = iban + '.json';
