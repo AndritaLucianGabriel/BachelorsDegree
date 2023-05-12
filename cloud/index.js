@@ -124,6 +124,8 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
           const destinationAccount = JSON.parse(destinationData[0]);
       
           // Check if the source account has enough balance
+          console.log("sourceAccount.sold: " + sourceAccount.sold);
+          console.log("amount: " + amount);
           if (sourceAccount.sold < amount) {
             agent.add(`Insufficient balance in the source account with IBAN '${sourceIban}'.`);
             return;
@@ -136,8 +138,8 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
           const convertedAmount = amount * conversionRate;
       
           // Update account balances
-          sourceAccount.sold = parseFloat(sourceAccount.sold - amount);
-          destinationAccount.sold = parseFloat(destinationAccount.sold + convertedAmount);
+          sourceAccount.sold = parseFloat(sourceAccount.sold) - parseFloat(amount);
+          destinationAccount.sold = parseFloat(destinationAccount.sold) + parseFloat(convertedAmount);
       
           // Save updated account data
           await Promise.all([
