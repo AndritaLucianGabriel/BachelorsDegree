@@ -152,45 +152,43 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     }
 
     async function addAmount(agent) {
-        const iban = agent.parameters.iban;
-        const amount = agent.parameters.amount;
-        const currency = agent.parameters.currency;
-      
+        const { iban, amount, currency } = agent.parameters;
+    
         const bucketName = 'bank-accounts';
         const fileName = iban + '.json';
-      
+    
         // Initialize Google Cloud Storage
         const bucket = storage.bucket(bucketName);
         const file = bucket.file(fileName);
-
+    
         // Check if the file exists
         const [exists] = await file.exists();
     
         if (exists) {
             try {
-                // Read account data
-                const [accountData] = await file.download();
+                // Read account data and get conversion rate concurrently
+                const [accountData, conversionRate] = await Promise.all([
+                    file.download(),
+                    getConversionRate(account.currency, currency)
+                ]);
+    
                 const account = JSON.parse(accountData.toString());
-                console.log("account: " + account);
-                // Get conversion rate between source and destination currencies
-                const conversionRate = await getConversionRate(account.currency, currency);
-                console.log("ConversionRate: " + conversionRate);
+    
                 // Calculate the transferred amount in the destination currency
                 const convertedAmount = amount * conversionRate;
-                console.log("convertedAmount: " + convertedAmount);
+    
                 // Update account balance
                 account.sold = parseFloat(account.sold + convertedAmount);
-                console.log("account.sold: " + account.sold);
+    
                 // Save updated account data
                 await file.save(JSON.stringify(account), { contentType: 'application/json' });
-            
+    
                 agent.add(`Added ${amount} ${account.currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
             } catch (error) {
                 console.error('Error adding amount to account:', error);
                 agent.add(`Error adding amount to account: ${error.message}`);
             }
-        }
-        else {
+        } else {
             console.log(`Bank account with IBAN '${iban}' doesn't exist.`);
             agent.add(`Bank account with IBAN '${iban}' doesn't exist.`);
         }
