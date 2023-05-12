@@ -241,6 +241,57 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
     async function closeAccount(agent) {
         const iban = agent.parameters.iban;
+        const amount = agent.parameters.amount;
+        let currency = agent.parameters.currency;
+
+        const bucketName = 'bank-accounts';
+        const fileName = iban + '.json';
+
+        // Initialize Google Cloud Storage
+        const bucket = storage.bucket(bucketName);
+        const file = bucket.file(fileName);
+
+        // Check if the file exists
+        const [exists] = await file.exists();
+    
+        if (exists) {
+            // Read account data
+            const [accountData] = await file.download();
+            const account = JSON.parse(accountData.toString());
+
+            // Get conversion rate between source and destination currencies
+            let conversionRate = 1.0;
+            if(currency !== '') {
+                conversionRate = await getConversionRate(currency, account.currency);
+            } else {
+                // For debugging purposes
+                currency = account.currency;                    
+            }
+            console.log("ConversionRate: " + conversionRate);
+            // Calculate the transferred amount in the destination currency
+            const convertedAmount = amount * conversionRate;
+            console.log("convertedAmount: " + convertedAmount);
+            // Update account balance
+            console.log("before account.sold: " + account.sold);
+            account.sold = parseFloat(account.sold) - parseFloat(convertedAmount);
+            console.log("after withdrawing account.sold: " + account.sold);
+
+            account.sold = Number(account.sold).toFixed(2);
+            console.log("after rounded account.sold: " + account.sold);
+            // Save updated account data
+            await file.save(JSON.stringify(account), { contentType: 'application/json' });
+
+            console.log(`Withdrew ${amount} ${account.currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
+            agent.add(`Withdrew ${amount} ${account.currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
+        }
+        else {
+            console.log(`Bank account with IBAN '${iban}' doesn't exist.`);
+            agent.add(`Bank account with IBAN '${iban}' doesn't exist.`);
+        }
+    }
+
+    async function withdrawAmount(agent) {
+        const iban = agent.parameters.iban;
         const bucketName = 'bank-accounts';
         const fileName = iban + '.json';
 
@@ -340,6 +391,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     intentMap.set('Transfer Money', transferMoney);
     intentMap.set('Deposit', addAmount);
     intentMap.set('Close Account', closeAccount);
+    intentMap.set('Withdraw', withdrawAmount);
     // intentMap.set('your intent name here', yourFunctionHandler);
     // intentMap.set('your intent name here', googleAssistantHandler);
     agent.handleRequest(intentMap);
