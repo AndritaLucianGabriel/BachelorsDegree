@@ -5,6 +5,7 @@
 const functions = require('firebase-functions');
 const {WebhookClient} = require('dialogflow-fulfillment');
 const {Storage} = require('@google-cloud/storage');
+const axios = require('axios');
 process.env.DEBUG = 'dialogflow:debug'; // enables lib debugging statements
 
 exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, response) => {
@@ -197,12 +198,16 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
     }
 
     async function getConversionRate(sourceCurrency, destinationCurrency) {
-        // Implement a function that retrieves the conversion rate between two currencies
-        if(sourceCurrency === destinationCurrency) {
-            return 1.0;   
-        }
-        else {
-            return 1.0;
+        const apiKey = 'Hx5QBKAESeOlThw7d5R0kysnrl2jUu1zpZj3ociN';
+        const url = `https://api.freecurrencyapi.ro/v1/convert?from=${sourceCurrency}&to=${destinationCurrency}&api_key=${apiKey}`;
+      
+        try {
+          const response = await axios.get(url);
+          const conversionRate = response.data.rate;
+          return conversionRate;
+        } catch (error) {
+          console.error('Error retrieving conversion rate:', error);
+          throw error;
         }
     }
 
