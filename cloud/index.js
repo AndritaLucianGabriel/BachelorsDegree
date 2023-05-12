@@ -164,16 +164,16 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const file = bucket.file(fileName);
 
         // Check if the file exists
-        const [exists] = await file.exists();
+        const [exists] = file.exists();
     
         if (exists) {
             try {
                 // Read account data
-                const [accountData] = await file.download();
+                const [accountData] = file.download();
                 const account = JSON.parse(accountData.toString());
 
                 // Get conversion rate between source and destination currencies
-                const conversionRate = await getConversionRate(account.currency, currency);
+                const conversionRate = getConversionRate(account.currency, currency);
 
                 // Calculate the transferred amount in the destination currency
                 const convertedAmount = amount * conversionRate;
@@ -182,7 +182,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                 account.sold = parseFloat(account.sold + convertedAmount);
 
                 // Save updated account data
-                await Promise.all([file.save(JSON.stringify(account), { contentType: 'application/json' })]);
+                file.save(JSON.stringify(account), { contentType: 'application/json' });
             
                 agent.add(`Added ${amount} ${account.currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
             } catch (error) {
