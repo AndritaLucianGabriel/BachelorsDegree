@@ -181,10 +181,10 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                 }
                 console.log("ConversionRate: " + conversionRate);
                 // Calculate the transferred amount in the destination currency
-                const convertedAmount = amount * conversionRate.toFixed(2);
+                const convertedAmount = amount * conversionRate;
                 console.log("convertedAmount: " + convertedAmount);
                 // Update account balance
-                account.sold = parseFloat(account.sold + convertedAmount.toFixed(2));
+                account.sold = parseFloat(account.sold + convertedAmount).toFixed(2);
                 console.log("account.sold: " + account.sold);
                 // Save updated account data
                 await file.save(JSON.stringify(account), { contentType: 'application/json' });
