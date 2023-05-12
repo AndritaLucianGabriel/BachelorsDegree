@@ -199,11 +199,11 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
 
     async function getConversionRate(sourceCurrency, destinationCurrency) {
         const apiKey = 'Hx5QBKAESeOlThw7d5R0kysnrl2jUu1zpZj3ociN';
-        const url = `https://api.freecurrencyapi.ro/v1/convert?from=${sourceCurrency}&to=${destinationCurrency}&api_key=${apiKey}`;
-      
+        const url = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}&base_currency=${sourceCurrency}&currencies=${destinationCurrency}`;
         try {
           const response = await axios.get(url);
-          const conversionRate = response.data.rate;
+          axios.AxiosHeaders()
+          const conversionRate = response.data.destinationCurrency;
           return conversionRate;
         } catch (error) {
           console.error('Error retrieving conversion rate:', error);
