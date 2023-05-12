@@ -169,7 +169,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         if (exists) {
             try {
                 // Read account data
-                const [accountData] = file.download();
+                const [accountData] = await file.download();
                 const account = JSON.parse(accountData.toString());
 
                 // Get conversion rate between source and destination currencies
