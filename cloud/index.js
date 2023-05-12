@@ -175,19 +175,21 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                 console.log("account: " + account);
                 // Get conversion rate between source and destination currencies
                 let conversionRate = 1.0;
-                if(currency !== '') 
-                    conversionRate = await getConversionRate(account.currency, currency);
+                if(currency !== '') {
+                    conversionRate = await getConversionRate(currency, account.currency);
+                    currency = account.currency;
+                }
                 console.log("ConversionRate: " + conversionRate);
                 // Calculate the transferred amount in the destination currency
-                const convertedAmount = amount * conversionRate;
+                const convertedAmount = amount * conversionRate.toFixed(2);
                 console.log("convertedAmount: " + convertedAmount);
                 // Update account balance
-                account.sold = parseFloat(account.sold + convertedAmount);
+                account.sold = parseFloat(account.sold + convertedAmount.toFixed(2));
                 console.log("account.sold: " + account.sold);
                 // Save updated account data
                 await file.save(JSON.stringify(account), { contentType: 'application/json' });
             
-                agent.add(`Added ${amount} ${account.currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
+                agent.add(`Added ${amount} ${currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
             } catch (error) {
                 console.error('Error adding amount to account:', error);
                 agent.add(`Error adding amount to account: ${error.message}`);
