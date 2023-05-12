@@ -18,4 +18,4 @@ package-lock.json
 licenta_EXECUTABLE
 res/*.json
 todo
-test.txt
+*.txt
