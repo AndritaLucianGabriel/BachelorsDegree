@@ -204,15 +204,16 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const url = `https://api.freecurrencyapi.com/v1/latest?apikey=${apiKey}&base_currency=${sourceCurrency}&currencies=${destinationCurrency}`;
         console.log("URL: " + url);
         try {
-          const response = await axios.get(url);
-          const conversionRate = response.data[destinationCurrency];
-          console.log("response: " + JSON.stringify(response));
-          console.log("response.data: " + JSON.stringify(response.data));
-          console.log("response.data.destinationCurrency: " + JSON.stringify(response.data[destinationCurrency]));
-          return conversionRate;
+            const response = await axios.get(url);
+            console.log("response.data: " + JSON.stringify(response.data));
+            const conversionData = response.data['data'];
+            console.log("conversionData: " + JSON.stringify(conversionData));
+            const conversionRate = conversionData[destinationCurrency];
+            console.log("conversionRate: " + conversionRate);
+            return conversionRate;
         } catch (error) {
-          console.error('Error retrieving conversion rate:', error);
-          throw error;
+            console.error('Error retrieving conversion rate:', error);
+            throw error;
         }
     }
 
