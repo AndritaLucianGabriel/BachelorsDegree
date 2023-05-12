@@ -243,10 +243,10 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const iban = agent.parameters.iban;
         const amount = agent.parameters.amount;
         let currency = agent.parameters.currency;
-
+      
         const bucketName = 'bank-accounts';
         const fileName = iban + '.json';
-
+      
         // Initialize Google Cloud Storage
         const bucket = storage.bucket(bucketName);
         const file = bucket.file(fileName);
@@ -255,34 +255,39 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
         const [exists] = await file.exists();
     
         if (exists) {
-            // Read account data
-            const [accountData] = await file.download();
-            const account = JSON.parse(accountData.toString());
+            try {
+                // Read account data
+                const [accountData] = await file.download();
+                const account = JSON.parse(accountData.toString());
 
-            // Get conversion rate between source and destination currencies
-            let conversionRate = 1.0;
-            if(currency !== '') {
-                conversionRate = await getConversionRate(currency, account.currency);
-            } else {
-                // For debugging purposes
-                currency = account.currency;                    
+                // Get conversion rate between source and destination currencies
+                let conversionRate = 1.0;
+                if(currency !== '') {
+                    conversionRate = await getConversionRate(currency, account.currency);
+                } else {
+                    // For debugging purposes
+                    currency = account.currency;                    
+                }
+                console.log("ConversionRate: " + conversionRate);
+                // Calculate the transferred amount in the destination currency
+                const convertedAmount = amount * conversionRate;
+                console.log("convertedAmount: " + convertedAmount);
+                // Update account balance
+                console.log("before account.sold: " + account.sold);
+                account.sold = parseFloat(account.sold) - parseFloat(convertedAmount);
+                console.log("after adding account.sold: " + account.sold);
+
+                account.sold = Number(account.sold).toFixed(2);
+                console.log("after rounded account.sold: " + account.sold);
+                // Save updated account data
+                await file.save(JSON.stringify(account), { contentType: 'application/json' });
+            
+                console.log(`Withdrew ${amount} ${currency} from the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
+                agent.add(`Withdrew ${amount} ${currency} from the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
+            } catch (error) {
+                console.error('Error adding amount to account:', error);
+                agent.add(`Error adding amount to account: ${error.message}`);
             }
-            console.log("ConversionRate: " + conversionRate);
-            // Calculate the transferred amount in the destination currency
-            const convertedAmount = amount * conversionRate;
-            console.log("convertedAmount: " + convertedAmount);
-            // Update account balance
-            console.log("before account.sold: " + account.sold);
-            account.sold = parseFloat(account.sold) - parseFloat(convertedAmount);
-            console.log("after withdrawing account.sold: " + account.sold);
-
-            account.sold = Number(account.sold).toFixed(2);
-            console.log("after rounded account.sold: " + account.sold);
-            // Save updated account data
-            await file.save(JSON.stringify(account), { contentType: 'application/json' });
-
-            console.log(`Withdrew ${amount} ${account.currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
-            agent.add(`Withdrew ${amount} ${account.currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
         }
         else {
             console.log(`Bank account with IBAN '${iban}' doesn't exist.`);
@@ -329,9 +334,15 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                 const iban = file.name.replace('.json', '');
                 ibanList.push(iban);
             });
-    
-            console.log(`Found ${ibanList.length} bank accounts. IBANs: ${ibanList.join(', ')}`);
-            agent.add(`Found ${ibanList.length} bank accounts. IBANs: ${ibanList.join(', ')}`);
+            
+            if(files.length != 1) {
+                console.log(`Found ${ibanList.length} bank accounts. IBANs: ${ibanList.join(', ')}`);
+                agent.add(`Found ${ibanList.length} bank accounts. IBANs: ${ibanList.join(', ')}`);
+            }
+            else {
+                console.log(`Found ${ibanList.length} bank account. IBAN: ${ibanList.join(', ')}`);
+                agent.add(`Found ${ibanList.length} bank account. IBAN: ${ibanList.join(', ')}`);
+            }
         } else {
             console.log('No bank accounts found.');
             agent.add('No bank accounts found.');
