@@ -182,7 +182,7 @@ exports.dialogflowFirebaseFulfillment = functions.https.onRequest((request, resp
                 account.sold = parseFloat(account.sold + convertedAmount);
 
                 // Save updated account data
-                await Promise.all(file.save(JSON.stringify(account), { contentType: 'application/json' }));
+                await Promise(file.save(JSON.stringify(account), { contentType: 'application/json' }));
             
                 agent.add(`Added ${amount} ${account.currency} to the account with IBAN '${iban}'. The new balance is ${account.sold} ${account.currency}.`);
             } catch (error) {
