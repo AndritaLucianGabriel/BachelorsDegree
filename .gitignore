@@ -9,8 +9,13 @@ build
 logs
 css
 
+# Files used in cloud shell editor via agent's webhook
+node_modules
+package.json
+package-lock.json
+
 # Files
 licenta_EXECUTABLE
 res/*.json
 todo
-test.txt
+*.txt
