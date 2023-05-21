@@ -1,0 +1,22 @@
+\selectlanguage *{romanian}
+\selectlanguage *{romanian}
+\selectlanguage *{romanian}
+\selectlanguage *{english}
+\selectlanguage *{romanian}
+\contentsline {chapter}{\numberline {I}Introducere}{5}{chapter.1}%
+\contentsline {section}{\numberline {I.1}Nevoia migrării in cloud}{5}{section.1.1}%
+\contentsline {section}{\numberline {I.2}Scopul lucrării}{6}{section.1.2}%
+\contentsline {section}{\numberline {I.3}Obiective}{6}{section.1.3}%
+\contentsline {section}{\numberline {I.4}Motivația personală}{6}{section.1.4}%
+\contentsline {section}{\numberline {I.5}Scurt istoric al integrării asistenților virtuali}{7}{section.1.5}%
+\contentsline {section}{\numberline {I.6}Structura lucrării}{8}{section.1.6}%
+\contentsline {chapter}{\numberline {II}Preliminarii}{10}{chapter.2}%
+\contentsline {section}{\numberline {II.1}Noțiuni de bază}{10}{section.2.1}%
+\contentsline {section}{\numberline {II.2}Stadiul actual al subdomeniului}{11}{section.2.2}%
+\contentsline {section}{\numberline {II.3}Obiectivele lucrării în context}{12}{section.2.3}%
+\contentsline {chapter}{\numberline {III}Design și arhitectură}{14}{chapter.3}%
+\contentsline {section}{\numberline {III.1}Arhitectură}{14}{section.3.1}%
+\contentsline {section}{\numberline {III.2}Design}{14}{section.3.2}%
+\contentsline {chapter}{\numberline {IV}Implementare}{15}{chapter.4}%
+\contentsline {chapter}{\numberline {V}Concluzii}{16}{chapter.5}%
+\contentsline {chapter}{Bibliografie}{17}{chapter*.1}%
