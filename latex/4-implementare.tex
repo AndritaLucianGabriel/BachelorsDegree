@@ -1,1 +1,308 @@
 \chapter{Implementare}
+
+\section{Alegerea bibliotecii}
+
+Biblioteca Portable Components (POCO) este un set popular de biblioteci open-source pentru dezvoltarea software în C++. Se evidențiază printr-o gamă largă de facilități care îi permit să fie o soluție potrivită pentru dezvoltarea unei aplicații web. Înainte de a trece la detaliile bibliotecii POCO, este esențial să se înțeleagă contextul general al instrumentelor și bibliotecilor disponibile pentru dezvoltarea aplicațiilor web în C++.
+
+Din punct de vedere istoric, dezvoltarea aplicațiilor web în C++ a fost deseori privită ca un proces complex, în mare parte din cauza faptului că limbajul C++ este orientat spre dezvoltarea software de nivel înalt, cu un control detaliat asupra resurselor hardware, precum și a complexității implicite a acestui limbaj. Cu toate acestea, cu ajutorul unor instrumente precum bibliotecile POCO \cite{poco-docs}, Boost \cite{boost-docs}, Wt \cite{wt-docs} și CPPCMS \cite{cppcms-docs}, dezvoltarea aplicațiilor web în C++ a devenit mult mai ușoară și mai eficientă.
+
+\subsection{POCO: avantaje și caracteristici}
+
+POCO se distinge prin designul său robust și portabil, care permite dezvoltatorilor să creeze software eficient și de înaltă performanță, care poate fi portat cu ușurință pe diferite platforme și sisteme de operare. Bibliotecile POCO au fost concepute pentru a fi ușor de înțeles și de utilizat, fără a impune niciun model de programare specific. Acest lucru le face flexibile și adaptabile, încurajând dezvoltarea rapidă și agile.
+
+În contextul dezvoltării aplicațiilor web, biblioteca POCO oferă numeroase facilități, inclusiv suport pentru HTTP, FTP, sendmail, URI, cookie-uri, HTML formular, și altele. Acesta include, de asemenea, un framework pentru servere web, care permite dezvoltarea serverelor web multithreaded și sigure. De asemenea, biblioteca NetSSL furnizează suport pentru comunicațiile securizate SSL/TLS, care sunt esențiale pentru orice aplicație web modernă.
+
+\subsection{POCO în comparație cu alte biblioteci C++}
+
+Să comparam acum POCO cu alte biblioteci C++ populare pentru dezvoltarea aplicațiilor web: Boost, Wt și CPPCMS.
+
+Boost este o colecție vastă de biblioteci C++, care oferă o gamă largă de facilități. Cu toate acestea, Boost nu este specializat în dezvoltarea aplicațiilor web și nu include suport direct pentru HTTP sau alte protocoale web specifice. Prin urmare, dezvoltarea unei aplicații web cu Boost ar necesita o cantitate semnificativă de cod adițional sau utilizarea altor biblioteci pentru a acoperi aceste funcționalități.
+
+Wt este o bibliotecă C++ pentru dezvoltarea aplicațiilor web care utilizează un model de programare similar cu cel al Qt. Deși Wt este puternic și flexibil, are un model de programare mai complex decât POCO și poate fi mai dificil de învățat și de utilizat, în special pentru cei care nu sunt familiarizați cu Qt.
+
+CPPCMS este un framework specializat pentru dezvoltarea aplicațiilor web în C++. Deși CPPCMS include o serie de facilități puternice pentru dezvoltarea aplicațiilor web, el impune un anumit model de programare, care poate fi mai restrictiv decât abordarea mai flexibilă a POCO.
+
+În concluzie, POCO oferă un echilibru excelent între ușurința de utilizare, flexibilitate, portabilitate și performanță, ceea ce o face o alegere bună pentru dezvoltarea aplicațiilor web în C++. Cu toate acestea, alegerea finală ar trebui să depindă de cerințele specifice ale proiectului, de preferințele dezvoltatorului și de alte considerații.
+
+Bineînțeles! Iată codul LaTeX pentru traducerea în limba română a textului pe care l-am generat:
+
+\chapter{Informații generale}
+
+\section{Instalarea bibliotecilor}
+Utilizatorul trebuie să aibă o cheie de acces pentru un cont de serviciu pe platforma Google Cloud pentru a accesa API-ul Dialogflow ES. Această cheie trebuie plasată sub directorul "res". Mai multe informații găsiți \href{https://cloud.google.com/iam/docs/keys-create-delete}{aici}.
+
+Această cheie va fi setată ca variabilă de mediu \texttt{GOOGLE\_APPLICATION\_CREDENTIALS}, care va funcționa ca un sistem de autentificare pentru platformă.
+
+În directorul rădăcină al proiectului, se află un script Bash numit \texttt{getting\_started.sh} (Notă: dacă scriptul nu poate fi rulat pe o platformă Unix, recomandăm verificarea formatului greșit al sfârșitului de linie prin executarea comenzii \texttt{dos2unix} pentru script și verificarea din nou). Când este rulat pe o platformă Unix, acesta va instala toate dependențele necesare (vezi \hyperref[first-time-setup]{Configurarea inițială}). După finalizarea scriptului, utilizatorul trebuie să ruleze manual configurarea inițială pentru CLI-ul GC:
+
+\begin{verbatim}
+./google-cloud-sdk/install.sh
+source ~/.bashrc
+./google-cloud-sdk/bin/gcloud init
+\end{verbatim}
+
+Notă: Configurarea inițială va dura un timp \textbf{îndelungat} (în special pe mașini mai vechi).
+
+\section{Configurarea inițială}
+Fluxul scriptului \texttt{getting\_started.sh} este următorul:
+
+\textbf{Notă importantă}: Trebuie să fie rulat cu opțiunea \texttt{-i} sau \texttt{--install}, iar după finalizarea acestuia, utilizatorul trebuie să ruleze manual configurarea inițială pentru gcloud (vezi pașii de mai sus).
+
+\begin{enumerate}
+  \item Configurarea mediului:
+    \begin{enumerate}
+      \item Submodulele sunt iniț
+
+ializate.
+      \item Pe baza diferenței în terminarea greșită a liniei, atât scriptul \texttt{build.sh}, cât și executabilul \texttt{sass} vor fi convertite la formatul Unix-like.
+      \item Se instalează \texttt{doxygen} și dependența sa \texttt{graphviz}.
+    \end{enumerate}
+  \item Revenirea la versiunile dorite ale bibliotecilor:
+    \begin{enumerate}
+      \item Se utilizează versiunea \texttt{Poco v1.12.4}.
+      \item Se utilizează versiunea \texttt{VCPKG v2023.04.15 Release}.
+      \item Se utilizează versiunea \texttt{GCP v2.9.1}.
+    \end{enumerate}
+  \item Configurarea Poco. Mai multe informații găsiți \href{https://github.com/pocoproject/poco}{aici}:
+    \begin{enumerate}
+      \item Se instalează dependențele (\texttt{openssl, libssl-dev, git, g++, make, cmake}).
+      \item Se configurează fișierul \texttt{CMakeLists.txt}.
+      \item Se construiește fișierul de configurare.
+      \item Se instalează biblioteca.
+    \end{enumerate}
+  \item Configurarea npm:
+    \begin{enumerate}
+      \item Se instalează \texttt{npm} prin intermediul gestionarului de pachete implicit.
+    \end{enumerate}
+  \item Configurarea Google Cloud CLI. Mai multe informații găsiți \href{https://cloud.google.com/sdk/docs/install}{aici}:
+    \begin{enumerate}
+      \item Se descarcă arhiva care conține codul sursă.
+      \item Se extrage arhiva.
+    \end{enumerate}
+  \item Configurarea Sass:
+    \begin{enumerate}
+      \item Se creează un link simbolic (\texttt{symlink}) și se forțează crearea acestuia, chiar dacă există, către executabilul furnizat (vezi directorul \texttt{libs/sass}).
+    \end{enumerate}
+  \item Configurarea VCPKG. Mai multe informații găsiți \href{https://github.com/Microsoft/vcpkg}{aici}:
+    \begin{enumerate}
+      \item Se instalează dependențele (\texttt{curl, zip, unzip, tar}).
+      \item Se configurează managerul vcpkg pentru prima dată prin intermediul scriptului de pornire (\texttt{libs/vcpkg/bootstrap-vcpkg.sh}).
+    \end{enumerate}
+  \item Configurarea Google Cloud Platform. Mai multe informații găsiți \href{https://github.com/googleapis/google-cloud-cpp/tree/main/google/cloud/dialogflow_es/quickstart}{aici}:
+    \begin{enumerate}
+      \item Se instalează modulele reale pe care le vom utiliza în proiect (\texttt{core} și \texttt{dialogflow-es}) prin intermediul vcpkg.
+    \end{enumerate}
+\end{enumerate}
+
+\section{Cum se construiește}
+Din directorul rădăcină al proiectului, putem
+
+ utiliza scriptul \texttt{build.sh} pentru a construi și rula aplicația. În mod implicit, serverul va utiliza portul \textbf{9090}, dar acesta poate fi modificat din fișierul \texttt{constants.h} (vezi \texttt{globals::serverPort}).
+
+Există câteva opțiuni pe care le puteți utiliza cu scriptul:
+\begin{itemize}
+  \item \texttt{-b} sau \texttt{--build} => compilează și rulează proiectul
+  \item \texttt{-bscss} sau \texttt{--build-scss} => compilează doar fișierele SCSS pentru a actualiza aspectul HTML-ului
+  \item \texttt{-docs} sau \texttt{--generate-docs} => generează documentația tehnică utilizând Doxygen
+  \item \texttt{-c} sau \texttt{--clean} => curăță proiectul
+  \item \texttt{-v} sau \texttt{--verbose} => opțional, afișează mai multe informații în consolă
+  \item \texttt{-h} sau \texttt{--help} => afișează această informație de ajutor
+\end{itemize}
+
+Notă: Nu rulați opțiunea \texttt{-c} împreună cu alte opțiuni, deoarece curățarea trebuie să fie un proces singular.
+
+\section{Informații detaliate}
+Ambele scripturi folosesc același cod pentru prelucrarea inputului utilizatorului și tratarea erorilor.
+
+Acestea sunt procesate de funcția \texttt{func\_read\_cli\_options} și sunt verificate cu lista implicită (care diferă în mare parte pentru ambele scripturi, deoarece au roluri distincte, dar opțiunile \texttt{-v} și \texttt{-h} sunt comune, deoarece au o utilitate comună).
+
+\begin{itemize}
+  \item Flag comune:
+    \begin{itemize}
+      \item Flagul \texttt{verbose} permite scripturilor să afișeze mai multe informații (atât de la ele, cât și din jurnalele aplicației) în consolă. Această opțiune va seta variabila globală \texttt{VERBOSE} la true.
+      \item Flagul \texttt{help} va afișa doar informațiile de ajutor.
+    \end{itemize}
+  \item Flagurile specifice pentru \texttt{getting\_started.sh}:
+    \begin{itemize}
+      \item Flagul \texttt{install} instalează și configurează toate dependențele pentru proiect.
+    \end{itemize}
+  \item Flagurile specifice pentru \texttt{build.sh}:
+    \begin{itemize}
+      \item Flagul \texttt{build} va compila și executa proiectul.
+      \item Flagul \texttt{build-scss} va compila doar fișierele SCSS pentru a actualiza aspectul HTML-ului.
+      \item Flagul \texttt{generate-docs} va genera documentația tehnică utilizând Doxygen.
+      \item Flagul \texttt{clean} va curăța proiectul de fișiere temporare, jurnale, executabile, fișiere binare, etc.
+    \end{itemize}
+\end{itemize}
+
+Dacă Flagul există în lista dorită, variabila \texttt{COMMAND} stochează acțiunea dorită și apoi este pasată funcției \texttt{execute}.
+
+Funcția \texttt{execute} va apela apoi metoda corespunzătoare funcționalității dorite. Acest nivel de abstractizare permite concatenarea mai multor comenzi sub același nume, dacă este necesar.
+
+Notă: Din acest punct înainte, vom analiza fiecare script în mod individual, deoarece au metode diferite pentru cazurile lor de utilizare diferite.
+
+Iată codul LaTeX actualizat, utilizând listele pentru enumerare:
+
+\section{Getting Started}
+Pentru \texttt{getting\_started.sh}:
+
+\begin{itemize}
+    \item Metoda \texttt{execute} poate apela doar funcția \texttt{install}. Această metodă va parcurge o listă de comenzi și va instala dependențele necesare (vezi \hyperref[first-time-setup]{Configurarea inițială}).
+\end{itemize}
+
+\section{Build}
+Pentru \texttt{build.sh}:
+
+\begin{itemize}
+    \item Metoda \texttt{execute} poate apela una dintre următoarele funcții:
+    \begin{itemize}
+        \item Funcția \texttt{compile\_sass} va itera peste toate fișierele SCSS din subfolderul \texttt{res/scss} și le va compila, generând fișierele CSS dorite în subfolderul \texttt{res/css}. Aceste fișiere nu vor conține hărți CSS generate automat, deoarece nu există mult CSS pentru început și nu este necesară crearea unei logici suplimentare pentru ca serverul să gestioneze aceste solicitări.
+        \item Funcția \texttt{generate\_docs} va genera documentația tehnică. În fișierul Doxyfile, următoarele taguri au fost modificate:
+        \begin{itemize}
+            \item \texttt{PROJECT\_NAME = "Licență"}
+            \item \texttt{PROJECT\_BRIEF = "O aplicație bancară C++ care utilizează Dialogflow ES de pe Google Cloud Platform pentru interacțiuni uman-bot într-un context bancar."}
+            \item \texttt{OUTPUT\_DIRECTORY = "./res/docs"}
+            \item \texttt{FULL\_PATH\_NAMES = NO}
+            \item \texttt{BUILTIN\_STL\_SUPPORT = YES}
+            \item \texttt{EXTRACT\_ALL = YES}
+            \item \texttt{EXTRACT\_PRIVATE = YES}
+            \item \texttt{EXTRACT\_STATIC = YES}
+            \item \texttt{INPUT = ./res}
+            \item \texttt{RECURSIVE = YES}
+            \item \texttt{HTML\_OUTPUT = .}
+            \item \texttt{DISABLE\_INDEX = YES}
+            \item \texttt{GENERATE\_TREEVIEW = YES}
+            \item \texttt{GENERATE\_LATEX = NO}
+            \item \texttt{CALL\_GRAPH = YES}
+            \item \texttt{CALLER\_GRAPH = YES}
+            \item \texttt{ALPHABETICAL\_INDEX = NO}
+        \end{itemize}
+        \item Funcția \texttt{build} este o metodă de nivel superior care are ca scop construirea și rularea executabilului final. Executabilul se numește \texttt{licenta\_EXECUTABLE} și poate fi găsit în directorul rădăcină al proiectului. Acesta poate fi rulat cu două indicatoare: \texttt{DISABLE\_DEBUG} sau \texttt{ENABLE\_DEBUG}. Aceste indicatoare depind de valoarea variabilei globale \texttt{VERBOSE}. Dacă este \texttt{true}, sistemul de jurnalizare al proiectului (\texttt{MyLogger} - un wrapper peste clasa \texttt{Poco's Logger}) va crea un canal \texttt{Poco::ConsoleChannel}, care va fi furnizat unui canal \texttt{Poco::SplitterChannel}. Astfel, orice jurnal se va genera, va fi afișat și în consolă, pe lângă folderul \texttt{logs}.
+        \item \begin{enumerate}
+            \item Funcția \texttt{build} este o metodă de nivel superior care are ca scop construirea și rularea executabilului final. Executabilul se numește \texttt{licenta\_EXECUTABLE} și poate fi găsit în directorul rădăcină al proiectului. Acesta poate fi rulat cu două indicatoare: \texttt{DISABLE\_DEBUG} sau \texttt{ENABLE\_DEBUG}. Aceste indicatoare depind de valoarea variabilei globale \texttt{VERBOSE}. Dacă este \texttt{true}, sistemul de jurnalizare al proiectului (\texttt{MyLogger} - un wrapper peste clasa \texttt{Poco's Logger}) va crea un canal \texttt{Poco::ConsoleChannel}, care va fi furnizat unui canal \texttt{Poco::SplitterChannel}. Astfel, orice jurnal se va genera, va fi afișat și în consolă, pe lângă folderul \texttt{logs}.
+            \item Se apelează funcția \texttt{compile\_sass}. Consultați mai sus pentru mai multe explicații.
+            \item Funcția \texttt{compile\_cpp} configurează mai întâi fișierul \texttt{CMakeLists.txt} și trece variabila \texttt{CMAKE\_TOOLCHAIN\_FILE} la CMake-ul de pe Google Cloud Platform. Deoarece aceasta nu este utilizată direct în acest CMake, vom adăuga și indicativul \texttt{--no-warn-unused-cli} pentru a suprima avertismentul referitor la această variabilă. Dacă configurarea reușește, se va efectua construirea efectivă a proiectului.
+            \item Funcția \texttt{configure\_gcp} va exporta variabila \texttt{GOOGLE\_APPLICATION\_CREDENTIALS}, astfel încât să fie vizibilă pentru fiecare proces și subproces care pornește din script.
+        \end{enumerate}
+    \end{itemize}
+\end{itemize}
+
+Proiectul CMake utilizează standardul \texttt{C++17}, iar executabilul este generat în directorul rădăcină al proiectului. Bibliotecile utilizate pentru legare sunt \texttt{Poco::Foundation Poco::Net Poco::Util google-cloud-cpp::dialogflow\_es}.
+
+\chapter{Explicații codului din cloud}
+
+Codul poate fi găsit în \textbf{./cloud} și constă într-un scrip JavaScript utilizat în contextul unui serviciu de îndeplinire a cerințelor (fulfillment) pentru Dialogflow, un serviciu de înțelegere a limbajului natural și de gestionare a conversațiilor dezvoltat de Google. Acest script gestionează cererile primite de la Dialogflow și furnizează răspunsurile corespunzătoare. De asemenea acesta este rulat prin Google Cloud Function, codul fiind luat din serviciul Google Source Repository.
+
+La nivel top-level, avem următoarele funcționalități:
+
+\begin{enumerate}
+    \item Se importă modulele necesare: `firebase-functions`, `dialogflow-fulfillment`, `google-cloud/storage` și `axios`. Aceste module facilitează comunicarea cu Dialogflow, gestionarea stocării și efectuarea de cereri HTTP.
+
+    \item Se definește funcția `dialogflowFirebaseFulfillment` ca o funcție de tip `functions.https.onRequest`, care va fi apelată în momentul în care se primește o cerere HTTP către URL-ul specificat în configurația Firebase.
+
+    \item În interiorul funcției `dialogflowFirebaseFulfillment`, se inițializează un obiect `WebhookClient` cu request-ul și response-ul primite. Acest obiect facilitează procesarea cererii și furnizarea răspunsului către Dialogflow.
+
+    \item Se definesc funcțiile care vor fi apelate în funcție de intent-ul identificat de Dialogflow. Aceste funcții gestionează diferite scenarii de conversație și furnizează răspunsuri specifice. De exemplu, funcția `welcome` furnizează un mesaj de bun venit, iar funcția `checkBalance` verifică soldul unei anumite conturi bancare. Fiecare funcție primește ca parametru obiectul `agent`, care reprezintă un context de conversație și permite adăugarea de mesaje și interacțiune cu utilizatorul.
+
+    \item În cadrul funcțiilor, se folosește obiectul `agent` pentru a adăuga mesaje de răspuns, a efectua verificări și a interacționa cu sistemul de stocare în cloud folosind modulul `google-cloud/storage`.
+
+    \item Funcția `getConversionRate` este utilizată pentru a obține rata de conversie între două valute folosind un serviciu extern. Această funcție face o cerere HTTP către un API și returnează rata de conversie.
+
+    \item Este creată o instanță a obiectului `WebhookClient` și se apelează funcția `handleRequest` pentru a procesa cererea și a furniza răspunsul corespunzător.
+
+    \item Este definită o hartă de intent-uri (`intentMap`) care asociază funcțiile definite mai sus cu intent-urile specifice. Astfel, în funcția `handleRequest`, se va apela funcția corespunzătoare în funcție de intent-ul identificat de Dialogflow.
+\end{enumerate}
+
+Acest script oferă suport pentru diferite funcționalități de gestionare a conversațiilor cu un chatbot, cum ar fi verificarea soldului, transferul de bani între conturi, crearea și ștergerea de conturi bancare. De asemenea, folosește un serviciu extern pentru a obține ratele de conversie valutară. Prin intermediul acestui script, se poate crea un chatbot interactiv și inteligent care să furnizeze răspunsuri personalizate și să interacționeze cu utilizatorii într-un mod natural.
+
+\chapter{Explicații codului local}
+
+\section{Main}
+
+Codul începe prin includerea mai multor fișiere de bibliotecă necesare pentru funcționalitatea serverului. Aceste fișiere de bibliotecă sunt:
+
+Poco/Util/ServerApplication.h: Această bibliotecă conține clasa ServerApplication, care oferă funcționalități pentru implementarea unei aplicații server.
+Poco/Net/HTTPServer.h: Această bibliotecă conține clasa HTTPServer, care gestionează cererile HTTP primite de la clienți.
+Poco/Net/SecureServerSocket.h: Această bibliotecă conține clasa SecureServerSocket, care permite comunicarea securizată între server și clienți utilizând SSL/TLS.
+Poco/Net/HTTPServerParams.h: Această bibliotecă conține clasa HTTPServerParams, care permite configurarea parametrilor serverului HTTP.
+În plus față de bibliotecile Poco, codul include și alte fișiere specifice aplicației, cum ar fi "server.h", "logger.h", "chatbot.h" și "constants.h". Aceste fișiere conțin declarații și implementări specifice aplicației și sunt utilizate în codul principal pentru a oferi funcționalitatea dorită.
+
+După includerea fișierelor de bibliotecă și a fișierelor specifice aplicației, se utilizează namespace-ul Poco::Util pentru a evita utilizarea repetată a acestuia în cod.
+
+Următoarea parte a codului definește clasa MyServerApp, care este o clasă derivată din ServerApplication. Această clasă acționează ca un wrapper peste clasa ServerApplication și permite rularea aplicației ca un daemon Unix. Aceasta înseamnă că aplicația poate fi rulată în fundal, fără o interfață grafică și fără a bloca consola (vezi Anexa \ref{annex:exempluConversatie}).
+
+Clasa MyServerApp conține o metodă main suprascrisă, care implementează funcționalitatea serverului. În această metodă, se configurează parametrii serverului HTTP utilizând clasa HTTPServerParams. Parametrii, cum ar fi numărul maxim de conexiuni acceptate și numărul maxim de thread-uri, sunt setați în acest pas.
+
+Apoi, se creează un obiect de tip HTTPServer utilizând clasa HTTPServer și se specifică un MyRequestHandlerFactory ca factor de generare a handler-elor pentru cererile primite de la clienți. De asemenea, se specifică portul serverului utilizând obiectul ServerSocket și se folosesc parametrii configurați anterior pentru a inițializa serverul.
+
+După ce serverul este creat și configurat, acesta este pornit utilizând metoda start a obiectului HTTPServer. În plus, se afișează un mesaj de informare folosind obiectul logger sau prin afișarea directă la consolă
+
+\section{Chatbot}
+
+Clasa Chatbot este responsabilă pentru gestionarea comunicării cu Google Cloud Platform pentru trimiterea și primirea informațiilor. Această clasă este implementată ca un singleton, ceea ce înseamnă că există o singură instanță a acestei clase în întregul program.
+
+Pentru a utiliza funcționalitățile necesare pentru comunicarea cu Google Cloud Platform, avem incluse mai multe fișiere de bibliotecă, cum ar fi "google/cloud/dialogflow\_es/sessions\_client.h", "google/cloud/project.h" și "Poco/Logger.h". Aceste fișiere de bibliotecă conțin clase și funcționalități esențiale pentru interacțiunea cu platforma de cloud.
+
+În cadrul clasei Chatbot, avem o serie de metode și membri de date importante. Pentru a asigura că există o singură instanță a clasei Chatbot, avem metoda statică `getInstance()` care verifică dacă obiectul `agent` a fost deja creat. Dacă da, returnează referința către această instanță existentă, iar dacă nu, creează o nouă instanță și returnează referința către aceasta. Acest mecanism de singleton asigură că avem o singură instanță a clasei Chatbot în întregul program.
+
+O altă metodă importantă este `sendMessage(const std::string\& message)` care primește un mesaj de la client și îl setează ca text de intrare pentru obiectul `request`. Apoi, obiectul `client` trimite informația la Google Cloud Platform și așteaptă un răspuns. Dacă textul de completare din răspuns este gol, un mesaj implicit este stocat în membrul `outputText` al obiectului `agent`. Această metodă asigură trimiterea mesajelor și primirea răspunsurilor în cadrul conversației cu platforma de cloud.
+
+Există și metode pentru setarea și obținerea textului de ieșire al agentului, respectiv `setOutputText(const std::string\& outputParam)` și `getOutputText()`. Aceste metode permit manipularea și accesarea textului de ieșire generat de agentul de chat.
+
+În plus, clasa Chatbot conține și membri de date relevanți pentru funcționarea acesteia. Avem un obiect `logger` de tip Poco::Logger, care este utilizat pentru înregistrarea mesajelor de jurnal și este accesibil prin intermediul clasei Logger definită în fișierul "logger.h". De asemenea, avem un obiect `client` de tip dialogflow\_es::SessionsClient care gestionează interacțiunea cu sesiunile de comunicare cu platforma de cloud. Un alt membru important este obiectul `request` de tip v2::DetectIntentRequest care reprezintă cererea de comunicare trimisă la platforma de cloud.
+
+În general, clasa Chatbot oferă o interfață simplificată pentru trimiterea și primirea mesajelor către/de la Google Cloud Platform, facilitând astfel implementarea unui agent de chat funcțional. Această clasă utilizează bibliotecile și funcționalitățile oferite de Google Cloud Platform și Poco pentru a asigura o comunicare eficientă și robustă.
+
+\section{Constants}
+
+În codul de mai sus, avem fișierul header "constants.h" care conține câteva constante și un namespace pentru variabilele de configurare utilizate în program.
+
+În interiorul namespace-ului "globals", avem mai multe constante definite:
+\begin{enumerate}
+    \item "serverPort" reprezintă portul folosit pentru server și are valoarea 9090.
+    \item "projectID" reprezintă numele proiectului utilizat pe platforma Google Cloud și are valoarea "licenta-383311".
+    \item "sessionID" reprezintă ID-ul sesiunii utilizate pentru client și are valoarea "123456789".
+    \item "agentLanguage" reprezintă limba sesiunii și are valoarea "en" (engleză).
+\end{enumerate}
+
+Aceste constante sunt folosite în cadrul programului pentru a configura și personaliza diferite aspecte legate de comunicarea cu platforma Google Cloud.
+
+Fișierul header "constants.h" este protejat împotriva includerii multiple în codul sursă utilizând macro-ul de preprocesare "\#ifndef CONSTANTS\_H\_" și "\#endif", ceea ce asigură că fișierul este inclus o singură dată în cadrul unui fișier sursă.
+
+Utilizarea acestor constante și a namespace-ului "globals" asigură o gestionare eficientă a valorilor de configurare în cadrul programului și facilitează modificarea acestora într-un singur loc. Aceasta oferă flexibilitate și ușurință în adaptarea programului la diferite scenarii și cerințe specifice.
+
+\section{Logger}
+
+Clasa "MyLogger" care este un wrapper singleton peste clasa Poco::Logger. Acesta este un sistem de înregistrare și logging oferit de biblioteca POCO. 
+
+La nivel top-level, clasa "MyLogger" oferă următoarele funcționalități:
+
+\begin{itemize}
+
+    \item Metoda statică "getLogger()" verifică dacă obiectul logger a fost deja creat și returnează o referință către acel obiect. Dacă obiectul nu a fost creat, se va crea un canal pentru fluxul de consolă și un canal pentru fluxul sistemului de fișiere. Se setează anumite parametri pentru serviciu, iar în funcție de modul în care a fost rulată aplicația (cu ENABLE\_DEBUG sau DISABLE\_DEBUG), sistemul de înregistrare va folosi canalul de consolă ca utilitate de depanare.
+
+    \item Metoda statică "init()" setează valoarea membrului de date "debug" în funcție de modul în care a fost rulată aplicația. Parametrul "debugParam" este valoarea transmisă din funcția "main".
+
+    \item Metoda statică "getDebug()" returnează valoarea membrului de date "debug". Dacă aplicația a fost rulată cu ENABLE\_DEBUG, se va returna true (utilizează canalul de consolă pentru înregistrări de depanare), altfel se va returna false (utilizează doar canalul de fișiere).
+
+    \item Metoda statică "cleanUp()" setează obiectul logger la nullptr. Poco::AutoPtr este un înveliș pentru pointeri inteligent similar cu shared\_ptr și verifică numărul de utilizări ale referinței. Deoarece clasa MyLogger este un singleton și are întotdeauna o singură referință, dacă această referință este setată la nullptr, atunci se gestionează automat memoria.
+
+\end{itemize}
+
+Clasa "MyLogger" oferă un mod simplu și eficient de gestionare a sistemului de înregistrare în aplicație. Prin intermediul metodelor sale statice, se poate accesa și utiliza obiectul logger într-un mod centralizat și ușor de întreținut. Utilizarea acestui wrapper singleton asigură că obiectul logger este creat o singură dată și poate fi accesat în mod global în cadrul aplicației.
+
+\section{Server}
+
+În fișierul "Server.h" avem două clase, "MyRequestHandler" și "MyRequestHandlerFactory", care sunt wrappere peste clasele Poco::Net::HTTPRequestHandler și Poco::Net::HTTPRequestHandlerFactory. Aceste clase conțin logica necesară pentru a gestiona cererile și a furniza răspunsurile serverului.
+
+La nivel top-level, avem următoarele funcționalități:
+
+1. Clasa "MyRequestHandler" este o clasă derivată din clasa Poco::Net::HTTPRequestHandler și reprezintă handler-ul care procesează cererile primite de la utilizatori. Metoda "handleRequest" primește cererea HTTP de la utilizator și verifică tipul acesteia. Dacă cererea este un payload JSON, atunci este mesajul trimis de utilizator prin JavaScript. Dacă conținutul este o cerere simplă pentru un fișier (sau legături către fișiere), atunci cererea este pasată metodei "serveResponse" pentru a trimite răspunsul corespunzător.
+
+2. Metoda "serveResponse" trimite prin răspuns fișierul solicitat de client sau o pagină HTML. Aceasta primește răspunsul HTTP și numele fișierului solicitat împreună cu extensia acestuia. Este necesară specificarea extensiei deoarece aceasta indică folderul în care se află fișierul.
+
+3. Clasa "MyRequestHandlerFactory" este o clasă derivată din clasa Poco::Net::HTTPRequestHandlerFactory și reprezintă o fabrică de handler-e pentru fiecare cerere individuală. Metoda "createRequestHandler" creează un nou handler pentru fiecare cerere primită.
+
+Ambele clase utilizează obiectul "logger" din clasa "MyLogger" pentru a înregistra informații relevante și a le afișa în consolă sau a le scrie în fișiere de log.
+
+Aceste wrapper-e peste clasele din biblioteca Poco oferă un nivel de abstractizare și encapsulare pentru a gestiona cererile primite de la utilizatori și a furniza răspunsurile corespunzătoare. Ele permit serverului să ofere un serviciu robust și scalabil, gestionând diferite tipuri de cereri și direcționându-le către funcționalitățile adecvate ale aplicației.
