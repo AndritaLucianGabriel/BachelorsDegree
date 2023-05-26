@@ -293,7 +293,7 @@ Clasa "MyLogger" oferă un mod simplu și eficient de gestionare a sistemului de
 La nivel top-level, avem următoarele funcționalități:
 
 \begin{enumerate}
-  \item Clasa "MyRequestHandler" este o clasă derivată din clasa Poco::Net::HTTPRequestHandler și reprezintă handler-ul care procesează cererile primite de la utilizatori. Metoda "handleRequest" primește cererea HTTP de la utilizator și verifică tipul acesteia. Dacă cererea este un payload JSON, atunci este mesajul trimis de utilizator prin JavaScript. Dacă conținutul este o cerere simplă pentru un fișier (sau legături către fișiere), atunci cererea este pasată metodei "serveResponse" pentru a trimite răspunsul\footnote{Aici mă refer la fișierul corespunzător.} corespunzător.
+  \item Clasa "MyRequestHandler" este o clasă derivată din clasa Poco::Net::HTTPRequestHandler și reprezintă handler-ul care procesează cererile primite de la utilizatori. Metoda "handleRequest" primește cererea HTTP de la utilizator și verifică tipul acesteia. Dacă cererea este un payload JSON, atunci este mesajul trimis de utilizator prin JavaScript. Dacă conținutul este o cerere simplă pentru un fișier (sau legături către fișiere), atunci cererea este pasată metodei "serveResponse" pentru a trimite răspunsul (adică fișierul) corespunzător.
 
   \item Metoda "serveResponse" trimite prin răspuns fișierul solicitat de client sau o pagină HTML. Aceasta primește răspunsul HTTP și numele fișierului solicitat împreună cu extensia acestuia. Este necesară specificarea extensiei deoarece aceasta indică folderul în care se află fișierul.
 
