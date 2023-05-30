@@ -23,7 +23,7 @@ Google Cloud Functions se integrează perfect cu Google Source Repositories \cit
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.0\textwidth]{fulfillment-flow}
-    \caption{Flow-ul intern al Dialogflow \cite{google_dialogflow}}
+    \caption{Flow-ul intern al Dialogflow \cite{google_dialogflow}.}
 \end{figure}
 
 În ansamblu, alegerea Dialogflow, împreună cu Google Cloud Functions, Google Source Repositories și Google Cloud Storage, oferă o soluție robustă și flexibilă pentru dezvoltarea de chatboti în sectorul bancar. Prin folosirea acestor tehnologii, băncile pot crea experiențe de conversație personalizate, eficiente și securizate pentru clienții lor.
@@ -35,7 +35,7 @@ Dialogflow folosește input-ul trimis de către Dialogflow API C++ Client \cite{
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.0\textwidth]{entitati}
-    \caption{Reprezentarea unei entități pentru IBAN folosind un regex}
+    \caption{Reprezentarea unei entități pentru IBAN folosind un regex.}
     \label{fig:entitati}
 \end{figure}
 
@@ -43,12 +43,12 @@ Dialogflow folosește input-ul trimis de către Dialogflow API C++ Client \cite{
 
 \textbf{Contextele} permit agentului DialogFlow să înțeleagă starea conversației și să răspundă în mod corespunzător. Există două tipuri de contexte: contexte de intrare și contexte de ieșire. Contextele de intrare sunt cele pe care agentul le caută înainte de a potrivi o intenție, în timp ce contextele de ieșire sunt stabilite după ce o intenție este potrivită.
 
-\textbf{Exemple de declarații ale utilizatorului} sunt exemple de ceea ce utilizatorul ar putea spune pentru a declanșa această intenție (vezi Figura \ref{fig:training-phrases}). Sistemul utilizează aceste exemple pentru a învăța modelul de limbaj pentru a recunoaște aceeași intenție din declarații diferite.
+\textbf{Exemple de declarații ale utilizatorului} sunt exemple de ceea ce utilizatorul ar putea spune pentru a declanșa această intenție (vezi Figura \ref{fig:training-phrases}). Sistemul utilizează aceste exemple pentru a învăța modelul de limbaj și pentru a recunoaște aceeași intenție din declarații diferite.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=1.0\textwidth]{training-phrases}
-    \caption{Frazele de antrenament ale botului}
+    \caption{Frazele de antrenament ale botului.}
     \label{fig:training-phrases}
 \end{figure}
 
@@ -57,7 +57,7 @@ Dialogflow folosește input-ul trimis de către Dialogflow API C++ Client \cite{
 \begin{figure}[H]
     \centering
     \includegraphics[width=1.0\textwidth]{fulfillment}
-    \caption{Selectarea fulfillment-ului}
+    \caption{Selectarea fulfillment-ului.}
     \label{fig:fulfillment}
 \end{figure}
 
@@ -66,7 +66,7 @@ Dialogflow folosește input-ul trimis de către Dialogflow API C++ Client \cite{
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.0\textwidth]{actiune-parametrii}
-    \caption{Extragerea de paramertii din inputul clientului}
+    \caption{Extragerea de paramertii din inputul clientului.}
     \label{fig:actiune-parametrii}
 \end{figure}
 
@@ -75,38 +75,38 @@ Dialogflow folosește input-ul trimis de către Dialogflow API C++ Client \cite{
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.0\textwidth]{exemplu-request}
-    \caption{Exemplu de request trimis către Google Cloud Function}
+    \caption{Exemplu de request trimis către Google Cloud Function.}
     \label{fig:exemplu-request}
 \end{figure}
 
-Explicațiile parametrului pentru o mai bună înțelegere a modului de transmitere a informației între seriviciile Google Cloud Platform.
+Explicațiile parametrului pentru o mai bună înțelegere a modului de transmitere a informației între seriviciile Google Cloud Platform:
 
 \begin{enumerate}
-    \item responseId: acesta este un identificator unic pentru fiecare interacțiune cu DialogFlow.
+    \item responseId: este un identificator unic pentru fiecare interacțiune cu DialogFlow.
 
-    \item queryResult: aceasta este secțiunea care conține majoritatea informațiilor legate de interacțiunea cu utilizatorul.
+    \item queryResult: este secțiunea care conține majoritatea informațiilor legate de interacțiunea cu utilizatorul.
     
-    \subitem queryText: aceasta este întrebarea sau afirmația pe care utilizatorul a transmis-o.
+    \subitem queryText: este întrebarea sau afirmația pe care utilizatorul a transmis-o.
     
-    \subitem parameters: acestea sunt parametrii extrasi din întrebarea utilizatorului. În acest caz, "iban" este un parametru și valoarea sa este "RO59RZBR0000068222375800".
+    \subitem parameters: sunt parametrii extrasi din întrebarea utilizatorului. În acest caz, "iban" este un parametru și valoarea sa este "RO59RZBR0000068222375800".
     
     \subitem allRequiredParamsPresent: acest câmp indică dacă toți parametrii necesari pentru intenție sunt prezenți. În acest caz, este adevărat, ceea ce înseamnă că toți parametrii necesari sunt prezenți.
     
-    \subitem fulfillmentText: acesta este textul care va fi returnat utilizatorului ca răspuns la întrebarea sa.
+    \subitem fulfillmentText: este textul care va fi returnat utilizatorului ca răspuns la întrebarea sa.
     
-    \subitem fulfillmentMessages: aceasta este o listă de mesaje care vor fi trimise înapoi utilizatorului. În acest caz, este doar un mesaj, care este același cu fulfillmentText.
+    \subitem fulfillmentMessages: este o listă de mesaje care vor fi trimise înapoi utilizatorului. În acest caz, este doar un mesaj, care este același cu fulfillmentText.
     
-    \subitem intent: aceasta este intenția care a fost potrivită pentru întrebarea utilizatorului.
+    \subitem intent: este intenția care a fost potrivită pentru întrebarea utilizatorului.
     
-    \subitem intentDetectionConfidence: acesta este gradul de încredere cu care DialogFlow a potrivit intenția. În acest caz, este de aproximativ 93%.
+    \subitem intentDetectionConfidence: este gradul de încredere cu care DialogFlow a potrivit intenția. În acest caz, este de aproximativ 93%.
     
-    \subitem diagnosticInfo: acestea sunt informații suplimentare privind interacțiunea. În acest caz, indică timpul de latență pentru webhook.
+    \subitem diagnosticInfo: sunt informații suplimentare privind interacțiunea. În acest caz, indică timpul de latență pentru webhook.
     
-    \subitem languageCode: acesta este codul de limbă al interogării utilizatorului.
+    \subitem languageCode: este codul de limbă al interogării utilizatorului.
     
-    \subitem sentimentAnalysisResult: aceasta este analiza sentimentului textului interogării. Scorul indică sentimentul general (pozitiv sau negativ), iar magnitudinea indică intensitatea sentimentului.
+    \subitem sentimentAnalysisResult: este analiza sentimentului textului interogării. Scorul indică sentimentul general (pozitiv sau negativ), iar magnitudinea indică intensitatea sentimentului.
     
-    \item webhookStatus: acesta este statusul execuției webhook-ului, care în acest caz a fost reușită.
+    \item webhookStatus: este statusul execuției webhook-ului, care în acest caz a fost reușită.
 \end{enumerate}
 
 Tabul de "Validation" din DialogFlow ES are de-a face cu revizuirea și aprobarea sau respingerea propunerilor pe care DialogFlow le face pentru îmbunătățirea modelului asistentului virtual. Acesta este un element al învățării automate interactive, unde sistemul învață din feedbackul dat de utilizator.
@@ -128,7 +128,7 @@ Fiecare sugestie poate fi aprobată sau respinsă, în funcție de dorință (ve
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.0\textwidth]{validation}
-    \caption{Validarea rezultatului agentului}
+    \caption{Validarea rezultatului agentului.}
     \label{fig:validation}
 \end{figure}
 
@@ -142,11 +142,11 @@ Din punct de vedere istoric, dezvoltarea aplicațiilor web în C++ a fost deseor
 
 POCO se distinge prin designul său robust și portabil, care permite dezvoltatorilor să creeze software eficient și de înaltă performanță, care poate fi portat cu ușurință pe diferite platforme și sisteme de operare. Bibliotecile POCO au fost concepute pentru a fi ușor de înțeles și de utilizat, fără a impune niciun model de programare specific. Acest lucru le face flexibile și adaptabile, încurajând dezvoltarea rapidă și agile.
 
-În contextul dezvoltării aplicațiilor web, biblioteca POCO oferă numeroase facilități, inclusiv suport pentru HTTP, FTP, sendmail, URI, cookie-uri, HTML formular, și altele. Acesta include, de asemenea, un framework pentru servere web, care permite dezvoltarea serverelor web multithreaded și sigure. De asemenea, biblioteca NetSSL furnizează suport pentru comunicațiile securizate SSL/TLS, care sunt esențiale pentru orice aplicație web modernă.
+În contextul dezvoltării aplicațiilor web, biblioteca POCO oferă numeroase facilități, inclusiv suport pentru HTTP, FTP, sendmail, URI, cookie-uri, HTML formular și altele. Acesta include, de asemenea, un framework pentru servere web, care permite dezvoltarea serverelor web multithreaded și sigure. De asemenea, biblioteca NetSSL furnizează suport pentru comunicațiile securizate SSL/TLS, care sunt esențiale pentru orice aplicație web modernă.
 
 \subsection{POCO în comparație cu alte biblioteci C++}
 
-Să comparam acum POCO cu alte biblioteci C++ populare pentru dezvoltarea aplicațiilor web: Boost, Wt și CPPCMS.
+Să comparăm acum POCO cu alte biblioteci C++ populare pentru dezvoltarea aplicațiilor web: Boost, Wt și CPPCMS.
 
 Boost este o colecție vastă de biblioteci C++, care oferă o gamă largă de facilități. Cu toate acestea, Boost nu este specializat în dezvoltarea aplicațiilor web și nu include suport direct pentru HTTP sau alte protocoale web specifice. Prin urmare, dezvoltarea unei aplicații web cu Boost ar necesita o cantitate semnificativă de cod adițional sau utilizarea altor biblioteci pentru a acoperi aceste funcționalități.
 
@@ -154,4 +154,4 @@ Wt este o bibliotecă C++ pentru dezvoltarea aplicațiilor web care utilizează 
 
 CPPCMS este un framework specializat pentru dezvoltarea aplicațiilor web în C++. Deși CPPCMS include o serie de facilități puternice pentru dezvoltarea aplicațiilor web, el impune un anumit model de programare, care poate fi mai restrictiv decât abordarea mai flexibilă a POCO.
 
-În concluzie, POCO oferă un echilibru excelent între ușurința de utilizare, flexibilitate, portabilitate și performanță, ceea ce o face o alegere bună pentru dezvoltarea aplicațiilor web în C++. Cu toate acestea, alegerea finală ar trebui să depindă de cerințele specifice ale proiectului, de preferințele dezvoltatorului și de alte considerații.
+Prin urmare, POCO oferă un echilibru excelent între ușurința de utilizare, flexibilitate, portabilitate și performanță, ceea ce o face o alegere bună pentru dezvoltarea aplicațiilor web în C++. Cu toate acestea, alegerea finală ar trebui să depindă de cerințele specifice ale proiectului, de preferințele dezvoltatorului și de alte considerații.

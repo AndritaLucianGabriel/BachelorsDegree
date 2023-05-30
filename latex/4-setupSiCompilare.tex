@@ -5,7 +5,7 @@ Utilizatorul trebuie să aibă o cheie de acces pentru un cont de serviciu pe pl
 
 Această cheie va fi setată ca variabilă de mediu \texttt{GOOGLE\_APPLICATION\_CREDENTIALS}, care va funcționa ca un sistem de autentificare pentru platformă.
 
-În directorul rădăcină al proiectului, se află un script Bash numit \texttt{getting\_started.sh} (Notă: dacă scriptul nu poate fi rulat pe o platformă Unix, recomandăm verificarea formatului greșit al sfârșitului de linie prin executarea comenzii \texttt{dos2unix} pentru script și verificarea din nou). Când este rulat pe o platformă Unix, acesta va instala toate dependențele necesare (vezi \hyperref[first-time-setup]{Configurarea inițială}). După finalizarea scriptului, utilizatorul trebuie să ruleze manual configurarea inițială pentru CLI-ul GC:
+În directorul rădăcină al proiectului, se află un script Bash numit \texttt{getting\_started.sh} (Notă: dacă scriptul nu poate fi rulat pe o platformă Unix, se recomandă verificarea formatului greșit al sfârșitului de linie prin executarea comenzii \texttt{dos2unix} pentru script și verificarea din nou). Când este rulat pe o platformă Unix, acesta va instala toate dependențele necesare (vezi \hyperref[first-time-setup]{Configurarea inițială}). După finalizarea scriptului, utilizatorul trebuie să ruleze manual configurarea inițială pentru CLI-ul GC:
 
 \begin{verbatim}
 ./google-cloud-sdk/install.sh
@@ -67,7 +67,7 @@ Fluxul scriptului \texttt{getting\_started.sh} este următorul:
 \section{Cum se construiește}
 Din directorul rădăcină al proiectului, putem utiliza scriptul \texttt{build.sh} pentru a construi și rula aplicația. În mod implicit, serverul va utiliza portul \textbf{9090}, dar acesta poate fi modificat din fișierul \texttt{constants.h} (vezi \texttt{globals::serverPort}).
 
-Există câteva opțiuni pe care le puteți utiliza cu scriptul:
+Există câteva opțiuni care pot fi utilizate cu scriptul:
 \begin{itemize}
   \item \texttt{-b} sau \texttt{--build} => compilează și rulează proiectul
   \item \texttt{-bscss} sau \texttt{--build-scss} => compilează doar fișierele SCSS pentru a actualiza aspectul HTML-ului
@@ -77,4 +77,4 @@ Există câteva opțiuni pe care le puteți utiliza cu scriptul:
   \item \texttt{-h} sau \texttt{--help} => afișează această informație de ajutor
 \end{itemize}
 
-Notă: Nu rulați opțiunea \texttt{-c} împreună cu alte opțiuni, deoarece curățarea trebuie să fie un proces singular.
+Notă: Nu se recomandă rularea opțiunii \texttt{-c} împreună cu alte opțiuni, deoarece curățarea trebuie să fie un proces singular.

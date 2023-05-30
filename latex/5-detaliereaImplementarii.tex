@@ -29,7 +29,7 @@ Dacă Flagul există în lista dorită, variabila \texttt{COMMAND} stochează ac
 
 Funcția \texttt{execute} va apela apoi metoda corespunzătoare funcționalității dorite. Acest nivel de abstractizare permite concatenarea mai multor comenzi sub același nume, dacă este necesar.
 
-Notă: Din acest punct înainte, vom analiza fiecare script în mod individual, deoarece au metode diferite pentru cazurile lor de utilizare diferite.
+Notă: Din acest moment înainte, se va analiza fiecare script în mod individual, deoarece au metode diferite pentru cazurile lor de utilizare diferite.
 
 Iată codul LaTeX actualizat, utilizând listele pentru enumerare:
 
@@ -83,7 +83,7 @@ Proiectul CMake utilizează standardul \texttt{C++17}, iar executabilul este gen
 
 Codul poate fi găsit în \textbf{./cloud} și constă într-un scrip JavaScript utilizat în contextul unui serviciu de îndeplinire a cerințelor (fulfillment) pentru Dialogflow, un serviciu de înțelegere a limbajului natural și de gestionare a conversațiilor dezvoltat de Google. Acest script gestionează cererile primite de la Dialogflow și furnizează răspunsurile corespunzătoare. De asemenea acesta este rulat prin Google Cloud Function, codul fiind luat din serviciul Google Source Repository.
 
-La nivel top-level, avem următoarele funcționalități:
+La nivel top-level, se regăsesc următoarele funcționalități:
 
 \begin{enumerate}
     \item Se importă modulele necesare: `firebase-functions`, `dialogflow-fulfillment`, `google-cloud/storage` și `axios`. Aceste module facilitează comunicarea cu Dialogflow, gestionarea stocării și efectuarea de cereri HTTP.
@@ -106,6 +106,15 @@ La nivel top-level, avem următoarele funcționalități:
 Acest script oferă suport pentru diferite funcționalități de gestionare a conversațiilor cu un chatbot, cum ar fi verificarea soldului, transferul de bani între conturi, crearea și ștergerea de conturi bancare. De asemenea, folosește un serviciu extern pentru a obține ratele de conversie valutară. Prin intermediul acestui script, se poate crea un chatbot interactiv și inteligent care să furnizeze răspunsuri personalizate și să interacționeze cu utilizatorii într-un mod natural.
 
 \section{Logica locală}
+
+Arhitectural vorbind, partea din aplicație care se află local reprezinta doar scheletul funcționalității principale, partea importantă fiind mutată în serviciile oferite de Google Cloud Platform.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=1.0\textwidth]{include-graph}
+  \caption{Include graph-ul principal.}
+  \label{fig:includeGraph}
+\end{figure}
 
 \subsection{Main}
 
@@ -153,6 +162,13 @@ Există și metode pentru setarea și obținerea textului de ieșire al agentulu
 
 În general, clasa Chatbot oferă o interfață simplificată pentru trimiterea și primirea mesajelor către/de la Google Cloud Platform, facilitând astfel implementarea unui agent de chat funcțional. Această clasă utilizează bibliotecile și funcționalitățile oferite de Google Cloud Platform și Poco pentru a asigura o comunicare eficientă și robustă.
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{include-graph-chatbot}
+  \caption{Include graph-ul pentru clasa Chatbot.}
+  \label{fig:includeGraphChatbot}
+\end{figure}
+
 \subsection{Constants}
 
 În codul de mai sus, avem fișierul header "constants.h" care conține câteva constante și un namespace pentru variabilele de configurare utilizate în program.
@@ -170,6 +186,13 @@ Aceste constante sunt folosite în cadrul programului pentru a configura și per
 Fișierul header "constants.h" este protejat împotriva includerii multiple în codul sursă utilizând macro-ul de preprocesare "\#ifndef CONSTANTS\_H\_" și "\#endif", ceea ce asigură că fișierul este inclus o singură dată în cadrul unui fișier sursă.
 
 Utilizarea acestor constante și a namespace-ului "globals" asigură o gestionare eficientă a valorilor de configurare în cadrul programului și facilitează modificarea acestora într-un singur loc. Aceasta oferă flexibilitate și ușurință în adaptarea programului la diferite scenarii și cerințe specifice.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.6\textwidth]{include-graph-constants}
+  \caption{Include graph-ul pentru clasa Constants.}
+  \label{fig:includeGraphConstants}
+\end{figure}
 
 \subsection{Logger}
 
@@ -189,6 +212,13 @@ La nivel top-level, clasa "MyLogger" oferă următoarele funcționalități:
 
 Clasa "MyLogger" oferă un mod simplu și eficient de gestionare a sistemului de înregistrare în aplicație. Prin intermediul metodelor sale statice, se poate accesa și utiliza obiectul logger într-un mod centralizat și ușor de întreținut. Utilizarea acestui wrapper singleton asigură că obiectul logger este creat o singură dată și poate fi accesat în mod global în cadrul aplicației.
 
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.8\textwidth]{include-graph-logger}
+  \caption{Include graph-ul pentru clasa Logger.}
+  \label{fig:includeGraphLogger}
+\end{figure}
+
 \subsection{Server}
 
 În fișierul "Server.h" avem două clase, "MyRequestHandler" și "MyRequestHandlerFactory", care sunt wrappere peste clasele Poco::Net::HTTPRequestHandler și Poco::Net::HTTPRequestHandlerFactory. Aceste clase conțin logica necesară pentru a gestiona cererile și a furniza răspunsurile serverului.
@@ -206,3 +236,10 @@ La nivel top-level, avem următoarele funcționalități:
 Ambele clase utilizează obiectul "logger" din clasa "MyLogger" pentru a înregistra informații relevante și a le afișa în consolă sau a le scrie în fișiere de log.
 
 Aceste wrapper-e peste clasele din biblioteca Poco oferă un nivel de abstractizare și encapsulare pentru a gestiona cererile primite de la utilizatori și a furniza răspunsurile corespunzătoare. Ele permit serverului să ofere un serviciu robust și scalabil, gestionând diferite tipuri de cereri și direcționându-le către funcționalitățile adecvate ale aplicației.
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[width=0.6\textwidth]{include-graph-server}
+  \caption{Include graph-ul pentru clasa Server.}
+  \label{fig:includeGraphServer}
+\end{figure}
