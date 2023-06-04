@@ -19,3 +19,14 @@ licenta_EXECUTABLE
 res/*.json
 todo
 *.txt
+latex/*.aux
+latex/*.bbl
+latex/*.bcf
+latex/*.blg
+latex/*.fdb_latexmk
+latex/*.fls
+latex/*.log
+latex/*.out
+latex/*.xml
+latex/*.gz
+latex/*.toc

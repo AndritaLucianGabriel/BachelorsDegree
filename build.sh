@@ -38,7 +38,7 @@ inf() { echo -e "$(tput bold)"INFO: "$(tput sgr0)$* \n"; }
 
 clean() {
     msg "Cleaning..."
-    rm -rf "build" "licenta_EXECUTABLE" "logs" "res/css" "res/docs"
+    rm -rf  "build" "licenta_EXECUTABLE" "logs" "res/css" "res/docs"
     GOOGLE_APPLICATION_CREDENTIALS="" # we ll clean the enviroment variable for the GCP's credentials
     if [ $? -ne 0 ]; then
         err_exit "Failed with exit status $?!\n"

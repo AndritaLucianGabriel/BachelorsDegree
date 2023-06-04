@@ -1,0 +1,80 @@
+\chapter{Setup și compilare}
+
+\section{Instalarea bibliotecilor}
+Utilizatorul trebuie să aibă o cheie de acces pentru un cont de serviciu pe platforma Google Cloud pentru a accesa API-ul Dialogflow ES. Această cheie trebuie plasată sub directorul \emph{res}. Mai multe informații găsiți \href{https://cloud.google.com/iam/docs/keys-create-delete}{aici}.
+
+Această cheie va fi setată ca variabilă de mediu \texttt{GOOGLE\_APPLICATION\_CREDENTIALS}, care va funcționa ca un sistem de autentificare pentru platformă.
+
+În directorul rădăcină al proiectului, se află un script Bash numit \texttt{getting\_started.sh} (Notă: dacă scriptul nu poate fi rulat pe o platformă Unix, se recomandă verificarea formatului greșit al sfârșitului de linie prin executarea comenzii \texttt{dos2unix} pentru script și verificarea din nou). Când este rulat pe o platformă Unix, acesta va instala toate dependențele necesare (vezi \hyperref[first-time-setup]{Configurarea inițială}). După finalizarea scriptului, utilizatorul trebuie să ruleze manual configurarea inițială pentru CLI-ul GC:
+
+\begin{verbatim}
+./google-cloud-sdk/install.sh
+source ~/.bashrc
+./google-cloud-sdk/bin/gcloud init
+\end{verbatim}
+
+Notă: Configurarea inițială va dura un timp \textbf{îndelungat} (în special pe mașini mai vechi).
+
+\section{Configurarea inițială}
+Fluxul scriptului \texttt{getting\_started.sh} este următorul:
+
+\textbf{Notă importantă}: Trebuie să fie rulat cu opțiunea \texttt{-i} sau \texttt{--install}, iar după finalizarea acestuia, utilizatorul trebuie să ruleze manual configurarea inițială pentru gcloud (vezi pașii de mai sus).
+
+\begin{enumerate}
+  \item Configurarea mediului:
+    \begin{enumerate}
+      \item Submodulele sunt inițializate.
+      \item Pe baza diferenței în terminarea greșită a liniei, atât scriptul \texttt{build.sh}, cât și executabilul \texttt{sass} vor fi convertite la formatul Unix-like.
+      \item Se instalează \texttt{doxygen} și dependența sa \texttt{graphviz}.
+    \end{enumerate}
+  \item Revenirea la versiunile dorite ale bibliotecilor:
+    \begin{enumerate}
+      \item Se utilizează versiunea \texttt{POCO v1.12.4}.
+      \item Se utilizează versiunea \texttt{VCPKG v2023.04.15 Release}.
+      \item Se utilizează versiunea \texttt{GCP v2.9.1}.
+    \end{enumerate}
+  \item Configurarea POCO. Mai multe informații găsiți \href{https://github.com/pocoproject/poco}{aici}:
+    \begin{enumerate}
+      \item Se instalează dependențele (\texttt{openssl, libssl-dev, git, g++, make, cmake}).
+      \item Se configurează fișierul \texttt{CMakeLists.txt}.
+      \item Se construiește fișierul de configurare.
+      \item Se instalează biblioteca.
+    \end{enumerate}
+  \item Configurarea npm:
+    \begin{enumerate}
+      \item Se instalează \texttt{npm} prin intermediul gestionarului de pachete implicit.
+    \end{enumerate}
+  \item Configurarea Google Cloud CLI. Mai multe informații găsiți \href{https://cloud.google.com/sdk/docs/install}{aici}:
+    \begin{enumerate}
+      \item Se descarcă arhiva care conține codul sursă.
+      \item Se extrage arhiva.
+    \end{enumerate}
+  \item Configurarea Sass:
+    \begin{enumerate}
+      \item Se creează un link simbolic (\texttt{symlink}) și se forțează crearea acestuia, chiar dacă există, către executabilul furnizat (vezi directorul \texttt{libs/sass}).
+    \end{enumerate}
+  \item Configurarea VCPKG. Mai multe informații găsiți \href{https://github.com/Microsoft/vcpkg}{aici}:
+    \begin{enumerate}
+      \item Se instalează dependențele (\texttt{curl, zip, unzip, tar}).
+      \item Se configurează managerul vcpkg pentru prima dată prin intermediul scriptului de pornire (\texttt{libs/vcpkg/bootstrap-vcpkg.sh}).
+    \end{enumerate}
+  \item Configurarea Google Cloud Platform. Mai multe informații găsiți \href{https://github.com/googleapis/google-cloud-cpp/tree/main/google/cloud/dialogflow_es/quickstart}{aici}:
+    \begin{enumerate}
+      \item Se instalează modulele reale pe care le vom utiliza în proiect (\texttt{core} și \texttt{dialogflow-es}) prin intermediul vcpkg.
+    \end{enumerate}
+\end{enumerate}
+
+\section{Cum se construiește}
+Din directorul rădăcină al proiectului, putem utiliza scriptul \texttt{build.sh} pentru a construi și rula aplicația. În mod implicit, serverul va utiliza portul \textbf{9090}, dar acesta poate fi modificat din fișierul \texttt{constants.h} (vezi \texttt{globals::serverPort}).
+
+Există câteva opțiuni care pot fi utilizate cu scriptul:
+\begin{itemize}
+  \item \texttt{-b} sau \texttt{--build} => compilează și rulează proiectul
+  \item \texttt{-bscss} sau \texttt{--build-scss} => compilează doar fișierele SCSS pentru a actualiza aspectul HTML-ului
+  \item \texttt{-docs} sau \texttt{--generate-docs} => generează documentația tehnică utilizând Doxygen
+  \item \texttt{-c} sau \texttt{--clean} => curăță proiectul
+  \item \texttt{-v} sau \texttt{--verbose} => opțional, afișează mai multe informații în consolă
+  \item \texttt{-h} sau \texttt{--help} => afișează această informație de ajutor
+\end{itemize}
+
+Notă: Nu se recomandă rularea opțiunii \texttt{-c} împreună cu alte opțiuni, deoarece curățarea trebuie să fie un proces singular.
