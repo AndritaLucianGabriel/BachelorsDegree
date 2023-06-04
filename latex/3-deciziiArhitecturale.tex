@@ -39,9 +39,9 @@ Dialogflow folosește input-ul trimis de către Dialogflow API C++ Client \cite{
     \label{fig:entitati}
 \end{figure}
 
-În DialogFlow, o "intenție" reprezintă un anumit rezultat pe care îl doriți de la o interacțiune cu utilizatorul. Atunci când un utilizator trimite un input (cum ar fi o întrebare sau o comandă), DialogFlow potrivește inputul cu cea mai bună intenție pe baza a ceea ce ați setat în agentul dvs. În cadrul unei intenții, există mai multe câmpuri și concepte cheie care sunt utilizate pentru a defini și a rafina comportamentul intenției.
+În Dialogflow, o "intenție" reprezintă un anumit rezultat pe care îl doriți de la o interacțiune cu utilizatorul. Atunci când un utilizator trimite un input (cum ar fi o întrebare sau o comandă), Dialogflow potrivește inputul cu cea mai bună intenție pe baza a ceea ce ați setat în agentul dvs. În cadrul unei intenții, există mai multe câmpuri și concepte cheie care sunt utilizate pentru a defini și a rafina comportamentul intenției.
 
-\textbf{Contextele} permit agentului DialogFlow să înțeleagă starea conversației și să răspundă în mod corespunzător. Există două tipuri de contexte: contexte de intrare și contexte de ieșire. Contextele de intrare sunt cele pe care agentul le caută înainte de a potrivi o intenție, în timp ce contextele de ieșire sunt stabilite după ce o intenție este potrivită.
+\textbf{Contextele} permit agentului Dialogflow să înțeleagă starea conversației și să răspundă în mod corespunzător. Există două tipuri de contexte: contexte de intrare și contexte de ieșire. Contextele de intrare sunt cele pe care agentul le caută înainte de a potrivi o intenție, în timp ce contextele de ieșire sunt stabilite după ce o intenție este potrivită.
 
 \textbf{Exemple de declarații ale utilizatorului} sunt exemple de ceea ce utilizatorul ar putea spune pentru a declanșa această intenție (vezi Figura \ref{fig:training-phrases}). Sistemul utilizează aceste exemple pentru a învăța modelul de limbaj și pentru a recunoaște aceeași intenție din declarații diferite.
 
@@ -66,7 +66,7 @@ Dialogflow folosește input-ul trimis de către Dialogflow API C++ Client \cite{
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.0\textwidth]{actiune-parametrii}
-    \caption{Extragerea de paramertii din inputul clientului.}
+    \caption{Extragerea de parametrii din inputul clientului.}
     \label{fig:actiune-parametrii}
 \end{figure}
 
@@ -82,7 +82,7 @@ Dialogflow folosește input-ul trimis de către Dialogflow API C++ Client \cite{
 Explicațiile parametrului pentru o mai bună înțelegere a modului de transmitere a informației între seriviciile Google Cloud Platform:
 
 \begin{enumerate}
-    \item responseId: este un identificator unic pentru fiecare interacțiune cu DialogFlow.
+    \item responseId: este un identificator unic pentru fiecare interacțiune cu Dialogflow.
 
     \item queryResult: este secțiunea care conține majoritatea informațiilor legate de interacțiunea cu utilizatorul.
     
@@ -98,7 +98,7 @@ Explicațiile parametrului pentru o mai bună înțelegere a modului de transmit
     
     \subitem intent: este intenția care a fost potrivită pentru întrebarea utilizatorului.
     
-    \subitem intentDetectionConfidence: este gradul de încredere cu care DialogFlow a potrivit intenția. În acest caz, este de aproximativ 93%.
+    \subitem intentDetectionConfidence: este gradul de încredere cu care Dialogflow a potrivit intenția. În acest caz, este de aproximativ 90.
     
     \subitem diagnosticInfo: sunt informații suplimentare privind interacțiunea. În acest caz, indică timpul de latență pentru webhook.
     
@@ -109,7 +109,7 @@ Explicațiile parametrului pentru o mai bună înțelegere a modului de transmit
     \item webhookStatus: este statusul execuției webhook-ului, care în acest caz a fost reușită.
 \end{enumerate}
 
-Tabul de "Validation" din DialogFlow ES are de-a face cu revizuirea și aprobarea sau respingerea propunerilor pe care DialogFlow le face pentru îmbunătățirea modelului asistentului virtual. Acesta este un element al învățării automate interactive, unde sistemul învață din feedbackul dat de utilizator.
+Tabul de "Validation" din Dialogflow ES are de-a face cu revizuirea și aprobarea sau respingerea propunerilor pe care Dialogflow le face pentru îmbunătățirea modelului asistentului virtual. Acesta este un element al învățării automate interactive, unde sistemul învață din feedbackul dat de utilizator.
 
 După ce asistentul virtual a fost folosit o vreme, va începe să învețe din interacțiunile cu utilizatorii și va încerca să îmbunătățească precizia detecției intențiilor și a entităților. Acest lucru este realizat prin generarea de "sugestii" pe baza interacțiunilor anterioare. Aceste sugestii apar în tabul "Validation".
 
@@ -117,13 +117,13 @@ Fiecare sugestie conține următoarele elemente:
 
 Training phrase - Este textul interacțiunii dintre utilizator și asistentul virtual.
 
-Intent - Este numele intenției pe care DialogFlow o propune pentru fraza de instruire. Acesta poate fi o intenție existentă sau o nouă intenție sugerată de DialogFlow.
+Intent - Este numele intenției pe care Dialogflow o propune pentru fraza de instruire. Acesta poate fi o intenție existentă sau o nouă intenție sugerată de Dialogflow.
 
-Action - Este un câmp opțional, care permite asocierea unei acțiuni cu o intenție. DialogFlow poate sugera o acțiune pe baza contextului frazei de instruire.
+Action - Este un câmp opțional, care permite asocierea unei acțiuni cu o intenție. Dialogflow poate sugera o acțiune pe baza contextului frazei de instruire.
 
-Entities - Sunt entitățile pe care DialogFlow le propune pentru a fi asociate cu fraza de instruire.
+Entities - Sunt entitățile pe care Dialogflow le propune pentru a fi asociate cu fraza de instruire.
 
-Fiecare sugestie poate fi aprobată sau respinsă, în funcție de dorință (vezi Figura \ref{fig:validation}). Dacă sugestia este aprobată, DialogFlow va actualiza modelul asistentului virtual pentru a include informațiile din sugestie, îmbunătățind astfel precizia detecției de intenții și entități în interacțiunile viitoare. Dacă sugestia este respinsă, DialogFlow nu va face nicio modificare.
+Fiecare sugestie poate fi aprobată sau respinsă, în funcție de dorință (vezi Figura \ref{fig:validation}). Dacă sugestia este aprobată, Dialogflow va actualiza modelul asistentului virtual pentru a include informațiile din sugestie, îmbunătățind astfel precizia detecției de intenții și entități în interacțiunile viitoare. Dacă sugestia este respinsă, Dialogflow nu va face nicio modificare.
 
 \begin{figure}[h]
     \centering

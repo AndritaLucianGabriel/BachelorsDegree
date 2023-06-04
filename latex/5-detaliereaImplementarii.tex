@@ -7,7 +7,7 @@ Ambele scripturi folosesc același cod pentru prelucrarea inputului utilizatorul
 Acestea sunt procesate de funcția \texttt{func\_read\_cli\_options} și sunt verificate cu lista implicită (care diferă în mare parte pentru ambele scripturi, deoarece au roluri distincte, dar opțiunile \texttt{-v} și \texttt{-h} sunt comune, deoarece au o utilitate comună).
 
 \begin{itemize}
-  \item Flag comune:
+  \item Flaguri comune:
     \begin{itemize}
       \item Flagul \texttt{verbose} permite scripturilor să afișeze mai multe informații (atât de la ele, cât și din jurnalele aplicației) în consolă. Această opțiune va seta variabila globală \texttt{VERBOSE} la true.
       \item Flagul \texttt{help} va afișa doar informațiile de ajutor.
@@ -127,7 +127,7 @@ Codul începe prin includerea mai multor fișiere de bibliotecă necesare pentru
   \item Poco/Net/HTTPServerParams.h: Această bibliotecă conține clasa HTTPServerParams, care permite configurarea parametrilor serverului HTTP.
 \end{itemize}
 
-În plus față de bibliotecile Poco, codul include și alte fișiere specifice aplicației, cum ar fi "server.h", "logger.h", "chatbot.h" și "constants.h". Aceste fișiere conțin declarații și implementări specifice aplicației și sunt utilizate în codul principal pentru a oferi funcționalitatea dorită.
+În plus față de bibliotecile POCO, codul include și alte fișiere specifice aplicației, cum ar fi "server.h", "logger.h", "chatbot.h" și "constants.h". Aceste fișiere conțin declarații și implementări specifice aplicației și sunt utilizate în codul principal pentru a oferi funcționalitatea dorită.
 
 După includerea fișierelor de bibliotecă și a fișierelor specifice aplicației, se utilizează namespace-ul Poco::Util pentru a evita utilizarea repetată a acestuia în cod.
 
@@ -136,7 +136,7 @@ Următoarea parte a codului definește clasa MyServerApp, care este o clasă der
 \begin{figure}[h]
     \centering
     \includegraphics[width=1.0\textwidth]{exemplu-conversatie}
-    \caption{Exemplu conversație.}
+    \caption{Exemplu de conversație.}
     \label{fig:exempluConversatie}
 \end{figure}
 
@@ -160,7 +160,7 @@ Există și metode pentru setarea și obținerea textului de ieșire al agentulu
 
 În plus, clasa Chatbot conține și membri de date relevanți pentru funcționarea acesteia. Avem un obiect `logger` de tip Poco::Logger, care este utilizat pentru înregistrarea mesajelor de sistem și este accesibil prin intermediul clasei Logger definită în fișierul "logger.h". De asemenea, avem un obiect `client` de tip dialogflow\_es::SessionsClient care gestionează interacțiunea cu sesiunile de comunicare cu platforma de cloud. Un alt membru important este obiectul `request` de tip v2::DetectIntentRequest care reprezintă cererea de comunicare trimisă la platforma de cloud.
 
-În general, clasa Chatbot oferă o interfață simplificată pentru trimiterea și primirea mesajelor către/de la Google Cloud Platform, facilitând astfel implementarea unui agent de chat funcțional. Această clasă utilizează bibliotecile și funcționalitățile oferite de Google Cloud Platform și Poco pentru a asigura o comunicare eficientă și robustă.
+În general, clasa Chatbot oferă o interfață simplificată pentru trimiterea și primirea mesajelor către/de la Google Cloud Platform, facilitând astfel implementarea unui agent de chat funcțional. Această clasă utilizează bibliotecile și funcționalitățile oferite de Google Cloud Platform și POCO pentru a asigura o comunicare eficientă și robustă.
 
 \begin{figure}[h]
   \centering
@@ -235,7 +235,7 @@ La nivel top-level, avem următoarele funcționalități:
 
 Ambele clase utilizează obiectul "logger" din clasa "MyLogger" pentru a înregistra informații relevante și a le afișa în consolă sau a le scrie în fișiere de log.
 
-Aceste wrapper-e peste clasele din biblioteca Poco oferă un nivel de abstractizare și encapsulare pentru a gestiona cererile primite de la utilizatori și a furniza răspunsurile corespunzătoare. Ele permit serverului să ofere un serviciu robust și scalabil, gestionând diferite tipuri de cereri și direcționându-le către funcționalitățile adecvate ale aplicației.
+Aceste wrapper-e peste clasele din biblioteca POCO oferă un nivel de abstractizare și encapsulare pentru a gestiona cererile primite de la utilizatori și a furniza răspunsurile corespunzătoare. Ele permit serverului să ofere un serviciu robust și scalabil, gestionând diferite tipuri de cereri și direcționându-le către funcționalitățile adecvate ale aplicației.
 
 \begin{figure}[h]
   \centering

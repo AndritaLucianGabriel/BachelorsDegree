@@ -6,7 +6,7 @@ Acesta este un șablon C++ care utilizează Dialogflow ES de la Google Cloud Pla
 
 Serverul care gestionează conexiunea între clienți și agent este găzduit local. Atunci când se primește o solicitare de la un client, serverul decide ce tip de fișiere să trimită. Pe măsură ce clientul își face interogari către agent, un script va acționa ca parser pentru textul dat și va asculta răspunsul de la server. Când serverul primește intrarea, o va trimite la agent. În cloud, agentul va potrivi textul primit cu o intenție, va extrage unii parametrii în funcție de intenție și va apela un webhook. Webhook-ul constă într-o funcție Google Cloud Function, care este găzduită pe Google Source Repository, unde va căuta în dosarul \emph{cloud} și va extrage funcționalitatea de acolo. 
 
-Funcția va avea privilegii CRUD+L asupra unui bucket Google Cloud Storage care stochează informațiile necesare. Acest studiu reprezintă o contribuție semnificativă la înțelegerea modului în care serviciile de cloud pot fi integrate cu succes în aplicațiile bazate pe C++, cu un accent specific pe dezvoltarea chatbot-urilor în industria bancară.
+Funcția va avea privilegii CRUD+L asupra unui bucket Google Cloud Storage care stochează informațiile necesare. Acestă lucrare reprezintă o contribuție semnificativă la înțelegerea modului în care serviciile de cloud pot fi integrate cu succes în aplicațiile bazate pe C++, cu un accent specific pe dezvoltarea chatbot-urilor în industria bancară.
 \end{abstract}
 
 \begin{abstract}{english}
@@ -15,7 +15,7 @@ This is a C++ template that uses Google Cloud Platform's Dialogflow ES for human
 
 The server that is serving the connection between the clients and the agent is locally hosted. When a request from a client is received, the server decides what type of files to send. As the client queries his intent to the agent, a script will act as a parser for the given text, and will listen for the response from the server. When the server receives the input, it will send it to the agent. In the cloud, the agent will match the received text with an intent, it will extract some parameters based on the intent, and it will call a webhook. The webhook consists of a Google Cloud Function, that's being hosted on Google Source Repository, where it will look into the \emph{cloud} folder and extract the functionality from there. 
 
-The function will have CRUD+L privileges on a Google Cloud Storage bucket that stores the needed information. This study represents a significant contribution to the understanding of how cloud services can be successfully integrated into C++ based applications, with a specific focus on the development of chatbots in the banking industry.
+The function will have CRUD+L privileges on a Google Cloud Storage bucket that stores the needed information. This paper represents a significant contribution to the understanding of how cloud services can be successfully integrated into C++ based applications, with a specific focus on the development of chatbots in the banking industry.
 \end{abstract}
 
 \end{abstractpage}
