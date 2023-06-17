@@ -15,7 +15,7 @@ This is a C++ template that uses Google Cloud Platform's Dialogflow ES for human
 
 The server that is serving the connection between the clients and the agent is locally hosted. When a request from a client is received, the server decides what type of files to send. As the client queries his intent to the agent, a script will act as a parser for the given text, and will listen for the response from the server. When the server receives the input, it will send it to the agent. In the cloud, the agent will match the received text with an intent, it will extract some parameters based on the intent, and it will call a webhook. The webhook consists of a Google Cloud Function, that's being hosted on Google Source Repository, where it will look into the \emph{cloud} folder and extract the functionality from there. 
 
-The function will have CRUD+L privileges on a Google Cloud Storage bucket that stores the needed information. This paper represents a significant contribution to the understanding of how cloud services can be successfully integrated into C++ based applications, with a specific focus on the development of chatbots in the banking industry.
+The function will have CRUD+L privileges on a Google Cloud Storage bucket that stores the needed information. This thesis represents a significant contribution to the understanding of how cloud services can be successfully integrated into C++ based applications, with a specific focus on the development of chatbots in the banking industry.
 \end{abstract}
 
 \end{abstractpage}

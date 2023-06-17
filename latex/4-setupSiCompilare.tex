@@ -1,7 +1,7 @@
 \chapter{Setup și compilare}
 
 \section{Instalarea bibliotecilor}
-Utilizatorul trebuie să aibă o cheie de acces pentru un cont de serviciu pe platforma Google Cloud pentru a accesa API-ul Dialogflow ES. Această cheie trebuie plasată sub directorul \emph{res}. Mai multe informații găsiți \href{https://cloud.google.com/iam/docs/keys-create-delete}{aici}.
+Utilizatorul trebuie să aibă o cheie de acces pentru un cont de serviciu pe platforma Google Cloud pentru a accesa API-ul Dialogflow ES. Această cheie trebuie plasată sub directorul \emph{res} \cite{keys-create-delete}.
 
 Această cheie va fi setată ca variabilă de mediu \texttt{GOOGLE\_APPLICATION\_CREDENTIALS}, care va funcționa ca un sistem de autentificare pentru platformă.
 
@@ -33,7 +33,7 @@ Fluxul scriptului \texttt{getting\_started.sh} este următorul:
       \item Se utilizează versiunea \texttt{VCPKG v2023.04.15 Release}.
       \item Se utilizează versiunea \texttt{GCP v2.9.1}.
     \end{enumerate}
-  \item Configurarea POCO. Mai multe informații găsiți \href{https://github.com/pocoproject/poco}{aici}:
+  \item Configurarea POCO \cite{poco}:
     \begin{enumerate}
       \item Se instalează dependențele (\texttt{openssl, libssl-dev, git, g++, make, cmake}).
       \item Se configurează fișierul \texttt{CMakeLists.txt}.
@@ -44,7 +44,7 @@ Fluxul scriptului \texttt{getting\_started.sh} este următorul:
     \begin{enumerate}
       \item Se instalează \texttt{npm} prin intermediul gestionarului de pachete implicit.
     \end{enumerate}
-  \item Configurarea Google Cloud CLI. Mai multe informații găsiți \href{https://cloud.google.com/sdk/docs/install}{aici}:
+  \item Configurarea Google Cloud CLI \cite{gcloud-cli}:
     \begin{enumerate}
       \item Se descarcă arhiva care conține codul sursă.
       \item Se extrage arhiva.
@@ -53,12 +53,12 @@ Fluxul scriptului \texttt{getting\_started.sh} este următorul:
     \begin{enumerate}
       \item Se creează un link simbolic (\texttt{symlink}) și se forțează crearea acestuia, chiar dacă există, către executabilul furnizat (vezi directorul \texttt{libs/sass}).
     \end{enumerate}
-  \item Configurarea VCPKG. Mai multe informații găsiți \href{https://github.com/Microsoft/vcpkg}{aici}:
+  \item Configurarea VCPKG \cite{vcpkg}:
     \begin{enumerate}
       \item Se instalează dependențele (\texttt{curl, zip, unzip, tar}).
       \item Se configurează managerul vcpkg pentru prima dată prin intermediul scriptului de pornire (\texttt{libs/vcpkg/bootstrap-vcpkg.sh}).
     \end{enumerate}
-  \item Configurarea Google Cloud Platform. Mai multe informații găsiți \href{https://github.com/googleapis/google-cloud-cpp/tree/main/google/cloud/dialogflow_es/quickstart}{aici}:
+  \item Configurarea Google Cloud Platform \cite{dialogflow_quickstart}:
     \begin{enumerate}
       \item Se instalează modulele reale pe care le vom utiliza în proiect (\texttt{core} și \texttt{dialogflow-es}) prin intermediul vcpkg.
     \end{enumerate}
