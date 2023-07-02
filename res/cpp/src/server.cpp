@@ -76,23 +76,12 @@ void MyRequestHandler::handleRequest(Poco::Net::HTTPServerRequest &request, Poco
         else {
             serveResponse(response, fileName, extension);
         }
-
-        // resp.sendFile("../res/views/pages/index.html", "text/html");
-        //     ostream &out = resp.send();
-        // out << buffer.str();
-        // out.flush();
-        // out << "<h1 style=\"font-size: 100; text-align: center; color: red;\">Reeee</h1>"
-        //     << "<p>Count: " << ++count << "</p>"
-        //     << "<p>Host: " << req.getHost() << "</p>"
-        //     << "<p>Method: " << req.getMethod() << "</p>"
-        //     << "<p>URI: " << req.getURI() << "</p>";
-        // out.flush();
     }
 }
 
-// Imi permite sa adaug tipuri noi de fisiere atata tip cat pastrez structura
-// 1. sa fie direct in res
-// 2. sa se faca un folder nou, avand ca nume extensia
+// It allows me to add new types of files (if I need them) and to keep a clean project structure
+// 1. It has to be directly into ./res folder
+// 2. The name of the folder is the actual extension of the file
 void MyRequestHandler::serveResponse(Poco::Net::HTTPServerResponse &response, const std::string& fileName, const std::string& extension) {
     response.setContentType("text/" + extension);
     std::ifstream file("res/" + extension + "/" + fileName + "." + extension);
